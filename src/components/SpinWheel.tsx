@@ -33,23 +33,40 @@ const Pointer = styled.div`
 `;
 
 const SpinButton = styled.button`
-  background: #0a3570;
+  background: linear-gradient(135deg, #0a3570 0%, #1c5ba9 100%);
   color: #fff;
-  font-size: 1.25rem;
-  font-weight: 700;
-  border: none;
-  border-radius: 32px;
-  padding: 16px 48px;
-  box-shadow: 0 4px 12px rgba(10, 53, 112, 0.3);
+  font-size: 1.4rem;
+  font-weight: 800;
+  border: 4px solid #ffe066;
+  border-radius: 40px;
+  padding: 18px 56px;
+  box-shadow: 0 8px 24px rgba(255, 224, 102, 0.3);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: pulse-glow 2s infinite;
+  
+  @keyframes pulse-glow {
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 224, 102, 0); }
+    50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 224, 102, 0.6); }
+    100% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 224, 102, 0); }
+  }
+
+  &:hover {
+    transform: translateY(-4px) scale(1.05);
+    background: linear-gradient(135deg, #1c5ba9 0%, #0a3570 100%);
+    box-shadow: 0 12px 30px rgba(255, 224, 102, 0.4);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+  
   &:disabled {
     background: #ccc;
+    border-color: #999;
     cursor: not-allowed;
+    animation: none;
     box-shadow: none;
-  }
-  &:active {
-    transform: scale(0.96);
   }
 `;
 

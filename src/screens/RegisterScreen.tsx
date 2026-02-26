@@ -251,8 +251,12 @@ const RegisterScreen = () => {
     // Save user via Service
     userService.saveUser(newUser, true);
     
+    // Clear any previous session flags to ensure welcome modal shows
+    sessionStorage.clear();
+    
     refreshUser();
-    setTimeout(() => router.push('/home'), 100);
+    // Use hard refresh to ensure Home state reads from storage correctly
+    window.location.href = '/home';
   };
 
   return (

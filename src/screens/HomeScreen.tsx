@@ -137,7 +137,7 @@ export default function HomeScreen() {
         {showWelcomeModal && (
           <ModalOverlay>
             <ModalContent>
-              <div style={{ fontSize: "6rem", marginBottom: 24 }}></div>
+              <div style={{ fontSize: "6rem", marginBottom: 24 }}>🎡</div>
               <h2 style={{ color: "white", fontSize: "2.2rem", marginBottom: 15, fontWeight: 900 }}>WELCOME BONUS!</h2>
               <p style={{ color: "white", marginBottom: 35, fontSize: "1.15rem", lineHeight: 1.6, opacity: 0.9 }}>
                 You have received <b style={{color: "#ffe066"}}>5 PROMOTIONAL SPINS</b>!<br/><br/>
@@ -145,7 +145,12 @@ export default function HomeScreen() {
                 Top Prize: <b>KES 20,000</b>!
               </p>
               <button 
-                onClick={() => setShowWelcomeModal(false)} 
+                onClick={() => {
+                  setShowWelcomeModal(false);
+                  // Scroll to the wheel immediately
+                  const wheel = document.getElementById('spin-wheel-section');
+                  if (wheel) wheel.scrollIntoView({ behavior: 'smooth' });
+                }} 
                 style={{ 
                   background: "#ffe066", 
                   color: "#001f3f", 
@@ -163,6 +168,24 @@ export default function HomeScreen() {
               </button>
             </ModalContent>
           </ModalOverlay>
+        )}
+
+        {/* If user has promo spins, show the wheel at the very top instead of bottom */}
+        {freeSpinsCount > 0 && (
+          <div id="spin-wheel-section" style={{ 
+            background: "white", 
+            borderRadius: 30, 
+            padding: "35px 20px", 
+            boxShadow: "0 10px 40px rgba(255, 204, 0, 0.2)", 
+            textAlign: "center",
+            border: "3px solid #ffcc00",
+            marginBottom: 30,
+            animation: "fadeIn 0.5s ease-out"
+          }}>
+            <h2 style={{ color: "#0a3570", marginBottom: 5, fontSize: "1.8rem", fontWeight: 900 }}>DASH FOR CASH!</h2>
+            <p style={{ color: "#f39c12", fontWeight: 800, marginBottom: 25 }}>{freeSpinsCount} PROMO SPINS LEFT</p>
+            <SpinWheel />
+          </div>
         )}
 
         <div style={{ marginBottom: 20 }}>
@@ -183,17 +206,20 @@ export default function HomeScreen() {
           />
         </div>
 
-        <div style={{ 
-          background: "white", 
-          borderRadius: 30, 
-          padding: "35px 20px", 
-          boxShadow: "0 10px 40px rgba(0,0,0,0.08)", 
-          textAlign: "center",
-          border: "1px solid rgba(0,0,0,0.03)"
-        }}>
-          <h2 style={{ color: "#0a3570", marginBottom: 28, fontSize: "1.6rem", fontWeight: 900 }}>Spin & Win Real Cash</h2>
-          <SpinWheel />
-        </div>
+        {/* Regular wheel location for returning users or when spins are done */}
+        {freeSpinsCount === 0 && (
+          <div id="spin-wheel-section" style={{ 
+            background: "white", 
+            borderRadius: 30, 
+            padding: "35px 20px", 
+            boxShadow: "0 10px 40px rgba(0,0,0,0.08)", 
+            textAlign: "center",
+            border: "1px solid rgba(0,0,0,0.03)"
+          }}>
+            <h2 style={{ color: "#0a3570", marginBottom: 28, fontSize: "1.6rem", fontWeight: 900 }}>Spin & Win Real Cash</h2>
+            <SpinWheel />
+          </div>
+        )}
       </main>
     </Container>
   );

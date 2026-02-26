@@ -1,8 +1,10 @@
 
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import styled, { keyframes } from "styled-components";
+import { useRouter } from "next/navigation";
+import { useUser } from "@/hooks/useUser";
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -18,6 +20,24 @@ const float = keyframes`
 const PageWrapper = styled.main`
   min-height: 100vh;
   background: linear-gradient(135deg, #001f3f 0%, #003366 50%, #1851a3 100%);
+`;
+
+export default function LandingPage() {
+  const { user, loading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push("/home");
+    }
+  }, [user, loading, router]);
+  
+  if (loading) return null;
+  if (user) return null; // Let the redirect happen
+
+  return (
+    <PageWrapper>
+      {/* Rest of the landing page code... */}
   display: flex;
   flex-direction: column;
   align-items: center;

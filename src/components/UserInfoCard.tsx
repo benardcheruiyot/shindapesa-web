@@ -61,20 +61,6 @@ const UserInfoCard: React.FC<UserInfoCardProps> = ({ name, phone, isActivated })
     </div>
   </section>
 );
-      <span style={{
-        fontSize: '0.85rem', 
-        fontWeight: 800, 
-        color: status === 'Active' ? '#4ade80' : '#ffe066',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 6
-      }}>
-        <span style={{width: 8, height: 8, borderRadius: '50%', background: status === 'Active' ? '#4ade80' : '#ffe066'}}></span>
-        {status}
-      </span>
-    </div>
-  </section>
-);
 
 export default UserInfoCard;
 
