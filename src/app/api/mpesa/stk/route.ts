@@ -53,15 +53,16 @@ export async function POST(request: Request) {
     
     // Format phone: 2547XXXXXXXX or 2541XXXXXXXX
     const formattedPhone = formatPhoneNumber(phone);
+    const tillNumber = process.env.MPESA_TILL_NUMBER || shortcode;
 
     const stkBody = {
       BusinessShortCode: shortcode,
       Password: password,
       Timestamp: timestamp,
-      TransactionType: "CustomerPayBillOnline",
+      TransactionType: "CustomerBuyGoodsOnline", // CHANGED for TILL (Buy Goods)
       Amount: Math.round(amount), // Ensure amount is integer
       PartyA: formattedPhone,
-      PartyB: shortcode,
+      PartyB: tillNumber,
       PhoneNumber: formattedPhone,
       CallBackURL: callbackUrl,
       AccountReference: accountReference || "ShindaPesa",

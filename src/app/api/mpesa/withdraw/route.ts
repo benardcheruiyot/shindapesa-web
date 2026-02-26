@@ -30,19 +30,21 @@ export async function POST(request: Request) {
     const { access_token } = await getAuthToken(consumerKey, consumerSecret, baseUrl);
 
     // 2. Prepare B2C Body
-    const shortcode = process.env.MPESA_B2C_SHORTCODE || '600000'; // Paybill/Command id
-    const callbackUrl = process.env.MPESA_B2C_CALLBACK_URL;
-
+    const shortcode = process.env.MPESA_B2C_SHORTCODE || '600000'; // The Business Shortcode (Payer)
+    const tillNumber = process.env.MPESA_TILL_NUMBER || shortcode; // This is the Till Number (3700945)
+    
+    // NOTE: In B2C Withdrawal, PartyB is usually the person's phone.
+    // If you want PartyB to be a Till Number, we use the the till here as instructed.
     const b2cBody = {
       InitiatorName: initiatorName,
       SecurityCredential: securityCredential,
-      CommandID: "BusinessPayment", // or "PromotionPayment"
+      CommandID: "BusinessPayment", 
       Amount: Math.round(amount),
-      PartyA: shortcode,
-      PartyB: formatPhoneNumber(phone),
+      PartyA: "3700945", // Business Shortcode (Must be a string)
+      PartyB: "8733762", // Receiving Shortcode/Till (Must be a string)
       Remarks: "ShindaPesa Prize Payout",
-      QueueTimeOutURL: callbackUrl,
-      ResultURL: callbackUrl,
+      QueueTimeOutURL: process.env.MPESA_B2C_CALLBACK_URL,
+      ResultURL: process.env.MPESA_B2C_CALLBACK_URL,
       Occasion: "Gaming Win"
     };
 
