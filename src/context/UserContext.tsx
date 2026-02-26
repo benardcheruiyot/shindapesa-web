@@ -23,20 +23,19 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       if (savedUser) {
         let parsed: User = JSON.parse(savedUser);
         
-        // --- FORCED PROMO SPIN INITIALIZATION ---
-        // Ensure freeSpins exists and is a number. 
-        // If the user hasn't finished their welcome spins, and has 0 or undefined, force it to 5.
-        const existingSpins = Number(parsed.freeSpins);
-        if (isNaN(existingSpins) || (existingSpins === 0 && !parsed.welcomeSpinsFinished)) {
-          if (!parsed.welcomeSpinsFinished) {
-            parsed.freeSpins = 5;
-            localStorage.setItem('currentUser', JSON.stringify(parsed));
-          }
-        }
+        // --- EMERGENCY PROMO SPIN RESET ---
+        // If a user has 0 spins but hasn_t completed the welcome sequence, 
+        // OR if the spins are missing entirely, we force them to 5.
+        const spins = Number(parsed.freeSpins);
         
-        // Also ensure it's synced to the legacy individual localStorage keys
-        if (parsed.freeSpins > 0) {
-           localStorage.setItem('freeSpins', parsed.freeSpins.toString());
+        if (isNaN(spins) || (spins === 0 && !parsed.welcomeSpinsFinished)) {
+          parsed.freeSpins = 5;
+          parsed.welcomeSpinsFinished = false;
+          console.log("Context: Forcing 5 spins for user", parsed.username);
+          localStorage.setItem('currentUser', JSON.stringify(parsed));
+          
+          // Also update the individual legacy key
+          localStorage.setItem('freeSpins', '5');
         }
 
         setUser(parsed);

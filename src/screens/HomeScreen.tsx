@@ -37,11 +37,17 @@ const PromoBanner = styled.div`
   background: #ffcc00;
   color: #000;
   text-align: center;
-  padding: 10px;
+  padding: 12px;
   font-weight: 900;
-  font-size: 0.95rem;
+  font-size: 1rem;
   text-transform: uppercase;
   border-bottom: 2px solid #000;
+  animation: pulse 1s infinite alternate;
+  
+  @keyframes pulse {
+    from { opacity: 1; }
+    to { opacity: 0.8; }
+  }
 `;
 
 const LogoutButton = styled.button`
@@ -64,8 +70,8 @@ const ModalOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.9);
+  backdrop-filter: blur(8px);
   z-index: 2000;
   display: flex;
   align-items: center;
@@ -76,12 +82,12 @@ const ModalOverlay = styled.div`
 const ModalContent = styled.div`
   background: #001f3f;
   border-radius: 28px;
-  padding: 32px;
+  padding: 40px 32px;
   text-align: center;
   border: 4px solid #ffe066;
   max-width: 420px;
   width: 100%;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 `;
 
 export default function HomeScreen() {
@@ -96,7 +102,9 @@ export default function HomeScreen() {
   }, [user, loading, router]);
 
   useEffect(() => {
+    // Show welcome modal if user has any spins left
     if (user && Number(user.freeSpins) > 0) {
+      console.log("HomeScreen: Spins detected:", user.freeSpins);
       const shown = sessionStorage.getItem("welcomeShown");
       if (!shown) {
         setShowWelcomeModal(true);
@@ -113,10 +121,12 @@ export default function HomeScreen() {
     );
   }
 
+  const freeSpinsCount = Number(user.freeSpins) || 0;
+
   return (
     <Container>
-      {Number(user.freeSpins) > 0 && (
-        <PromoBanner> 5 FREE PROMO SPINS DETECTED! WIN UP TO 20,000 KES!</PromoBanner>
+      {freeSpinsCount > 0 && (
+        <PromoBanner> 5 FREE PROMO SPINS ACTIVE! WIN UP TO 20,000 KES!</PromoBanner>
       )}
       <Header>
         <Logo>SHINDAPESA</Logo>
@@ -127,11 +137,11 @@ export default function HomeScreen() {
         {showWelcomeModal && (
           <ModalOverlay>
             <ModalContent>
-              <div style={{ fontSize: "5rem", marginBottom: 20 }}></div>
-              <h2 style={{ color: "white", fontSize: "2rem", marginBottom: 15, fontWeight: 900 }}>WELCOME BONUS!</h2>
-              <p style={{ color: "rgba(255,255,255,0.85)", marginBottom: 30, fontSize: "1.1rem", lineHeight: 1.6 }}>
-                You have received <b>5 PROMOTIONAL SPINS</b>!<br/><br/>
-                Cost: <b>KES 100</b> per spin (auto-deducted).<br/>
+              <div style={{ fontSize: "6rem", marginBottom: 24 }}></div>
+              <h2 style={{ color: "white", fontSize: "2.2rem", marginBottom: 15, fontWeight: 900 }}>WELCOME BONUS!</h2>
+              <p style={{ color: "white", marginBottom: 35, fontSize: "1.15rem", lineHeight: 1.6, opacity: 0.9 }}>
+                You have received <b style={{color: "#ffe066"}}>5 PROMOTIONAL SPINS</b>!<br/><br/>
+                Cost: <b>KES 100</b> per spin.<br/>
                 Top Prize: <b>KES 20,000</b>!
               </p>
               <button 
@@ -139,14 +149,14 @@ export default function HomeScreen() {
                 style={{ 
                   background: "#ffe066", 
                   color: "#001f3f", 
-                  padding: "18px", 
-                  borderRadius: "16px", 
+                  padding: "20px", 
+                  borderRadius: "18px", 
                   fontWeight: 900, 
                   border: "none", 
                   cursor: "pointer", 
                   width: "100%", 
-                  fontSize: "1.2rem",
-                  boxShadow: "0 4px 15px rgba(255,224,102,0.3)"
+                  fontSize: "1.3rem",
+                  boxShadow: "0 6px 20px rgba(255,224,102,0.4)"
                 }}
               >
                 START SPINNING
@@ -167,7 +177,7 @@ export default function HomeScreen() {
           <AccountBalanceCard 
             balance={Number(user.balance) || 0} 
             clicks={Number(user.clicks) || 0} 
-            freeSpins={Number(user.freeSpins) || 0}
+            freeSpins={freeSpinsCount}
             referral={Number(user.referralCredits) || 0}
             onWithdraw={() => router.push("/wallet")}
           />
@@ -176,12 +186,12 @@ export default function HomeScreen() {
         <div style={{ 
           background: "white", 
           borderRadius: 30, 
-          padding: "30px 20px", 
-          boxShadow: "0 10px 30px rgba(0,0,0,0.06)", 
+          padding: "35px 20px", 
+          boxShadow: "0 10px 40px rgba(0,0,0,0.08)", 
           textAlign: "center",
           border: "1px solid rgba(0,0,0,0.03)"
         }}>
-          <h2 style={{ color: "#0a3570", marginBottom: 24, fontSize: "1.5rem", fontWeight: 900 }}>Lucky Spin Wheel</h2>
+          <h2 style={{ color: "#0a3570", marginBottom: 28, fontSize: "1.6rem", fontWeight: 900 }}>Spin & Win Real Cash</h2>
           <SpinWheel />
         </div>
       </main>
