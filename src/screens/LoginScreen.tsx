@@ -204,6 +204,7 @@ const LoginScreen = () => {
       localStorage.setItem('userPhone', user.phone || user.phoneNumber);
       localStorage.setItem('collectedAmount', (user.balance || 0).toString());
       localStorage.setItem('userClicks', (user.clicks || 0).toString());
+      localStorage.setItem('freeSpins', (user.freeSpins || 0).toString());
       localStorage.setItem('welcomeSpinsFinished', user.welcomeSpinsFinished ? 'true' : 'false');
       localStorage.setItem('isActivated', user.isActivated ? 'true' : 'false');
       

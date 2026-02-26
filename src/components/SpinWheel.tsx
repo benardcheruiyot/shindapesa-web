@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useUser } from '@/context/UserContext';
 
@@ -53,14 +53,14 @@ const SpinButton = styled.button`
 `;
 
 const wheelData = [
-  { label: 'KES 1000', color: '#ffe066', value: 1000 },
-  { label: '-KES 1000', color: '#b71c1c', value: -1000 },
-  { label: 'KES 600', color: '#ffb3b3', value: 600 },
-  { label: '-KES 500', color: '#b71c1c', value: -500 },
-  { label: 'KES 500', color: '#7ed6df', value: 500 },
-  { label: '-KES 750', color: '#c0392b', value: -750 },
-  { label: 'KES 800', color: '#ffe066', value: 800 },
-  { label: '-KES 600', color: '#b71c1c', value: -600 },
+  { label: 'KES 15,000', color: '#ffe066', value: 15000 },
+  { label: 'KES 0', color: '#001f3f', value: 0 },
+  { label: 'KES 20,000', color: '#1851a3', value: 20000 },
+  { label: 'KES 0', color: '#001f3f', value: 0 },
+  { label: 'KES 12,000', color: '#ffe066', value: 12000 },
+  { label: 'KES 0', color: '#001f3f', value: 0 },
+  { label: 'KES 18,000', color: '#1851a3', value: 18000 },
+  { label: 'KES 0', color: '#001f3f', value: 0 },
 ];
 
 const SpinWheel = () => {
@@ -69,47 +69,72 @@ const SpinWheel = () => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [result, setResult] = useState<string | null>(null);
 
+  // Debug log to trace spins
+  useEffect(() => {
+    if (user) {
+      console.log(`SpinWheel Sync - User: ${user.username}, Spins: ${user.freeSpins}, Balance: ${user.balance}`);
+    }
+  }, [user]);
+
   const spin = () => {
     if (isSpinning || !user) return;
     
-    // Check if account is activated for real spins
-    if (!user.welcomeSpinsFinished && !user.isActivated) {
-       // Allow some spins for testing or demo?
+    // Explicitly check for free spins
+    const currentSpins = Number(user.freeSpins) || 0;
+    const isFreeSpin = currentSpins > 0;
+    
+    console.log("Spin Attempt - isFreeSpin:", isFreeSpin, "Count:", currentSpins);
+
+    // Check if account is activated for real spins (if no free spins)
+    if (!isFreeSpin && !user.isActivated) {
+       alert('Please activate your account to keep spinning!');
+       return;
+    }
+
+    // COST logic (if not free spin)
+    if (!isFreeSpin && (Number(user.balance) || 0) < 100) {
+      alert('Insufficient balance! Each spin costs KES 100.');
+      return;
     }
 
     setIsSpinning(true);
     setResult(null);
 
     // Randomize result
-    const extraDegrees = Math.floor(Math.random() * 360);
-    const totalSpins = 5 + Math.floor(Math.random() * 5); // 5 to 10 full rotations
-    const newRotation = rotation + (totalSpins * 360) + extraDegrees;
+    let wonSliceIndex: number;
+
+    if (isFreeSpin) {
+      // Sequence: Loss (5), Win 20k (4), Loss (3), Win 15k (2), Loss (1)
+      // If we have 5 spins left, we're on the 1st spin (idx 0)
+      const sequenceIndex = 5 - currentSpins; 
+      const indices = [1, 2, 5, 0, 7]; // Sequence of slice indices
+      wonSliceIndex = indices[sequenceIndex] ?? 7; 
+      console.log(`Executing Promo Spin #${sequenceIndex + 1}, target index: ${wonSliceIndex}`);
+    } else {
+      wonSliceIndex = Math.floor(Math.random() * wheelData.length);
+    }
+    
+    const sliceAngle = 360 / wheelData.length;
+    const targetRotation = (360 - (wonSliceIndex * sliceAngle)) % 360;
+    
+    const totalSpins = 5 + Math.floor(Math.random() * 5); 
+    const newRotation = rotation + (totalSpins * 360) + (targetRotation - (rotation % 360) + 360) % 360;
     
     setRotation(newRotation);
 
     setTimeout(() => {
       setIsSpinning(false);
-      
-      // Calculate which slice it landed on
-      // The pointer is at the top (0 deg). 
-      // The wheel rotates clockwise.
-      // A point at angle A on the wheel moves to (A + rotation) % 360.
-      // We want to know which slice is at the top (0 deg).
-      // So (sliceAngle + rotation) % 360 = 0 => sliceAngle = (-rotation) % 360
-      const actualRotation = newRotation % 360;
-      const sliceAngle = 360 / wheelData.length;
-      
-      // Adjusted calculation for pointer at top
-      const index = Math.floor(((360 - (actualRotation % 360)) % 360) / sliceAngle);
-      const wonSlice = wheelData[index];
-      
+      const wonSlice = wheelData[wonSliceIndex];
       setResult(`You won ${wonSlice.label}!`);
       
-      // Update balance in context
-      const currentBalance = user.balance || 0;
+      const currentBalance = Number(user.balance) || 0;
+      const nextSpins = isFreeSpin ? currentSpins - 1 : 0;
+
       updateUser({
-        balance: currentBalance + wonSlice.value,
-        clicks: (user.clicks || 0) + 1
+        balance: currentBalance + (wonSlice.value || 0) - 100, 
+        clicks: (Number(user.clicks) || 0) + 1,
+        freeSpins: nextSpins,
+        welcomeSpinsFinished: isFreeSpin ? (nextSpins === 0) : true
       });
 
     }, 4000);
@@ -165,6 +190,9 @@ const SpinWheel = () => {
 
   return (
     <WheelContainer>
+      <div style={{ color: '#0a3570', fontWeight: 700, marginBottom: 10, fontSize: '0.9rem' }}>
+        {user?.freeSpins ? `🎁 PROMO SPINS DETECTED (${user.freeSpins} left)` : 'LUCKY SPIN ACTIVE'}
+      </div>
       <div style={{ position: 'relative' }}>
         <Pointer />
         <WheelWrapper rotation={rotation} transitioning={isSpinning}>
@@ -183,7 +211,7 @@ const SpinWheel = () => {
           </div>
         )}
         <SpinButton onClick={spin} disabled={isSpinning}>
-          {isSpinning ? 'SPINNING...' : 'SPIN NOW!'}
+          {isSpinning ? 'SPINNING...' : (user && user.freeSpins > 0 ? `PROMO SPIN (${user.freeSpins} Left)` : 'LUCKY SPIN (KES 100)')}
         </SpinButton>
       </div>
     </WheelContainer>

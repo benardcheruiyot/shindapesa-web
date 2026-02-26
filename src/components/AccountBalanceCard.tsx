@@ -3,11 +3,12 @@ import React from 'react';
 interface AccountBalanceCardProps {
   balance: number;
   clicks: number;
+  freeSpins?: number;
   referral: number;
   onWithdraw: () => void;
 }
 
-const AccountBalanceCard: React.FC<AccountBalanceCardProps> = ({ balance, clicks, referral, onWithdraw }) => (
+const AccountBalanceCard: React.FC<AccountBalanceCardProps> = ({ balance, clicks, freeSpins = 0, referral, onWithdraw }) => (
   <section style={{
     background: 'linear-gradient(135deg, #1851a3, #001f3f)',
     border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -26,7 +27,7 @@ const AccountBalanceCard: React.FC<AccountBalanceCardProps> = ({ balance, clicks
         <div style={{fontSize: '0.9rem', fontWeight: 600, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: 1}}>Available Balance</div>
         <div style={{fontSize: '3rem', fontWeight: 900, color: '#ffe066', marginTop: 4, letterSpacing: -1}}>
           <span style={{fontSize: '1.5rem', verticalAlign: 'middle', marginRight: 8}}>KES</span>
-          {balance}
+          {balance.toLocaleString()}
         </div>
       </div>
       <div style={{background: 'rgba(255,255,255,0.1)', padding: '10px', borderRadius: 16, fontSize: '1.5rem'}}>
@@ -34,14 +35,18 @@ const AccountBalanceCard: React.FC<AccountBalanceCardProps> = ({ balance, clicks
       </div>
     </div>
 
-    <div style={{display:'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 25}}>
-      <div style={{background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: 20, textAlign: 'center'}}>
-        <div style={{fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', marginBottom: 4}}>Total Clicks</div>
-        <div style={{fontSize: '1.2rem', fontWeight: 800}}>{clicks}</div>
+    <div style={{display:'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 25}}>
+      <div style={{background: 'rgba(255,255,255,0.05)', padding: '12px 8px', borderRadius: 20, textAlign: 'center'}}>
+        <div style={{fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', marginBottom: 4}}>Clicks</div>
+        <div style={{fontSize: '1.1rem', fontWeight: 800}}>{clicks}</div>
       </div>
-      <div style={{background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: 20, textAlign: 'center'}}>
-        <div style={{fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', marginBottom: 4}}>Referral Earn</div>
-        <div style={{fontSize: '1.2rem', fontWeight: 800, color: '#ffe066'}}>KES {referral}</div>
+      <div style={{background: 'rgba(255,255,255,0.1)', padding: '12px 8px', borderRadius: 20, textAlign: 'center', border: '1px solid rgba(255, 224, 102, 0.2)'}}>
+        <div style={{fontSize: '0.75rem', color: '#ffe066', marginBottom: 4, fontWeight: 700}}>PROMOS</div>
+        <div style={{fontSize: '1.1rem', fontWeight: 900, color: '#ffe066'}}>{freeSpins}</div>
+      </div>
+      <div style={{background: 'rgba(255,255,255,0.05)', padding: '12px 8px', borderRadius: 20, textAlign: 'center'}}>
+        <div style={{fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', marginBottom: 4}}>Referral</div>
+        <div style={{fontSize: '1.1rem', fontWeight: 800}}>KES {referral}</div>
       </div>
     </div>
 

@@ -6,6 +6,8 @@ export interface User {
   password?: string;
   balance: number;
   clicks: number;
+  freeSpins: number; // For new users
+  referralCredits: number;
   referralBy?: string;
   welcomeSpinsFinished: boolean;
   isActivated: boolean;

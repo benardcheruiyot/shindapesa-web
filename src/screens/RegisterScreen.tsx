@@ -250,6 +250,8 @@ const RegisterScreen = () => {
       password, 
       balance: 1000, 
       clicks: 0,
+      freeSpins: 5,
+      referralCredits: 0,
       referralBy: referralCode,
       welcomeSpinsFinished: false,
       isActivated: false 
@@ -264,11 +266,12 @@ const RegisterScreen = () => {
     localStorage.setItem('userPhone', phoneNumber);
     localStorage.setItem('collectedAmount', '1000');
     localStorage.setItem('userClicks', '0');
+    localStorage.setItem('freeSpins', '5');
     localStorage.setItem('welcomeSpinsFinished', 'false');
     localStorage.setItem('isActivated', 'false');
     
     refreshUser();
-    router.push('/home');
+    setTimeout(() => router.push('/home'), 100);
   };
 
   return (
