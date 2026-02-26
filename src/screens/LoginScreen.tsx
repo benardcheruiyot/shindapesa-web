@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 import { useUser } from '@/context/UserContext';
+import { userService } from '@/services/userService';
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -190,23 +191,11 @@ const LoginScreen = () => {
       return;
     }
 
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find((u: any) => 
-      (u.username === username || u.phone === username) && u.password === password
-    );
+    const user = userService.findUser(username);
 
-    if (user) {
-      // Save full user object to currentUser
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      
-      // Legacy support for other parts of the app (optional but safe)
-      localStorage.setItem('userName', user.username || user.name);
-      localStorage.setItem('userPhone', user.phone || user.phoneNumber);
-      localStorage.setItem('collectedAmount', (user.balance || 0).toString());
-      localStorage.setItem('userClicks', (user.clicks || 0).toString());
-      localStorage.setItem('freeSpins', (user.freeSpins || 0).toString());
-      localStorage.setItem('welcomeSpinsFinished', user.welcomeSpinsFinished ? 'true' : 'false');
-      localStorage.setItem('isActivated', user.isActivated ? 'true' : 'false');
+    if (user && user.password === password) {
+      // Use Service to save current session
+      userService.saveUser(user, true);
       
       refreshUser(); // Update context
       router.push('/home');

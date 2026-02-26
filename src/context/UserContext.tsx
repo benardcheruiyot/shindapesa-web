@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User } from '@/types';
+import { userService } from '@/services/userService';
 
 interface UserContextType {
   user: User | null;
@@ -59,15 +60,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     
     const updatedUser = { ...user, ...updates };
     setUser(updatedUser);
-    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
     
-    // Update in users list too
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const userIndex = users.findIndex((u: User) => u.username === user.username);
-    if (userIndex !== -1) {
-      users[userIndex] = updatedUser;
-      localStorage.setItem('users', JSON.stringify(users));
-    }
+    // Use the Service to persist changes everywhere
+    userService.saveUser(updatedUser, true);
   };
 
   const refreshUser = () => {

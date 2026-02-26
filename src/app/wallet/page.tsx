@@ -2,6 +2,8 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import styled, { keyframes } from "styled-components";
+import { useUser } from "@/context/UserContext";
+import { mpesaApi } from "@/services/mpesaService";
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(15px); }
@@ -169,12 +171,40 @@ const HeaderTitle = styled.h1`
 
 export default function Wallet() {
   const router = useRouter();
-  const [balance, setBalance] = React.useState<number>(1000);
+  const { user, updateUser } = useUser();
+  const [isWithdrawing, setIsWithdrawing] = React.useState(false);
 
-  React.useEffect(() => {
-    const saved = localStorage.getItem("collectedAmount");
-    if (saved) setBalance(parseInt(saved));
-  }, []);
+  const handleWithdrawal = async () => {
+    if (!user) return;
+    
+    const balance = user.balance || 0;
+    if (balance < 100) {
+      alert("Minimum withdrawal is KES 100.");
+      return;
+    }
+
+    if (!user.isActivated) {
+      alert("Please activate your account to unlock withdrawals.");
+      return;
+    }
+
+    setIsWithdrawing(true);
+    try {
+      const result = await mpesaApi.initiateWithdrawal(user.phone || user.phoneNumber || "", balance);
+      
+      if (result.ResponseCode === "0") {
+        alert("Withdrawal initiated! You will receive your cash shortly.");
+        // Deduct balance locally (Wait for callback for 100% accuracy in real app)
+        updateUser({ balance: 0 });
+      } else {
+        alert("M-Pesa Error: " + (result.ResponseDescription || "Request failed"));
+      }
+    } catch (err) {
+      alert("Failed to connect to withdrawal server.");
+    } finally {
+      setIsWithdrawing(false);
+    }
+  };
 
   const history = [
     { id: 1, type: 'Spin Win', amount: 500, date: 'Feb 26, 2026', positive: true },
@@ -194,15 +224,15 @@ export default function Wallet() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <BalanceCard>
             <BalanceTitle>Main Trading Balance</BalanceTitle>
-            <BalanceAmount>KES {balance.toLocaleString()}.00</BalanceAmount>
+            <BalanceAmount>KES {(user?.balance || 0).toLocaleString()}.00</BalanceAmount>
             <ActionButtons>
-              <ActionButton primary onClick={() => {
-                if (balance < 100) {
-                  alert("Minimum withdrawal is KES 100.");
-                } else {
-                  router.push('/home'); // Go to home to use the selection modal
-                }
-              }}>Withdraw</ActionButton>
+              <ActionButton 
+                primary 
+                disabled={isWithdrawing} 
+                onClick={handleWithdrawal}
+              >
+                {isWithdrawing ? "Processing..." : "Withdraw"}
+              </ActionButton>
               <ActionButton onClick={() => alert('Top up coming soon!')}>Top Up</ActionButton>
             </ActionButtons>
             <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>

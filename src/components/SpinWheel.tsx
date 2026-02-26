@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useUser } from '@/context/UserContext';
+import { userService } from '@/services/userService';
 
 const WheelContainer = styled.div`
   position: relative;

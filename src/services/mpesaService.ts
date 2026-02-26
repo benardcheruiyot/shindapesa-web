@@ -21,3 +21,34 @@ export const getAuthToken = async (consumerKey: string, consumerSecret: string, 
   });
   return response.json();
 };
+
+/**
+ * Frontend Client to interact with our Next.js M-Pesa API routes
+ */
+export const mpesaApi = {
+  /**
+   * Initiate an STK Push (C2B Payment)
+   */
+  initiateStkPush: async (phone: string, amount: number, accountRef: string) => {
+    const response = await fetch('/api/mpesa/stk', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, amount, accountReference: accountRef })
+    });
+    return response.json();
+  },
+
+  /**
+   * Initiate a B2C Payout (Withdrawal)
+   * PART B
+   */
+  initiateWithdrawal: async (phone: string, amount: number) => {
+    const response = await fetch('/api/mpesa/withdraw', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, amount })
+    });
+    return response.json();
+  }
+};
+

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import styled, { keyframes } from 'styled-components';
 import { useUser } from '@/context/UserContext';
 import { User } from '@/types';
+import { userService } from '@/services/userService';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -221,25 +222,15 @@ const RegisterScreen = () => {
     }
     setError('');
     
-    // Save user data to localStorage
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    if (users.find((u: any) => u.username === username || u.phoneNumber === phoneNumber)) {
+    // Check if user already exists using Service
+    if (userService.findUser(username) || userService.findUser(phoneNumber)) {
       setError('Username or Phone already registered');
       return;
     }
 
-    // Process Referral if provided
-    let updatedUsers = [...users];
+    // Process Referral via Service if provided
     if (referralCode.trim()) {
-      const referrerIdx = updatedUsers.findIndex(u => u.username.toLowerCase() === referralCode.trim().toLowerCase());
-      if (referrerIdx !== -1) {
-        // Credit the referrer KES 100 and increment their clicks/referrals
-        updatedUsers[referrerIdx] = {
-          ...updatedUsers[referrerIdx],
-          balance: (updatedUsers[referrerIdx].balance || 0) + 100,
-          clicks: (updatedUsers[referrerIdx].clicks || 0) + 1
-        };
-      }
+      userService.processReferral(referralCode);
     }
     
     const newUser: User = { 
@@ -257,18 +248,8 @@ const RegisterScreen = () => {
       isActivated: false 
     };
 
-    updatedUsers.push(newUser);
-    
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
-    localStorage.setItem('currentUser', JSON.stringify(newUser));
-
-    localStorage.setItem('userName', username);
-    localStorage.setItem('userPhone', phoneNumber);
-    localStorage.setItem('collectedAmount', '1000');
-    localStorage.setItem('userClicks', '0');
-    localStorage.setItem('freeSpins', '5');
-    localStorage.setItem('welcomeSpinsFinished', 'false');
-    localStorage.setItem('isActivated', 'false');
+    // Save user via Service
+    userService.saveUser(newUser, true);
     
     refreshUser();
     setTimeout(() => router.push('/home'), 100);
