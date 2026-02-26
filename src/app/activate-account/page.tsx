@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styled, { keyframes } from "styled-components";
@@ -262,7 +263,7 @@ export default function ActivateAccount() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          phone: user.phone || user.phoneNumber,
+          phone: user.phoneNumber,
           amount: activationFee,
           accountReference: "ShindaPesa"
         })
@@ -377,7 +378,7 @@ export default function ActivateAccount() {
               <div style={{ fontSize: '4rem', marginBottom: 20 }}>📱</div>
               <Title>Check Your Phone</Title>
               <Description>
-                A real STK Push has been sent to <b>{user.phone || user.phoneNumber}</b>. 
+                A real STK Push has been sent to <b>{user.phoneNumber}</b>. 
                 <br /><br />
                 Please enter your M-PESA PIN to complete the activation.
               </Description>

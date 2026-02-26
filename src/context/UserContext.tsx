@@ -46,7 +46,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     
     // Update in users list too
     const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const userIndex = users.findIndex((u: User) => u.phone === user.phone);
+    const userIndex = users.findIndex((u: User) => u.username === user.username);
     if (userIndex !== -1) {
       users[userIndex] = updatedUser;
       localStorage.setItem('users', JSON.stringify(users));

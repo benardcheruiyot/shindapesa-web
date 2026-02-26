@@ -191,5 +191,3 @@ const SpinWheel = () => {
 };
 
 export default SpinWheel;
-
-export default SpinWheel;

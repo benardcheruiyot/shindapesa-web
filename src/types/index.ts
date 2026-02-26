@@ -1,6 +1,8 @@
 export interface User {
   username: string;
-  phoneNumber: string;
+  name: string;
+  phone: string;
+  phoneNumber?: string; 
   password?: string;
   balance: number;
   clicks: number;

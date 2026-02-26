@@ -64,7 +64,6 @@ const SiteLogo = styled.div`
   color: #0a3570;
   letter-spacing: 1px;
   text-align: center;
-  );
 `;
 
 const BalanceCard = styled.div`
