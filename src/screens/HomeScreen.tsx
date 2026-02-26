@@ -1,9 +1,11 @@
 "use client";
 import '../app/globals.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import SpinWheel from '../components/SpinWheel';
 import styled from 'styled-components';
+import { useUser } from '@/context/UserContext';
+import { User } from '@/types';
 
 const Drawer = styled.div`
   position: fixed;
@@ -295,36 +297,117 @@ const ReferralCard = styled.div`
 `;
 
 const HomeScreen = () => {
-  console.log('HomeScreen RENDERED - NEW DASHBOARD');
-  // Example user data (replace with real data/fetch logic)
-  const [user] = useState({
-    name: 'Felix Mohamed',
-    phone: '0790***697',
-    balance: 0,
-    clicks: 0,
-    referral: 0,
-    pendingAmount: 2419,
-    pendingStatus: 'Processing',
-  });
+  const router = useRouter();
+  const { user, loading, logout } = useUser();
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: '#f7f7f7' }}>
+        <p>Loading your dashboard...</p>
+      </div>
+    );
+  }
 
   return (
-    <main style={{maxWidth:480,margin:'0 auto',padding:'18px 0',fontFamily:'inherit'}}>
-      <div style={{background:'#d32f2f',color:'#fff',padding:'18px',borderRadius:12,textAlign:'center',fontWeight:800,fontSize:'1.5rem',marginBottom:24}}>
-        THIS IS THE NEW DASHBOARD
-      </div>
-      {/* User Info Card */}
-      <section style={{background:'#0a3570',color:'#fff',borderRadius:16,padding:'18px 18px 12px 18px',marginBottom:18,boxShadow:'0 2px 12px rgba(0,0,0,0.08)'}}>
-        <div style={{fontWeight:700,fontSize:'1.13rem',marginBottom:2}}>{user.name}</div>
-        <div style={{fontSize:'1.01rem',marginBottom:8,opacity:0.92}}>{user.phone}</div>
-        <div style={{display:'flex',alignItems:'center',gap:12}}>
-          <span style={{background:'#e6fbe6',color:'#1b7e1b',borderRadius:8,padding:'2px 10px',fontWeight:600,fontSize:'0.98rem'}}>
-            KES {user.pendingAmount} pending
-          </span>
-          <span style={{color:'#1b7e1b',fontWeight:600,fontSize:'0.98rem'}}>⏳ {user.pendingStatus}</span>
+    <DashboardWrapper>
+      <SiteHeader>
+        <SiteNav>
+          <div 
+            style={{ position: 'absolute', left: 24, fontSize: '1.4rem', color: '#0a3570', cursor: 'pointer' }}
+            onClick={() => setDrawerOpen(true)}
+          >
+            ☰
+          </div>
+          <SiteLogo>ShindaPesa</SiteLogo>
+        </SiteNav>
+      </SiteHeader>
+
+      {isDrawerOpen && (
+        <>
+          <DrawerOverlay onClick={() => setDrawerOpen(false)} />
+          <Drawer>
+            <DrawerClose onClick={() => setDrawerOpen(false)}>&times;</DrawerClose>
+            <DrawerHeader>
+              <DrawerAvatar>{(user.name || user.username || 'U')[0].toUpperCase()}</DrawerAvatar>
+              <DrawerName>{user.name || user.username}</DrawerName>
+              <DrawerPhone>{user.phone || user.phoneNumber}</DrawerPhone>
+              <DrawerBalanceCard>
+                KES {user.balance?.toLocaleString() || '0'}
+              </DrawerBalanceCard>
+            </DrawerHeader>
+            <DrawerNav>
+              <DrawerNavItem onClick={() => router.push('/home')}>
+                🏠 Home Dashboard
+              </DrawerNavItem>
+              <DrawerNavItem onClick={() => router.push('/wallet')}>
+                💰 My Wallet
+              </DrawerNavItem>
+              <DrawerNavItem onClick={() => router.push('/referral')}>
+                👥 Invite Friends
+              </DrawerNavItem>
+              <DrawerNavItem onClick={() => router.push('/activate-account')}>
+                ⚡ Activate Account
+              </DrawerNavItem>
+              <DrawerNavItem className="logout" onClick={logout}>
+                🚪 Logout
+              </DrawerNavItem>
+            </DrawerNav>
+            <DrawerFooter>
+              ShindaPesa v1.0.2
+            </DrawerFooter>
+          </Drawer>
+        </>
+      )}
+
+      <main style={{ maxWidth: 480, margin: '0 auto', padding: '18px 16px', width: '100%' }}>
+        {/* User Info Card */}
+        <section style={{ background: '#0a3570', color: '#fff', borderRadius: 16, padding: '18px', marginBottom: 18, boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}>
+          <div style={{ fontWeight: 700, fontSize: '1.13rem', marginBottom: 2 }}>{user.name || user.username}</div>
+          <div style={{ fontSize: '1.01rem', marginBottom: 12, opacity: 0.92 }}>{user.phone || user.phoneNumber}</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <span style={{ background: '#e6fbe6', color: '#1b7e1b', borderRadius: 8, padding: '4px 10px', fontWeight: 600, fontSize: '0.92rem' }}>
+              KES {user.balance?.toLocaleString() || '0'} Balance
+            </span>
+            <span style={{ color: user.isActivated ? '#1b7e1b' : '#d32f2f', fontWeight: 600, fontSize: '0.92rem' }}>
+              {user.isActivated ? '✅ Verified Account' : '❌ Unverified Account'}
+            </span>
+          </div>
+        </section>
+
+        {/* Spin Wheel Section */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#222', marginBottom: 16 }}>Spin & Win Instant Cash!</h2>
+          <SpinWheel />
         </div>
-      </section>
-      {/* ...rest of dashboard... */}
-    </main>
+
+        {/* Quick Stats Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 24 }}>
+          <div style={{ background: '#fff', padding: 18, borderRadius: 12, boxShadow: '0 2px 4px rgba(0,0,0,0.04)' }}>
+            <div style={{ fontSize: '0.85rem', color: '#888', marginBottom: 4 }}>Total Earnings</div>
+            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#073366' }}>KES {user.balance?.toLocaleString() || '0'}</div>
+          </div>
+          <div style={{ background: '#fff', padding: 18, borderRadius: 12, boxShadow: '0 2px 4px rgba(0,0,0,0.04)' }}>
+            <div style={{ fontSize: '0.85rem', color: '#888', marginBottom: 4 }}>Total Spins</div>
+            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#073366' }}>{user.clicks || 0}</div>
+          </div>
+        </div>
+
+        {/* Action Link */}
+        <div 
+          onClick={() => router.push('/wallet')}
+          style={{ background: '#073366', color: '#fff', textAlign: 'center', padding: '16px', borderRadius: 12, fontWeight: 700, cursor: 'pointer' }}
+        >
+          Withdraw Winnings
+        </div>
+      </main>
+    </DashboardWrapper>
   );
 };
 

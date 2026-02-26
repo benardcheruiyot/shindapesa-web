@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styled, { keyframes } from 'styled-components';
+import { useUser } from '@/context/UserContext';
+import { User } from '@/types';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -195,6 +197,7 @@ const SignInLink = styled.a`
 
 const RegisterScreen = () => {
   const router = useRouter();
+  const { refreshUser } = useUser();
   const [username, setUsername] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
@@ -239,18 +242,23 @@ const RegisterScreen = () => {
       }
     }
     
-    updatedUsers.push({ 
+    const newUser: User = { 
       username, 
-      phoneNumber, 
+      name: username,
+      phone: phoneNumber,
+      phoneNumber,
       password, 
       balance: 1000, 
       clicks: 0,
-      referralBy: referralCode, // Track who referred them
+      referralBy: referralCode,
       welcomeSpinsFinished: false,
       isActivated: false 
-    });
+    };
+
+    updatedUsers.push(newUser);
     
     localStorage.setItem('users', JSON.stringify(updatedUsers));
+    localStorage.setItem('currentUser', JSON.stringify(newUser));
 
     localStorage.setItem('userName', username);
     localStorage.setItem('userPhone', phoneNumber);
@@ -259,6 +267,7 @@ const RegisterScreen = () => {
     localStorage.setItem('welcomeSpinsFinished', 'false');
     localStorage.setItem('isActivated', 'false');
     
+    refreshUser();
     router.push('/home');
   };
 
