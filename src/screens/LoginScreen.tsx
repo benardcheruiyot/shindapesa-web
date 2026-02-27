@@ -102,10 +102,32 @@ const LoginScreen = () => {
         <BottomText>
           New here? <span onClick={() => router.push('/register')}>Create Account</span>
         </BottomText>
+
+        <SecureBadge>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          SSL SECURED & ENCRYPTED
+        </SecureBadge>
       </AuthCard>
     </PageWrapper>
   );
 };
+
+const SecureBadge = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 32px;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  
+  svg {
+    opacity: 0.5;
+  }
+`;
 
 export default LoginScreen;
 

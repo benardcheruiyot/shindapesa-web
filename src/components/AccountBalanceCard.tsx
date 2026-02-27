@@ -11,12 +11,12 @@ interface AccountBalanceCardProps {
 }
 
 const CardContainer = styled.section`
-  background: rgba(15, 23, 42, 0.45);
+  background: rgba(13, 21, 38, 0.45);
   backdrop-filter: blur(40px);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 40px;
-  padding: 48px 36px;
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.1);
+  border-radius: 32px;
+  padding: 40px 32px;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
   color: #ffffff;
   position: relative;
   overflow: hidden;
@@ -34,7 +34,7 @@ const CardContainer = styled.section`
       rgba(59, 130, 246, 0.05),
       transparent
     );
-    animation: shimmer 8s infinite linear;
+    animation: shimmer 12s infinite linear;
   }
 
   @keyframes shimmer {
@@ -43,19 +43,19 @@ const CardContainer = styled.section`
   }
 
   @media (max-width: 600px) {
-    padding: 32px 24px;
-    border-radius: 32px;
+    padding: 24px 20px;
+    border-radius: 24px;
   }
 `;
 
 const GlowEffect = styled.div`
   position: absolute;
-  top: -150px;
-  right: -150px;
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
-  opacity: 0.2;
+  top: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+  opacity: 0.3;
   z-index: 0;
 `;
 
@@ -65,143 +65,146 @@ const Content = styled.div`
 `;
 
 const Label = styled.div`
-  font-size: 0.8rem;
-  font-weight: 950;
-  color: #fbdf07;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94a3b8;
   text-transform: uppercase;
-  letter-spacing: 4px;
-  margin-bottom: 12px;
-  opacity: 0.9;
+  letter-spacing: 0.15em;
+  margin-bottom: 8px;
 
   @media (max-width: 600px) {
-    font-size: 0.7rem;
-    letter-spacing: 2px;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
   }
 `;
 
 const MainBalance = styled.div`
-  font-size: 5.2rem;
-  font-weight: 950;
+  font-size: 4rem;
+  font-weight: 800;
   color: #ffffff;
-  letter-spacing: -4px;
-  line-height: 1;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
   display: flex;
   align-items: baseline;
-  gap: 16px;
+  gap: 12px;
 
   span {
-    font-size: 1.6rem;
-    color: #fbdf07;
-    font-weight: 950;
+    font-size: 1.25rem;
+    color: #3b82f6;
+    font-weight: 700;
     letter-spacing: 0;
   }
 
   @media (max-width: 600px) {
-    font-size: 3.5rem;
-    gap: 10px;
+    font-size: 2.75rem;
+    gap: 8px;
     
     span {
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
   }
 
   @media (max-width: 400px) {
-    font-size: 2.8rem;
+    font-size: 2.25rem;
   }
 `;
 
 const SubBalance = styled.div`
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: rgba(255,255,255,0.4);
-  margin-top: 16px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #64748b;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 
   span {
-    color: #ffffff;
-    font-weight: 950;
-    margin-left: 4px;
+    color: #94a3b8;
+    font-weight: 600;
   }
 `;
 
 const StatsGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px;
-  margin: 40px 0;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 32px 0;
 
   @media (max-width: 600px) {
-    gap: 12px;
-    margin: 28px 0;
+    gap: 8px;
+    margin: 24px 0;
   }
 `;
 
 const StatItem = styled.div<{ $highlight?: boolean }>`
-  background: ${props => props.$highlight ? 'rgba(251, 223, 7, 0.08)' : 'rgba(255, 255, 255, 0.02)'};
-  padding: 24px 16px;
-  border-radius: 28px;
+  background: ${props => props.$highlight ? 'rgba(59, 130, 246, 0.08)' : 'rgba(255, 255, 255, 0.03)'};
+  padding: 16px 12px;
+  border-radius: 16px;
   text-align: center;
-  border: 1px solid ${props => props.$highlight ? 'rgba(251, 223, 7, 0.2)' : 'rgba(255,255,255,0.05)'};
-  transition: all 0.3s ease;
+  border: 1px solid ${props => props.$highlight ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255, 255, 255, 0.05)'};
+  transition: all 0.2s ease;
 
   &:hover {
-    background: ${props => props.$highlight ? 'rgba(251, 223, 7, 0.12)' : 'rgba(255, 255, 255, 0.04)'};
-    transform: translateY(-2px);
+    background: ${props => props.$highlight ? 'rgba(59, 130, 246, 0.12)' : 'rgba(255, 255, 255, 0.05)'};
+    transform: translateY(-1px);
   }
 
   .stat-label {
     font-size: 0.6rem;
-    color: ${props => props.$highlight ? '#fbdf07' : 'rgba(255,255,255,0.4)'};
-    margin-bottom: 8px;
-    font-weight: 950;
-    letter-spacing: 1.5px;
+    color: ${props => props.$highlight ? '#60a5fa' : '#64748b'};
+    margin-bottom: 4px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
   }
 
   .stat-value {
-    font-size: 1.4rem;
-    font-weight: 950;
-    color: ${props => props.$highlight ? '#ffffff' : '#ffffff'};
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #f8fafc;
 
     @media (max-width: 600px) {
-      font-size: 1.15rem;
+      font-size: 1rem;
     }
   }
 
   @media (max-width: 600px) {
-    padding: 16px 12px;
-    border-radius: 20px;
+    padding: 12px 8px;
   }
 `;
 
 const WithdrawButton = styled.button`
-  background: linear-gradient(135deg, #fbdf07 0%, #d4bb00 100%);
-  color: #000000;
+  background: #3b82f6;
+  color: #ffffff;
   border: none;
-  border-radius: 24px;
-  padding: 28px;
-  font-weight: 950;
-  font-size: 1.2rem;
+  border-radius: 16px;
+  padding: 18px;
+  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  box-shadow: 0 20px 40px rgba(251, 223, 7, 0.25);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 0.05em;
 
   span {
-    font-size: 1.4rem;
+    font-size: 1.25rem;
+    transition: transform 0.3s ease;
   }
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 25px 50px rgba(251, 223, 7, 0.4);
-    filter: brightness(1.1);
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(59, 130, 246, 0.3);
+    
+    span {
+      transform: translateX(4px);
+    }
   }
 
   &:active {
@@ -209,9 +212,9 @@ const WithdrawButton = styled.button`
   }
 
   @media (max-width: 600px) {
-    padding: 22px;
-    font-size: 1.05rem;
-    border-radius: 20px;
+    padding: 16px;
+    font-size: 0.9rem;
+    border-radius: 14px;
   }
 `;
 

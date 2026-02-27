@@ -6,63 +6,76 @@ interface ReferralCardProps {
 }
 
 const CardContainer = styled.section`
-  background: #002d58;
-  color: #ffffff;
-  border-radius: 40px;
-  padding: 40px;
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 32px;
+  padding: 32px;
   margin-bottom: 24px;
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
-  border: 4px solid #fbdf07;
   position: relative;
   overflow: hidden;
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+    opacity: 0.5;
+  }
 `;
 
 const Glow = styled.div`
   position: absolute;
-  bottom: -100px;
-  right: -100px;
-  width: 250px;
-  height: 250px;
-  background: radial-gradient(circle, rgba(0, 91, 170, 0.1) 0%, transparent 70%);
-  opacity: 0.1;
+  top: -20px;
+  right: -20px;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
   z-index: 0;
 `;
 
 const Badge = styled.div`
-  background: rgba(57, 181, 74, 0.1);
-  color: #39b54a;
-  padding: 6px 14px;
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  padding: 6px 12px;
   border-radius: 12px;
   font-size: 0.6rem;
-  font-weight: 950;
-  letter-spacing: 2px;
-  border: 1px solid rgba(57, 181, 74, 0.2);
+  font-weight: 800;
+  letter-spacing: 1px;
+  border: 1px solid rgba(34, 197, 94, 0.2);
   text-transform: uppercase;
 `;
 
 const IconWrapper = styled.div`
-  background: rgba(251, 223, 7, 0.1);
-  padding: 12px;
-  border-radius: 16px;
-  border: 1px solid rgba(251, 223, 7, 0.2);
+  background: rgba(59, 130, 246, 0.1);
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
 const Title = styled.h3`
-  font-weight: 950;
-  font-size: 1.2rem;
+  font-weight: 800;
+  font-size: 1.1rem;
   color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   margin: 0;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 `;
 
 const BalanceDisplay = styled.div`
-  font-size: 3.2rem;
-  font-weight: 950;
-  margin-bottom: 32px;
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 24px;
   color: #ffffff;
   letter-spacing: -2px;
   display: flex;
@@ -70,32 +83,31 @@ const BalanceDisplay = styled.div`
   gap: 12px;
 
   span {
-    font-size: 1.1rem;
-    color: #fbdf07;
-    font-weight: 950;
+    font-size: 1.2rem;
+    color: #3b82f6;
+    font-weight: 800;
   }
 `;
 
 const ActionButton = styled.button`
-  background: rgba(255, 255, 255, 0.03);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 24px;
-  font-weight: 950;
-  font-size: 1.1rem;
+  border: none;
+  border-radius: 16px;
+  padding: 20px;
+  font-weight: 800;
+  font-size: 1rem;
   cursor: pointer;
   width: 100%;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  letter-spacing: 1px;
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3);
 
   &:hover {
-    transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.06);
-    border-color: #fbdf07;
-    box-shadow: 0 15px 30px rgba(251, 223, 7, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    filter: brightness(1.1);
   }
 `;
 
@@ -129,8 +141,8 @@ const ReferralCard: React.FC<ReferralCardProps> = ({ referral }) => (
         GENERATE SECURE LINK 🚀
       </ActionButton>
 
-      <div style={{ marginTop: 24, textAlign: 'center', opacity: 0.35, fontSize: '0.65rem', fontWeight: 950, letterSpacing: 1.5, textTransform: 'uppercase' }}>
-        SECURE MULTI-LEVEL COMMISSION PROTOCOL ACTIVE
+      <div style={{ marginTop: 24, textAlign: 'center', opacity: 0.3, fontSize: '0.6rem', fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', color: '#94a3b8' }}>
+        ENCRYPTED AFFILIATE NODE ACTIVE
       </div>
     </div>
   </CardContainer>

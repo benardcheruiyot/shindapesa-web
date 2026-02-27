@@ -10,54 +10,55 @@ const PayoutList = styled.div`
 `;
 
 const PayoutItem = styled.div`
-  background: rgba(30, 41, 59, 0.4);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 18px 24px;
-  border-radius: 20px;
+  background: rgba(13, 21, 38, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 16px 20px;
+  border-radius: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: all 0.3s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
-    background: rgba(30, 41, 59, 0.6);
-    border-color: rgba(245, 158, 11, 0.2);
-    transform: translateX(5px);
+    background: rgba(13, 21, 38, 0.6);
+    border-color: rgba(59, 130, 246, 0.2);
+    transform: translateX(4px);
   }
 
   .user {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
   }
 
   .name-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
 
   .name {
-    font-weight: 800;
-    font-size: 0.95rem;
-    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #f8fafc;
   }
 
   .verified-tag {
     font-size: 0.55rem;
-    background: rgba(76, 209, 55, 0.1);
-    color: #4cd137;
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
     padding: 1px 6px;
     border-radius: 4px;
-    font-weight: 900;
+    font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .phone {
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.4);
-    font-weight: 600;
+    color: #64748b;
+    font-weight: 500;
   }
 
   .amount {
@@ -66,27 +67,27 @@ const PayoutItem = styled.div`
 
   .value {
     display: block;
-    color: #4cd137;
-    font-weight: 950;
-    font-size: 1.1rem;
-    letter-spacing: -0.5px;
+    color: #22c55e;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
   }
 
   .time {
     font-size: 0.65rem;
-    color: rgba(255, 255, 255, 0.3);
-    font-weight: 800;
+    color: #64748b;
+    font-weight: 600;
     text-transform: uppercase;
   }
 `;
 
 const TransactionID = styled.div`
   font-size: 0.55rem;
-  color: rgba(255, 255, 255, 0.3);
-  font-family: 'JetBrains Mono', monospace;
-  margin-top: 4px;
-  letter-spacing: 0.5px;
-  font-weight: 600;
+  color: #475569;
+  font-family: inherit;
+  margin-top: 2px;
+  letter-spacing: 0.02em;
+  font-weight: 500;
 `;
 
 interface Payout {

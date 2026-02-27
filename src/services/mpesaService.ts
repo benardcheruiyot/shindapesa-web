@@ -15,14 +15,31 @@ export const generateTimestamp = (): string => {
 };
 
 export const getAuthToken = async (consumerKey: string, consumerSecret: string, baseUrl: string) => {
-  const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64');
-  const response = await fetch(`${baseUrl}/oauth/v1/generate?grant_type=client_credentials`, {
-    headers: { Authorization: `Basic ${auth}` }
-  });
-  return response.json();
+  try {
+    const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64');
+    const response = await fetch(`${baseUrl}/oauth/v1/generate?grant_type=client_credentials`, {
+      headers: { Authorization: `Basic ${auth}` }
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Daraja Auth Error (${response.status}):`, errorText);
+      return { error: true, errorMessage: `Safaricom rejected credentials (${response.status})` };
+    }
+    
+    return response.json();
+  } catch (err: any) {
+    console.error("Network error during Daraja Auth:", err.message);
+    return { error: true, errorMessage: "Network error connecting to Safaricom" };
+  }
 };
 
 const getApiBaseUrl = () => {
+  // Always use relative paths in the browser for reliability across localhost/production
+  if (typeof window !== 'undefined') {
+    return '';
+  }
+  
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_APP_URL || '';
   return baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
 };

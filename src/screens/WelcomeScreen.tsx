@@ -67,84 +67,88 @@ const GlowRing = styled.div`
   width: 160px;
   height: 160px;
   border-radius: 50%;
-  border: 4px solid rgba(245, 158, 11, 0.2);
-  animation: ${spin} 8s linear infinite;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  animation: ${spin} 12s linear infinite;
   &:before {
     content: '';
     position: absolute;
-    top: -5px;
+    top: -4px;
     left: 50%;
-    width: 12px;
-    height: 12px;
-    background: #f59e0b;
+    width: 8px;
+    height: 8px;
+    background: #3b82f6;
     border-radius: 50%;
+    box-shadow: 0 0 10px #3b82f6;
   }
 `;
 
 const LogoBody = styled.div`
   width: 100px;
   height: 100px;
-  background: linear-gradient(135deg, #f59e0b, #b45309);
-  border-radius: 30px;
+  background: rgba(13, 21, 38, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
-  transform: rotate(-10deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transform: rotate(-5deg);
 `;
 
 const Title = styled.h1`
-  font-size: 3.2rem;
-  font-weight: 950;
+  font-size: 3.5rem;
+  font-weight: 800;
   margin-bottom: 8px;
-  letter-spacing: -2px;
+  letter-spacing: -0.04em;
   color: #ffffff;
   text-transform: uppercase;
 `;
 
 const Subtitle = styled.div`
-  font-size: 1.1rem;
-  color: #f59e0b;
-  font-weight: 950;
+  font-size: 1rem;
+  color: #3b82f6;
+  font-weight: 700;
   margin-bottom: 40px;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 0.1em;
 `;
 
 const LoadingText = styled.div`
   margin-top: 20px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #aaa;
-  letter-spacing: 3px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 `;
 
 const SystemLog = styled.div`
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(13, 21, 38, 0.4);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 12px;
-  padding: 12px;
-  font-family: monospace;
+  padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: #64748b;
   text-align: left;
   width: 100%;
   margin-top: 32px;
 `;
 
 const LogEntry = styled.div`
-  margin-bottom: 4px;
-  span { color: #39b54a; }
+  margin-bottom: 6px;
+  span { color: #22c55e; }
 `;
 
 const Spinner = styled.div`
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(255, 255, 255, 0.1);
-  border-top-color: #f59e0b;
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(59, 130, 246, 0.1);
+  border-top-color: #3b82f6;
   border-radius: 50%;
-  animation: ${spin} 1s linear infinite;
+  animation: ${spin} 0.8s linear infinite;
   margin: 0 auto;
 `;
 

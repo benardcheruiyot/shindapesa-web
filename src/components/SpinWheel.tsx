@@ -25,82 +25,70 @@ const Pointer = styled.div`
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%, -20px);
+  transform: translate(-50%, -15px);
   width: 0;
   height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-top: 40px solid #ffffff;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 30px solid #ffffff;
   filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
   z-index: 100;
   
   &::after {
     content: '';
     position: absolute;
-    top: -42px;
-    left: -18px;
+    top: -32px;
+    left: -13px;
     width: 0;
     height: 0;
-    border-left: 18px solid transparent;
-    border-right: 18px solid transparent;
-    border-top: 36px solid var(--primary);
+    border-left: 13px solid transparent;
+    border-right: 13px solid transparent;
+    border-top: 26px solid #3b82f6;
     z-index: 101;
   }
 `;
 
 const WheelOuterRing = styled.div`
   position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
+  top: -12px;
+  left: -12px;
+  right: -12px;
+  bottom: -12px;
   border-radius: 50%;
-  border: 10px solid #fbdf07;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(13, 21, 38, 0.4);
+  backdrop-filter: blur(20px);
   box-shadow: 
-    inset 0 0 20px rgba(0,0,0,0.5),
-    0 0 40px rgba(251, 223, 7, 0.3);
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    inset 0 0 40px rgba(59, 130, 246, 0.1);
   z-index: 1;
   pointer-events: none;
 `;
 
 const SpinButton = styled.button`
-  background: linear-gradient(135deg, #fbdf07 0%, #d4bb00 100%);
-  color: #000;
-  font-size: 1.4rem;
-  font-weight: 950;
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-radius: 40px;
-  padding: 22px 70px;
-  box-shadow: 0 15px 35px rgba(251, 223, 7, 0.3);
+  background: #3b82f6;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 100px;
+  padding: 16px 60px;
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 0.1em;
   position: relative;
   overflow: hidden;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    transition: 0.5s;
-  }
-  
   &:hover:not(:disabled) {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 20px 45px rgba(251, 223, 7, 0.5);
-    
-    &::before {
-      left: 100%;
-    }
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(59, 130, 246, 0.3);
   }
   
   &:active:not(:disabled) {
-    transform: translateY(0) scale(0.98);
+    transform: translateY(0);
   }
   
   &:disabled {
@@ -108,7 +96,7 @@ const SpinButton = styled.button`
     color: rgba(255, 255, 255, 0.2);
     cursor: not-allowed;
     box-shadow: none;
-    border: 1px solid rgba(255,255,255,0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
   }
 `;
 
@@ -118,19 +106,19 @@ const WinOverlay = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
-  background: rgba(15, 23, 42, 0.9);
-  backdrop-filter: blur(20px);
-  padding: 40px;
-  border-radius: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(13, 21, 38, 0.95);
+  backdrop-filter: blur(40px);
+  padding: 48px;
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
-  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+  animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
   min-width: 320px;
   color: #ffffff;
 
   @keyframes popIn {
-    from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
     to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   }
 `;
@@ -139,16 +127,16 @@ const TrustBadge = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(57, 181, 74, 0.1);
+  background: rgba(34, 197, 94, 0.08);
   padding: 8px 16px;
   border-radius: 100px;
   font-size: 0.65rem;
-  font-weight: 950;
-  color: #39b54a;
-  border: 1px solid rgba(57, 181, 74, 0.2);
+  font-weight: 700;
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.15);
   margin-top: 30px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.05em;
 `;
 
 const SpinWheel = () => {

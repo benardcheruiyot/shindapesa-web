@@ -8,49 +8,57 @@ const slideIn = keyframes`
 `;
 
 const Badge = styled.div<{ $isActivated: boolean }>`
-  background: ${props => props.$isActivated ? 'rgba(76, 209, 55, 0.05)' : 'rgba(239, 68, 68, 0.1)'};
-  border: 1px solid ${props => props.$isActivated ? 'rgba(76, 209, 55, 0.2)' : 'rgba(239, 68, 68, 0.2)'};
-  color: ${props => props.$isActivated ? '#4cd137' : '#ef4444'};
-  padding: 12px 20px;
+  background: ${props => props.$isActivated ? 'rgba(34, 197, 94, 0.05)' : 'rgba(239, 68, 68, 0.05)'};
+  border: 1px solid ${props => props.$isActivated ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.15)'};
+  color: ${props => props.$isActivated ? '#4ade80' : '#f87171'};
+  padding: 10px 16px;
   border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 800;
+  font-size: 0.7rem;
+  font-weight: 700;
   margin-bottom: 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  animation: ${slideIn} 0.5s ease-out;
+  animation: ${slideIn} 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.02em;
 
-  span {
-    background: ${props => props.$isActivated ? '#4cd137' : '#ef4444'};
-    color: ${props => props.$isActivated ? '#000' : '#fff'};
-    padding: 2px 8px;
+  span:first-child {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    &::before {
+      content: '${props => props.$isActivated ? '🛡️' : '⚠️'}';
+      font-size: 1rem;
+    }
+  }
+
+  .status-tag {
+    background: ${props => props.$isActivated ? '#22c55e' : '#ef4444'};
+    color: #ffffff;
+    padding: 3px 8px;
     border-radius: 6px;
     font-size: 0.6rem;
-    letter-spacing: 1px;
-    font-weight: 950;
+    letter-spacing: 0.05em;
+    font-weight: 800;
+    text-transform: uppercase;
   }
 `;
-
-interface StatusBadgeProps {
-  isActivated: boolean;
-  onClick: () => void;
-}
 
 const StatusBadge = ({ isActivated, onClick }: StatusBadgeProps) => {
   if (isActivated) {
     return (
       <Badge $isActivated onClick={onClick}>
-        <span>🔒 SECURITY PROTOCOL: ACCOUNT FULLY ACTIVATED</span>
-        <span>VERIFIED</span>
+        <span>System Protocol: Account Fully Protected</span>
+        <span className="status-tag">Verified</span>
       </Badge>
     );
   }
 
   return (
     <Badge $isActivated={false} onClick={onClick}>
-      ⚠️ ACCOUNT SEMI-VERIFIED: FULL ACTIVATION REQUIRED <span>ACTION REQUIRED</span>
+      <span>Security Alert: Activation Pending</span>
+      <span className="status-tag">Required</span>
     </Badge>
   );
 };

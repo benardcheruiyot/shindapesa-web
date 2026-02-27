@@ -11,16 +11,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ ResultCode: 1, ResultDesc: "Invalid Body" }, { status: 400 });
     }
 
-    const { stkCallback } = Body;
-    const { ResultCode, ResultDesc, CheckoutRequestID } = stkCallback;
+    const { ResultCode, ResultDesc, CheckoutRequestID, CallbackMetadata } = stkCallback;
 
-    console.log(`M-Pesa Callback Processed - ID: ${CheckoutRequestID}, Code: ${ResultCode}, Desc: ${ResultDesc}`);
+    let displayMessage = ResultDesc;
+    if (ResultCode === 1032) {
+      displayMessage = "Request canceled by user.";
+    } else if (ResultCode === 1) {
+      displayMessage = "Insufficient balance in your M-Pesa account.";
+    } else if (ResultCode === 2001) {
+      displayMessage = "Incorrect M-Pesa PIN entered.";
+    }
+
+    console.log(`M-Pesa Callback Processed - ID: ${CheckoutRequestID}, Code: ${ResultCode}, Desc: ${displayMessage}`);
 
     // Update the store for the frontend to poll
     updateTransactionStatus(CheckoutRequestID, {
       status: ResultCode === 0 ? "SUCCESS" : "FAILED",
       resultCode: ResultCode,
-      resultDesc: ResultDesc,
+      resultDesc: displayMessage,
+      metadata: CallbackMetadata,
       raw: stkCallback
     });
 

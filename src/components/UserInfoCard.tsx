@@ -13,9 +13,10 @@ const shimmer = keyframes`
 `;
 
 const CardWrapper = styled.section`
-  background: #002d58;
-  border: 4px solid #fbdf07;
-  border-radius: 40px;
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 32px;
   padding: 32px;
   display: flex;
   flex-direction: column;
@@ -23,7 +24,18 @@ const CardWrapper = styled.section`
   margin-bottom: 24px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+    opacity: 0.5;
+  }
 `;
 
 const Header = styled.div`
@@ -35,33 +47,33 @@ const Header = styled.div`
 `;
 
 const VipBadge = styled.div`
-  background: linear-gradient(135deg, #fbdf07 0%, #d4bb00 100%);
-  color: #000;
-  padding: 6px 14px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: #ffffff;
+  padding: 6px 12px;
   border-radius: 12px;
   font-size: 0.6rem;
-  font-weight: 950;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  box-shadow: 0 10px 20px rgba(251, 223, 7, 0.3);
+  letter-spacing: 1.5px;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.2);
   display: flex;
   align-items: center;
   gap: 6px;
 `;
 
 const Avatar = styled.div`
-  width: 64px;
-  height: 64px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: rgba(59, 130, 246, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
-  font-weight: 950;
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
 `;
 
 const UserDetails = styled.div`
@@ -70,27 +82,26 @@ const UserDetails = styled.div`
 
 const LevelTag = styled.div`
   font-size: 0.65rem;
-  font-weight: 950;
-  color: #fbdf07;
+  font-weight: 700;
+  color: #3b82f6;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 6px;
-  opacity: 0.8;
+  margin-bottom: 4px;
 `;
 
 const StatusBadge = styled.div<{ $isActivated: boolean }>`
-  background: ${props => props.$isActivated ? 'rgba(57, 181, 74, 0.1)' : 'rgba(238, 28, 37, 0.1)'};
-  color: ${props => props.$isActivated ? '#39b54a' : '#ee1c25'};
-  padding: 10px 18px;
-  border-radius: 14px;
+  background: ${props => props.$isActivated ? 'rgba(34, 197, 94, 0.08)' : 'rgba(239, 68, 68, 0.08)'};
+  color: ${props => props.$isActivated ? '#22c55e' : '#ef4444'};
+  padding: 8px 16px;
+  border-radius: 12px;
   font-size: 0.65rem;
-  font-weight: 950;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  border: 1px solid ${props => props.$isActivated ? 'rgba(76, 209, 55, 0.2)' : 'rgba(255, 71, 87, 0.2)'};
+  letter-spacing: 1px;
+  border: 1px solid ${props => props.$isActivated ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)'};
   display: flex;
   align-items: center;
   gap: 8px;
@@ -110,29 +121,29 @@ const StatsGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 16px;
+  padding-top: 24px;
 `;
 
 const StatItem = styled.div`
   background: rgba(255, 255, 255, 0.02);
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.02);
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
 `;
 
 const StatLabel = styled.div`
   font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: #64748b;
   text-transform: uppercase;
-  font-weight: 800;
+  font-weight: 700;
   margin-bottom: 4px;
+  letter-spacing: 0.5px;
 `;
 
 const StatValue = styled.div<{ gold?: boolean }>`
-  font-size: 1rem;
-  font-weight: 950;
-  color: ${props => props.gold ? '#3b82f6' : '#ffffff'};
-  letter-spacing: 0.5px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
 `;
 
 interface UserInfoCardProps {

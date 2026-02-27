@@ -15,14 +15,18 @@ const shimmer = keyframes`
 `;
 
 const CardContainer = styled.section`
-  background: #002d58;
-  border: 4px solid #fbdf07;
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 32px;
   padding: 32px;
   margin-bottom: 24px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
 
   &::before {
     content: '';
@@ -34,7 +38,7 @@ const CardContainer = styled.section`
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(251, 223, 7, 0.05),
+      rgba(59, 130, 246, 0.05),
       transparent
     );
     animation: ${shimmer} 8s infinite linear;
@@ -55,34 +59,37 @@ const TitleGroup = styled.div`
 
 const CardTitle = styled.h3`
   color: #ffffff;
-  font-size: 1.3rem;
-  font-weight: 950;
+  font-size: 1.1rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   margin: 0;
   display: flex;
   align-items: center;
   gap: 12px;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 `;
 
 const Subtitle = styled.span`
-  color: #fbdf07;
-  font-size: 0.7rem;
-  font-weight: 950;
+  color: #3b82f6;
+  font-size: 0.65rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 3px;
-  margin-top: 8px;
-  opacity: 0.8;
+  letter-spacing: 2px;
+  margin-top: 6px;
+  opacity: 0.9;
 `;
 
 const NodeBadge = styled.div`
-  background: rgba(57, 181, 74, 0.1);
-  border: 1px solid rgba(57, 181, 74, 0.2);
-  color: #39b54a;
-  padding: 8px 14px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+  padding: 6px 12px;
   border-radius: 20px;
   font-size: 0.65rem;
-  font-weight: 950;
+  font-weight: 800;
   text-transform: uppercase;
   display: flex;
   align-items: center;
@@ -91,25 +98,24 @@ const NodeBadge = styled.div`
 `;
 
 const Pulse = styled.div`
-  width: 8px;
-  height: 8px;
-  background: #39b54a;
+  width: 6px;
+  height: 6px;
+  background: #22c55e;
   border-radius: 50%;
   animation: ${pulse} 2s infinite;
-  box-shadow: 0 0 10px #39b54a;
 `;
 
 const BalanceDisplay = styled.div`
   margin-bottom: 32px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.3);
   padding: 24px;
   border-radius: 24px;
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 `;
 
 const Amount = styled.div`
-  font-size: 3.2rem;
-  font-weight: 950;
+  font-size: 3rem;
+  font-weight: 800;
   color: #ffffff;
   display: flex;
   align-items: baseline;
@@ -120,8 +126,8 @@ const Amount = styled.div`
 
 const Currency = styled.span`
   font-size: 1.2rem;
-  color: #fbdf07;
-  font-weight: 950;
+  color: #3b82f6;
+  font-weight: 800;
 `;
 
 const StatsGrid = styled.div`
@@ -136,51 +142,45 @@ const StatItem = styled.div`
   padding: 16px;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
 `;
 
 const StatLabel = styled.div`
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.6rem;
   text-transform: uppercase;
-  font-weight: 900;
+  font-weight: 800;
   margin-bottom: 6px;
   letter-spacing: 1px;
 `;
 
 const StatValue = styled.div`
   color: #ffffff;
-  font-size: 1rem;
-  font-weight: 950;
+  font-size: 0.95rem;
+  font-weight: 800;
 `;
 
 const ActionButton = styled.button`
   width: 100%;
-  background: linear-gradient(135deg, #fbdf07 0%, #d4bb00 100%);
-  color: #000;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: #ffffff;
   border: none;
-  border-radius: 20px;
-  padding: 24px;
-  font-weight: 950;
-  font-size: 1.1rem;
+  border-radius: 16px;
+  padding: 20px;
+  font-weight: 800;
+  font-size: 1rem;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 15px 35px rgba(251, 223, 7, 0.2);
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 45px rgba(251, 223, 7, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
     filter: brightness(1.1);
   }
 
@@ -191,13 +191,14 @@ const ActionButton = styled.button`
 
 const MpesaLogo = styled.span`
   background: #ffffff;
-  color: #39b54a;
-  padding: 4px 10px;
+  color: #22c55e;
+  padding: 3px 8px;
   border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 950;
+  font-size: 0.7rem;
+  font-weight: 800;
   margin-left: auto;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+`;
 `;
 
 const UrgencyBanner = styled.div`
@@ -239,7 +240,7 @@ const WithdrawCard: React.FC<WithdrawCardProps> = ({ available, onWithdraw }) =>
       <Header>
         <TitleGroup>
           <CardTitle>
-            <ShieldCheck size={22} color="#fbdf07" style={{ marginRight: '8px' }} />
+            <ShieldCheck size={22} color="#3b82f6" style={{ marginRight: '8px' }} />
             SECURE PAYOUT
           </CardTitle>
           <Subtitle>Safaricom M-PESA Portal</Subtitle>

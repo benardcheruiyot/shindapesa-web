@@ -22,12 +22,16 @@ const Header = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 2.8rem;
-  font-weight: 950;
+  font-size: 3.5rem;
+  font-weight: 800;
   color: #ffffff;
-  margin-bottom: 12px;
-  letter-spacing: -1.5px;
-  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: -0.04em;
+  line-height: 1;
+
+  @media (max-width: 600px) {
+    font-size: 2.5rem;
+  }
 `;
 
 const StatsBar = styled.div`
@@ -35,21 +39,37 @@ const StatsBar = styled.div`
   gap: 12px;
   margin-bottom: 40px;
   z-index: 10;
+  flex-wrap: wrap;
+  justify-content: center;
 `;
 
 const StatBadge = styled.div`
-  background: rgba(30, 41, 59, 0.4);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 10px 20px;
-  border-radius: 25px;
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: #ffffff;
+  background: rgba(13, 21, 38, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px 18px;
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f8fafc;
   display: flex;
   align-items: center;
-  gap: 10px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  gap: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(13, 21, 38, 0.6);
+    border-color: rgba(59, 130, 246, 0.2);
+  }
+
+  span.label {
+    opacity: 0.5;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
 `;
 
 export default function SpinScreen() {
@@ -66,37 +86,38 @@ export default function SpinScreen() {
 
   return (
     <PageWrapper>
-      <BackHeader title="Prestige Wheel" onBack={() => router.push("/home")} />
+      <BackHeader title="Spin to Win" onBack={() => router.push("/home")} />
 
       <Container>
         <Header>
           <div style={{ 
-            background: 'rgba(59, 130, 246, 0.1)', 
-            color: 'var(--primary-light)', 
-            padding: '6px 14px', 
-            borderRadius: 8, 
+            background: 'rgba(59, 130, 246, 0.08)', 
+            color: '#3b82f6', 
+            padding: '4px 12px', 
+            border: '1px solid rgba(59, 130, 246, 0.15)', 
+            borderRadius: '100px', 
             fontSize: '0.65rem', 
-            fontWeight: 950, 
-            letterSpacing: 2, 
+            fontWeight: 700, 
+            letterSpacing: '0.05em', 
             display: 'inline-block', 
             marginBottom: 16,
-            border: '1px solid rgba(59, 130, 246, 0.2)'
+            textTransform: 'uppercase'
           }}>
-            PREMIUM GAMING SUITE
+            Premium Gaming Experience
           </div>
-          <Title style={{ fontSize: '3.2rem', letterSpacing: '-2px' }}>PRESTIGE WHEEL</Title>
+          <Title>Royal Wheel</Title>
         </Header>
 
         <StatsBar>
           <StatBadge>
             <span style={{ fontSize: '1.1rem' }}>💳</span> 
-            <span style={{ opacity: 0.6, fontSize: '0.75rem', marginRight: 4 }}>WALLET:</span>
+            <span className="label">Balance</span>
             KES {Number(user.balance).toLocaleString()}
           </StatBadge>
           {Number(user.freeSpins) > 0 && (
-            <StatBadge style={{ background: 'rgba(76, 209, 55, 0.1)', borderColor: 'rgba(76, 209, 55, 0.2)' }}>
+            <StatBadge style={{ background: 'rgba(34, 197, 94, 0.08)', borderColor: 'rgba(34, 197, 94, 0.2)' }}>
               <span style={{ fontSize: '1.2rem' }}>🎡</span>
-              <span style={{ color: '#4cd137' }}>{user.freeSpins} COMPLIMENTARY SPINS</span>
+              <span style={{ color: '#4ade80' }}>{user.freeSpins} Free Spins Remaining</span>
             </StatBadge>
           )}
         </StatsBar>

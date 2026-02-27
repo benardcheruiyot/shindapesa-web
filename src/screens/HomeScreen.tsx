@@ -48,9 +48,9 @@ const PulseIndicator = styled.div`
 
 const Container = styled.div`
   min-height: 100vh;
-  background: #0f172a;
-  color: #ffffff;
-  padding-bottom: 140px;
+  background-color: #030712;
+  color: #f8fafc;
+  padding-bottom: 120px;
   position: relative;
   overflow: hidden;
 
@@ -61,7 +61,7 @@ const Container = styled.div`
     left: 50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(245, 158, 11, 0.04) 0%, transparent 50%);
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
     transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 0;
@@ -73,103 +73,87 @@ const ContentWrapper = styled.div`
   z-index: 10;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 32px 20px;
+  padding: 24px 20px;
 `;
 
 const Header = styled.header`
-  background: #1e293b;
+  background: rgba(13, 21, 38, 0.75);
+  backdrop-filter: blur(20px);
   color: #ffffff;
-  padding: 0 40px;
+  padding: 0 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
   top: 0;
   z-index: 3000;
-  border-bottom: 3px solid #f59e0b;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-  height: 80px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  height: 72px;
 
   @media (max-width: 600px) {
-    padding: 0 20px;
+    padding: 0 16px;
+    height: 64px;
   }
 `;
 
 const LogoText = styled.div`
-  font-size: 2.2rem;
-  font-weight: 950;
+  font-size: 1.75rem;
+  font-weight: 800;
   color: #ffffff;
-  letter-spacing: -2px;
+  letter-spacing: -0.05em;
   cursor: pointer;
-  text-transform: uppercase;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
   span {
-    color: #f59e0b;
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  &:hover {
-    transform: scale(0.96);
+  &::before {
+    content: '⚡';
+    font-size: 1.25rem;
   }
 
   @media (max-width: 600px) {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
   }
 `;
 
 const BalanceBadge = styled.div`
-  background: rgba(24, 24, 27, 0.7);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 8px 18px;
+  padding: 6px 14px;
   border-radius: 100px;
-  font-size: 1rem;
-  font-weight: 950;
+  font-size: 0.95rem;
+  font-weight: 700;
   color: #ffffff;
   display: flex;
   align-items: center;
-  gap: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  gap: 8px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
   span:first-child { 
-    font-size: 0.75rem; 
-    opacity: 0.7; 
-    font-weight: 700;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2px 6px;
-    border-radius: 4px;
+    font-size: 0.7rem; 
+    opacity: 0.6; 
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   &:hover {
-    transform: translateY(-2px);
-    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+    border-color: #3b82f6;
   }
 
   @media (max-width: 600px) {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    gap: 6px;
-
-    span:first-child {
-      font-size: 0.6rem;
-      padding: 1px 4px;
-    }
-  }
-
-  @media (max-width: 450px) {
-    padding: 4px 8px;
-    
-    span:first-child {
-      font-size: 0.55rem;
-      padding: 0px 3px;
-    }
-  }
-
-  @media (max-width: 380px) {
-    span:first-child {
-      display: none;
-    }
+    padding: 5px 12px;
+    font-size: 0.85rem;
   }
 `;
 
@@ -273,7 +257,7 @@ const StyledSectionTitle = styled.h2`
     content: '';
     width: 6px;
     height: 32px;
-    background: #fbdf07;
+    background: #3b82f6;
     border-radius: 4px;
   }
 `;

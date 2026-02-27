@@ -8,46 +8,58 @@ const NavContainer = styled.nav`
   bottom: 0;
   left: 0;
   right: 0;
-  height: 90px;
-  background: rgba(15, 23, 42, 0.9);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  height: 80px;
+  background: rgba(13, 21, 38, 0.85);
+  backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 0 10px 15px;
+  padding: 0 8px 10px;
   z-index: 4000;
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.5);
 `;
 
 const NavItem = styled.div<{ $active?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   cursor: pointer;
-  transition: all 0.2s;
-  padding: 8px 16px;
-  border-radius: 16px;
-  background: ${props => props.$active ? 'rgba(245, 158, 11, 0.1)' : 'transparent'};
-  color: ${props => props.$active ? '#f59e0b' : 'rgba(255, 255, 255, 0.6)'};
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: ${props => props.$active ? '#3b82f6' : 'rgba(255, 255, 255, 0.45)'};
+  flex: 1;
+  max-width: 80px;
 
   span:first-child {
-    font-size: 1.5rem;
-    filter: ${props => props.$active ? 'drop-shadow(0 0 8px rgba(245, 158, 11, 0.5))' : 'none'};
+    font-size: 1.35rem;
+    transition: transform 0.2s ease;
+    filter: ${props => props.$active ? 'drop-shadow(0 0 10px rgba(59, 130, 246, 0.4))' : 'grayscale(1) opacity(0.5)'};
   }
 
   span:last-child {
     font-size: 0.65rem;
-    font-weight: 800;
-    letter-spacing: 1px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
   }
 
   &:hover {
-    color: #f59e0b;
-    transform: translateY(-3px);
+    color: #3b82f6;
+    span:first-child {
+      transform: translateY(-4px);
+      filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.4)) grayscale(0) opacity(1);
+    }
   }
+
+  ${props => props.$active && `
+    span:first-child {
+      transform: translateY(-2px);
+      filter: grayscale(0) opacity(1) drop-shadow(0 0 12px rgba(59, 130, 246, 0.5));
+    }
+  `}
 `;
 
 interface BottomNavProps {

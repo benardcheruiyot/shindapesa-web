@@ -8,89 +8,101 @@ const float = keyframes`
 `;
 
 const CardContainer = styled.section`
-  background: #002d58;
-  color: #ffffff;
-  border-radius: 40px;
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 32px;
   padding: 56px 40px;
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
   text-align: center;
-  border: 4px solid #fbdf07;
   position: relative;
   overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+    opacity: 0.5;
+  }
 `;
 
 const Glow = styled.div`
   position: absolute;
-  top: -100px;
-  right: -100px;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(0, 91, 170, 0.15) 0%, transparent 70%);
-  opacity: 0.2;
+  top: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
   z-index: 0;
 `;
 
 const GatewayBadge = styled.div`
-  background: rgba(57, 181, 74, 0.1);
-  color: #39b54a;
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
   font-size: 0.65rem;
-  font-weight: 950;
-  padding: 8px 18px;
+  font-weight: 800;
+  padding: 8px 16px;
   border-radius: 12px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 32px;
-  border: 1px solid rgba(57, 181, 74, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.2);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
 `;
 
 const PromoIcon = styled.div`
-  font-size: 5rem;
+  font-size: 4.5rem;
   margin-bottom: 24px;
   display: inline-block;
-  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5));
   animation: ${float} 4s ease-in-out infinite;
 `;
 
 const Title = styled.h2`
-  font-weight: 950;
-  font-size: 2.4rem;
+  font-weight: 800;
+  font-size: 2.2rem;
   margin-bottom: 12px;
   color: #ffffff;
-  letter-spacing: -1.5px;
+  letter-spacing: -1px;
   text-transform: uppercase;
   line-height: 1.1;
 
   span {
-    color: #fbdf07;
+    background: linear-gradient(to bottom right, #3b82f6, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 `;
 
 const Subtitle = styled.p`
-  font-size: 1.1rem;
+  font-size: 1rem;
   margin-bottom: 48px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #94a3b8;
   line-height: 1.6;
-  font-weight: 700;
+  font-weight: 500;
 
   b {
     color: #ffffff;
-    font-weight: 950;
+    font-weight: 800;
   }
 `;
 
 const ActionButton = styled.button`
-  background: linear-gradient(135deg, #fbdf07 0%, #d4bb00 100%);
-  color: #000000;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: #ffffff;
   border: none;
-  border-radius: 24px;
-  padding: 28px 48px;
-  font-weight: 950;
-  font-size: 1.4rem;
+  border-radius: 20px;
+  padding: 24px 40px;
+  font-weight: 800;
+  font-size: 1.25rem;
   cursor: pointer;
-  box-shadow: 0 20px 40px rgba(251, 223, 7, 0.3);
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -98,12 +110,12 @@ const ActionButton = styled.button`
   gap: 16px;
   width: 100%;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  letter-spacing: 1.5px;
+  transition: all 0.3s ease;
 
   &:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 25px 50px rgba(251, 223, 7, 0.45);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
     filter: brightness(1.1);
   }
 
@@ -114,9 +126,9 @@ const ActionButton = styled.button`
 
 const Note = styled.div`
   margin-top: 28px;
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.3);
-  font-weight: 900;
+  font-size: 0.65rem;
+  color: #64748b;
+  font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
 `;
