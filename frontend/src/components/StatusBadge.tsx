@@ -45,6 +45,11 @@ const Badge = styled.div<{ $isActivated: boolean }>`
   }
 `;
 
+interface StatusBadgeProps {
+  isActivated: boolean;
+  onClick: () => void;
+}
+
 const StatusBadge = ({ isActivated, onClick }: StatusBadgeProps) => {
   if (isActivated) {
     return (
