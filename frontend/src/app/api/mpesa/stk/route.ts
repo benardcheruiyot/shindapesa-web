@@ -56,27 +56,24 @@ export async function POST(request: Request) {
     // 2. Prepare STK Push Request
     const timestamp = generateTimestamp();
     
-    // FORCE FIX: Production Logic for Paybill / Till Number
-    // If you are using a TILL NUMBER, ShortCode must be the STORE NUMBER.
-    // If you are using a PAYBILL, ShortCode and PartyB are the same.
-    const rawShortCode = (process.env.MPESA_SHORTCODE || '').trim();
+    // FORCE FIX FOR BUY GOODS (TILL):
+    // In Daraja Production, for Buy Goods:
+    // 1. BusinessShortCode MUST be the STORE NUMBER (6 or 7 digits).
+    // 2. PartyB MUST be the TILL NUMBER (5 or 6 digits).
+    // 3. Password is generated using the STORE NUMBER + Passkey + Timestamp.
+    
     const rawTill = (process.env.MPESA_TILL_NUMBER || '').trim();
     const rawStore = (process.env.MPESA_STORE_NUMBER || '').trim();
-    const txType = process.env.MPESA_TRANSACTION_TYPE || 'CustomerPayBillOnline';
+    const txType = 'CustomerBuyGoodsOnline'; // Force this for your setup
     
-    let businessShortCode = rawShortCode;
-    let partyB = rawShortCode;
-
-    if (txType === 'CustomerBuyGoodsOnline') {
-      // For Till Numbers, Safaricom requires the Store Number for the password, 
-      // but the Till Number as the Recipient (PartyB)
-      businessShortCode = rawStore || rawShortCode; 
-      partyB = rawTill || rawShortCode;
+    if (!rawStore || !rawTill) {
+      throw new Error(`Buy Goods configuration error: Missing Store Number (${rawStore}) or Till Number (${rawTill})`);
     }
-      
-    // Security check: Use the environment passkey directly
-    const passkey = (process.env.MPESA_PASSKEY || '').trim();
     
+    const businessShortCode = rawStore; 
+    const partyB = rawTill;
+      
+    const passkey = (process.env.MPESA_PASSKEY || '').trim();
     if (!passkey) {
       throw new Error("Missing MPESA_PASSKEY in production environment.");
     }
