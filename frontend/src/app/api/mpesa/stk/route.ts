@@ -16,58 +16,40 @@ export async function POST(request: Request) {
     }
 
     const baseUrl = getBaseUrl();
-    console.log(`Using Base URL: ${baseUrl}`);
+    console.log(`Using M-Pesa Environment: ${mpesaConfig.env} | Base URL: ${baseUrl}`);
     
-    // --- CONFIG CHECK ---
-    if (!isConfigValid('stk')) {
-      const missingFields = [];
-      if (!mpesaConfig.consumerKey) missingFields.push("Consumer Key");
-      if (!mpesaConfig.consumerSecret) missingFields.push("Consumer Secret");
-      if (!mpesaConfig.passkey) missingFields.push("Passkey");
-      if (!mpesaConfig.callbackUrl) missingFields.push("Callback URL");
-      
-      const isBuyGoods = mpesaConfig.transactionType === 'CustomerBuyGoodsOnline';
-      if (isBuyGoods && !mpesaConfig.storeNumber) missingFields.push("Store Number");
-      if (isBuyGoods && !mpesaConfig.tillNumber) missingFields.push("Till Number");
-
-      if (process.env.NODE_ENV === 'production' || mpesaConfig.env === 'production') {
-        console.error("CRITICAL: M-Pesa Production Variables Missing!", {
-          hasKey: !!mpesaConfig.consumerKey,
-          hasSecret: !!mpesaConfig.consumerSecret,
-          hasPasskey: !!mpesaConfig.passkey,
-          env: mpesaConfig.env,
-          missingFields
-        });
-        return NextResponse.json({ 
-          error: `Production setup error: Missing variables [${missingFields.join(", ")}]`,
-          help: "Ensure all M-Pesa variables are set in your Render dashboard."
-        }, { status: 500 });
-      }
-
-      // STRICT MODE: No longer returning fake success here
-      return NextResponse.json({ 
-        error: "M-Pesa Configuration Missing (STRICT MODE)",
-        missing: missingFields
-      }, { status: 500 });
-    }
-
+    // --- AUTHENTICATION ---
     let access_token = cachedToken;
     const now = Date.now();
 
-    // Only fetch a new token if cached one is missing or expired (with 5 min buffer)
     if (!access_token || now >= tokenExpiry) {
       try {
-        const data = await getAuthToken(mpesaConfig.consumerKey!, mpesaConfig.consumerSecret!, baseUrl);
-        if (data.error || !data.access_token) {
-          throw new Error(data.errorMessage || "OAuth Token generation failed");
+        // In production, we MUST use the environment variables directly
+        const key = process.env.MPESA_CONSUMER_KEY;
+        const secret = process.env.MPESA_CONSUMER_SECRET;
+        
+        if (!key || !secret) {
+          throw new Error("Missing MPESA_CONSUMER_KEY or MPESA_CONSUMER_SECRET in production environment");
         }
+        
+        console.log("Fetching new production OAuth token...");
+        const data = await getAuthToken(key.trim(), secret.trim(), baseUrl);
+        
+        if (data.error || !data.access_token) {
+          console.error("Safaricom Auth Failed:", data);
+          throw new Error(data.errorMessage || "OAuth Token generation failed (Check Keys)");
+        }
+        
         access_token = data.access_token;
         cachedToken = access_token;
-        // Mark expiry: Safaricom tokens usually last 3600 seconds. We save for 55 mins (3300s)
         tokenExpiry = now + (3300 * 1000); 
       } catch (tokenErr: any) {
-        console.error("Token Error:", tokenErr);
-        return NextResponse.json({ error: "Could not authenticate with Safaricom. Check credentials." }, { status: 401 });
+        console.error("M-Pesa Production Auth Error:", tokenErr.message);
+        return NextResponse.json({ 
+          error: "Production Authentication Failed", 
+          details: tokenErr.message,
+          tip: "Ensure your Consumer Key and Secret are from the 'PROD' app in Daraja Portal, not Sandbox."
+        }, { status: 401 });
       }
     }
 

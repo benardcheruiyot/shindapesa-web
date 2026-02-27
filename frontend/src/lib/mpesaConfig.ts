@@ -1,17 +1,19 @@
 export const mpesaConfig = {
-  consumerKey: process.env.MPESA_CONSUMER_KEY || 'c9AnG7qA00pGs0tVqA0W0A0W0A0W0A0W',
-  consumerSecret: process.env.MPESA_CONSUMER_SECRET || 'A0W0A0W0A0W0A0W0',
+  // Use trim() to prevent invisible characters from breaking authentication
+  consumerKey: (process.env.MPESA_CONSUMER_KEY || '').trim(),
+  consumerSecret: (process.env.MPESA_CONSUMER_SECRET || '').trim(),
   initiatorName: process.env.MPESA_INITIATOR_NAME || 'SpinWinAdmin',
   securityCredential: process.env.MPESA_SECURITY_CREDENTIAL,
-  shortcode: process.env.MPESA_SHORTCODE || '174379', // Sandbox Shortcode
-  b2cShortcode: process.env.MPESA_B2C_SHORTCODE || '600000', 
-  passkey: process.env.MPESA_PASSKEY || 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919', // Sandbox Passkey
-  env: process.env.MPESA_ENV || 'sandbox', // Switch to sandbox
-  callbackUrl: process.env.MPESA_CALLBACK_URL || `${process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_APP_URL}/api/mpesa/callback`,
-  b2cCallbackUrl: process.env.MPESA_B2C_CALLBACK_URL || `${process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_APP_URL}/api/mpesa/withdraw-callback`,
-  transactionType: process.env.MPESA_TRANSACTION_TYPE || 'CustomerPayBillOnline', // Sandbox usually uses PayBill
-  tillNumber: process.env.MPESA_TILL_NUMBER || '174379',
-  storeNumber: process.env.MPESA_STORE_NUMBER || '174379', 
+  shortcode: (process.env.MPESA_SHORTCODE || '174379').trim(),
+  b2cShortcode: (process.env.MPESA_B2C_SHORTCODE || '600000').trim(),
+  passkey: (process.env.MPESA_PASSKEY || '').trim(),
+  // Check if we are on Vercel or local to force environment
+  env: process.env.VERCEL ? 'production' : (process.env.MPESA_ENV || 'sandbox'),
+  callbackUrl: process.env.MPESA_CALLBACK_URL || `${process.env.NEXT_PUBLIC_APP_URL}/api/mpesa/callback`,
+  b2cCallbackUrl: process.env.MPESA_B2C_CALLBACK_URL || `${process.env.NEXT_PUBLIC_APP_URL}/api/mpesa/withdraw-callback`,
+  transactionType: process.env.MPESA_TRANSACTION_TYPE || 'CustomerPayBillOnline',
+  tillNumber: (process.env.MPESA_TILL_NUMBER || '').trim(),
+  storeNumber: (process.env.MPESA_STORE_NUMBER || '').trim(), 
 };
 
 export const getBaseUrl = () => {

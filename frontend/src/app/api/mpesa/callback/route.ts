@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { updateTransactionStatus } from '@/lib/mpesaStore';
+import { sql } from '@vercel/postgres';
 
 export async function POST(request: Request) {
   try {
@@ -25,14 +25,37 @@ export async function POST(request: Request) {
 
     console.log(`M-Pesa Callback Processed - ID: ${CheckoutRequestID}, Code: ${ResultCode}, Desc: ${displayMessage}`);
 
-    // Update the store for the frontend to poll
-    updateTransactionStatus(CheckoutRequestID, {
-      status: ResultCode === 0 ? "SUCCESS" : "FAILED",
-      resultCode: ResultCode,
-      resultDesc: displayMessage,
-      metadata: CallbackMetadata,
-      raw: stkCallback
-    });
+    // If payment was successful (ResultCode 0), update database
+    if (ResultCode === 0 && CallbackMetadata && CallbackMetadata.Item) {
+      const amount = CallbackMetadata.Item.find((i: any) => i.Name === 'Amount')?.Value;
+      const phone = CallbackMetadata.Item.find((i: any) => i.Name === 'PhoneNumber')?.Value;
+      const receipt = CallbackMetadata.Item.find((i: any) => i.Name === 'MpesaReceiptNumber')?.Value;
+
+      // Update user balance and activation status
+      // We use the phone number to match the user
+      await sql`
+        UPDATE users 
+        SET 
+          balance = balance + ${amount}, 
+          is_activated = true,
+          updated_at = NOW()
+        WHERE phone = ${phone.toString()}
+      `;
+
+      // Log the transaction
+      await sql`
+        INSERT INTO transactions (id, phone, amount, mpesa_receipt, status)
+        VALUES (${CheckoutRequestID}, ${phone.toString()}, ${amount}, ${receipt}, 'SUCCESS')
+        ON CONFLICT (id) DO UPDATE SET status = 'SUCCESS', mpesa_receipt = ${receipt}
+      `;
+    } else {
+      // Log failed transaction
+      await sql`
+        INSERT INTO transactions (id, status)
+        VALUES (${CheckoutRequestID}, 'FAILED')
+        ON CONFLICT (id) DO UPDATE SET status = 'FAILED'
+      `;
+    }
 
     return NextResponse.json({ ResultCode: 0, ResultDesc: "Success" });
   } catch (error: any) {
