@@ -105,13 +105,26 @@ export async function POST(request: Request) {
 
     const stkData = await stkResponse.json();
     
-    // LOGGING FOR PRODUCTION DEBUGGING
+    // ENHANCED PRODUCTION LOGGING
     console.log('--- Safaricom STK Response ---');
+    console.log('Environment:', mpesaConfig.env);
+    console.log('ShortCode Used:', businessShortCode);
+    console.log('PartyB Used:', partyB);
     console.log('Status Code:', stkResponse.status);
     console.log('Payload:', JSON.stringify(stkData, null, 2));
     
     if (stkResponse.status !== 200) {
-      console.error('STK Push Failed:', stkData.errorMessage || stkData.ResponseDescription || 'Unknown Error');
+      // If Safaricom rejects the body, we need to know why
+      return NextResponse.json({ 
+        error: "Safaricom Rejected STK Request", 
+        details: stkData.errorMessage || stkData.ResponseDescription || "Invalid Request Body",
+        code: stkData.errorCode || "400",
+        debug: {
+          shortCode: businessShortCode,
+          partyB: partyB,
+          type: mpesaConfig.transactionType
+        }
+      }, { status: stkResponse.status });
     }
 
     return NextResponse.json(stkData);
