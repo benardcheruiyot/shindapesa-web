@@ -3,15 +3,15 @@ export const mpesaConfig = {
   consumerSecret: process.env.MPESA_CONSUMER_SECRET,
   initiatorName: process.env.MPESA_INITIATOR_NAME || 'SpinWinAdmin',
   securityCredential: process.env.MPESA_SECURITY_CREDENTIAL,
-  shortcode: process.env.MPESA_SHORTCODE || '174379',
-  b2cShortcode: process.env.MPESA_B2C_SHORTCODE || '600000',
+  shortcode: "3700945", // Hardcoded Store/Shortcode
+  b2cShortcode: "600000", // Default B2C Shortcode
   passkey: process.env.MPESA_PASSKEY,
   env: process.env.MPESA_ENV || 'sandbox',
-  callbackUrl: process.env.MPESA_CALLBACK_URL || `${process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_APP_URL}/api/mpesa/callback`,
-  b2cCallbackUrl: process.env.MPESA_B2C_CALLBACK_URL || `${process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_APP_URL}/api/mpesa/withdraw-callback`,
-  transactionType: process.env.MPESA_TRANSACTION_TYPE || 'CustomerBuyGoodsOnline',
-  tillNumber: process.env.MPESA_TILL_NUMBER || '8733762',
-  storeNumber: process.env.MPESA_STORE_NUMBER, // For Buy Goods (Till) setups
+  callbackUrl: `${process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_APP_URL}/api/mpesa/callback`,
+  b2cCallbackUrl: `${process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_APP_URL}/api/mpesa/withdraw-callback`,
+  transactionType: "CustomerBuyGoodsOnline",
+  tillNumber: "8733762",
+  storeNumber: "3700945", 
 };
 
 export const getBaseUrl = () => {
@@ -21,25 +21,17 @@ export const getBaseUrl = () => {
 };
 
 export const isConfigValid = (type: 'stk' | 'b2c' | 'auth') => {
-  const { consumerKey, consumerSecret, passkey, shortcode, callbackUrl, storeNumber, tillNumber } = mpesaConfig;
+  const { consumerKey, consumerSecret, passkey } = mpesaConfig;
   
   if (type === 'auth') {
     return !!(consumerKey && consumerSecret);
   }
   if (type === 'stk') {
-    // Basic auth check
-    if (!consumerKey || !consumerSecret || !passkey || !callbackUrl) return false;
-    
-    // For Buy Goods (Till), we need both Store Number and Till Number
-    if (mpesaConfig.transactionType === 'CustomerBuyGoodsOnline') {
-      return !!(storeNumber && tillNumber);
-    }
-    
-    // For Paybill, we just need the shortcode
-    return !!shortcode;
+    // Only require Daraja credentials as requested
+    return !!(consumerKey && consumerSecret && passkey);
   }
   if (type === 'b2c') {
-    return !!(consumerKey && consumerSecret && mpesaConfig.securityCredential && mpesaConfig.b2cShortcode && mpesaConfig.b2cCallbackUrl);
+    return !!(consumerKey && consumerSecret && mpesaConfig.securityCredential);
   }
   return false;
 };
