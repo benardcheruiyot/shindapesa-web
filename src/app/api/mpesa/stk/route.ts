@@ -74,8 +74,10 @@ export async function POST(request: Request) {
     
     // Format phone: 2547XXXXXXXX or 2541XXXXXXXX
     const formattedPhone = formatPhoneNumber(phone);
+    
+    // CRITICAL: For "Buy Goods" (Till), PartyB MUST be the 7-digit Till Number
     const partyB = mpesaConfig.transactionType === 'CustomerBuyGoodsOnline'
-      ? mpesaConfig.tillNumber
+      ? mpesaConfig.tillNumber // e.g., 8733762
       : mpesaConfig.shortcode;
 
     const stkBody = {
