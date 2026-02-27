@@ -56,17 +56,26 @@ export async function POST(request: Request) {
     // 2. Prepare STK Push Request
     const timestamp = generateTimestamp();
     
-    // For Buy Goods (Till), the shortcode used for password generation is the STORE NUMBER
-    const businessShortCode = mpesaConfig.transactionType === 'CustomerBuyGoodsOnline' 
+    // FORCE FIX: ShortCode and Passkey logic for Production
+    // If you are using a Paybill, both BusinessShortCode and PartyB should be the same Shortcode.
+    // If you are using a Till Number, the BusinessShortCode is the STORE NUMBER.
+    
+    const businessShortCode = (mpesaConfig.transactionType === 'CustomerBuyGoodsOnline' 
       ? mpesaConfig.storeNumber 
-      : mpesaConfig.shortcode;
+      : mpesaConfig.shortcode).trim();
       
-    // Recipient of payment
-    const partyB = mpesaConfig.transactionType === 'CustomerBuyGoodsOnline'
+    const partyB = (mpesaConfig.transactionType === 'CustomerBuyGoodsOnline'
       ? mpesaConfig.tillNumber
-      : mpesaConfig.shortcode;
+      : mpesaConfig.shortcode).trim();
       
-    const password = Buffer.from(`${businessShortCode}${mpesaConfig.passkey}${timestamp}`).toString('base64');
+    // Security check: Use the environment passkey directly to ensure no config lag
+    const passkey = (process.env.MPESA_PASSKEY || mpesaConfig.passkey || '').trim();
+    
+    if (!passkey) {
+      throw new Error("Missing MPESA_PASSKEY in production environment.");
+    }
+      
+    const password = Buffer.from(`${businessShortCode}${passkey}${timestamp}`).toString('base64');
     
     // Format phone: 2547XXXXXXXX or 2541XXXXXXXX
     const formattedPhone = formatPhoneNumber(phone);
@@ -76,13 +85,13 @@ export async function POST(request: Request) {
       Password: password,
       Timestamp: timestamp,
       TransactionType: mpesaConfig.transactionType, 
-      Amount: Math.round(amount), // Ensure amount is integer
+      Amount: Math.round(amount), 
       PartyA: formattedPhone,
       PartyB: partyB,
       PhoneNumber: formattedPhone,
       CallBackURL: mpesaConfig.callbackUrl,
-      AccountReference: accountReference || "SHINDAPESA",
-      TransactionDesc: "Account Activation"
+      AccountReference: (accountReference || "SHINDAPESA").substring(0, 12),
+      TransactionDesc: "Payment"
     };
 
     const stkResponse = await fetch(`${baseUrl}/mpesa/stkpush/v1/processrequest`, {
