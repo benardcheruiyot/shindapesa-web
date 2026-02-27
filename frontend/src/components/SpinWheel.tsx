@@ -144,7 +144,7 @@ const SpinWheel = () => {
   const router = useRouter();
   const [rotation, setRotation] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
-  const [pendingWin, setPendingWin] = useState<{ value: number, label: string } | null>(null);
+  const [pendingWin, setPendingWin] = useState<{ value: number; label: string; multiplier?: string } | null>(null);
   const [result, setResult] = useState<string | null>(null);
 
   // Debug log to trace spins
