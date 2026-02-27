@@ -68,6 +68,38 @@ const Container = styled.div`
   }
 `;
 
+const FloatingChat = styled.button`
+  position: fixed;
+  bottom: 170px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+  cursor: pointer;
+  z-index: 3500;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  &:hover {
+    transform: scale(1.1) translateY(-5px);
+    box-shadow: 0 15px 35px rgba(37, 99, 235, 0.5);
+  }
+
+  @media (max-width: 600px) {
+    bottom: 180px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+  }
+`;
+
 const ContentWrapper = styled.div`
   position: relative;
   z-index: 10;
@@ -508,27 +540,6 @@ export default function HomeScreen() {
             <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#39b54a', letterSpacing: '0.5px' }}>{livePlayers.toLocaleString()} ONLINE</span>
           </div>
           
-          <button 
-            onClick={() => window.open('https://t.me/spin_win', '_blank')}
-            style={{ 
-              background: 'rgba(255,255,255,0.06)', 
-              border: '1px solid rgba(255,255,255,0.08)', 
-              color: '#fff', 
-              padding: '10px', 
-              borderRadius: 14, 
-              fontSize: '1.2rem', 
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
-            }}
-            title="Get Support"
-          >
-             ðŸ’¬
-          </button>
-          
           <BalanceBadge onClick={() => router.push("/activate-account")} style={{ background: 'rgba(76, 209, 55, 0.05)', borderColor: 'rgba(76, 209, 55, 0.2)' }}>
             <span style={{ color: '#4cd137', background: 'rgba(76, 209, 55, 0.1)' }}>UNLOCKED</span>
             {Number(user.withdrawableBalance).toLocaleString()}
@@ -621,6 +632,10 @@ export default function HomeScreen() {
       </ContentWrapper>
 
       <BottomNav onLogout={logout} />
+      
+      <FloatingChat onClick={() => window.open('https://t.me/spin_win', '_blank')}>
+        💬
+      </FloatingChat>
     </Container>
   );
 }
