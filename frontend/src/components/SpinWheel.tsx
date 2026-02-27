@@ -240,7 +240,7 @@ const SpinWheel = () => {
       }
       
       setResult(`You won ${wonSlice.label}!`);
-      setPendingWin({ value: actualWin, label: wonSlice.label });
+      setPendingWin({ value: actualWin, label: wonSlice.label, multiplier: wonSlice.valueTag });
     }, 4000);
   };
 
@@ -292,15 +292,24 @@ const SpinWheel = () => {
     const coords = getCoordsForAngle(labelAngle, labelRadius);
     labels.push(
       <g key={i} transform={`rotate(${labelAngle},${coords.x},${coords.y})`}>
+        {wheelData[i].valueTag !== 'x0' && (
+          <circle
+            cx={coords.x}
+            cy={coords.y + 10}
+            r={18}
+            fill="rgba(255, 255, 255, 0.15)"
+            style={{ filter: 'blur(4px)' }}
+          />
+        )}
         <text
           x={coords.x}
-          y={coords.y - 12}
+          y={coords.y - 14}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize="0.7rem"
+          fontSize="0.65rem"
           fontWeight="900"
           fill="#ffffff"
-          style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)', opacity: 0.8 }}
+          style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)', opacity: 0.7, letterSpacing: '1px' }}
         >
           {wheelData[i].label}
         </text>
@@ -309,10 +318,12 @@ const SpinWheel = () => {
           y={coords.y + 10}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize="1.1rem"
-          fontWeight="950"
-          fill="#ffffff"
-          style={{ textShadow: '0 2px 5px rgba(0,0,0,0.5)' }}
+          fontSize={wheelData[i].valueTag === 'x0' ? "1rem" : "1.4rem"}
+          fontWeight="1000"
+          fill={wheelData[i].valueTag === 'x0' ? "rgba(255,255,255,0.4)" : "#ffffff"}
+          style={{ 
+            textShadow: wheelData[i].valueTag === 'x0' ? 'none' : '0 0 15px rgba(59, 130, 246, 0.8), 0 2px 5px rgba(0,0,0,0.8)',
+          }}
         >
           {wheelData[i].valueTag}
         </text>
@@ -353,6 +364,9 @@ const SpinWheel = () => {
 
         {pendingWin && (
           <WinOverlay>
+            <div style={{ position: 'absolute', top: 20, right: 20, background: 'rgba(59, 130, 246, 0.2)', border: '1px solid rgba(59, 130, 246, 0.4)', padding: '8px 16px', borderRadius: '12px', fontSize: '1.2rem', fontWeight: 900, color: '#3b82f6' }}>
+              {pendingWin.multiplier}
+            </div>
             <div style={{ fontSize: '4rem', marginBottom: 20, filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.3))' }}>{pendingWin.value > 0 ? '🏆' : '🎲'}</div>
             <h2 style={{ color: pendingWin.value > 0 ? '#4cd137' : '#ffffff', fontSize: '1.8rem', fontWeight: 950, marginBottom: 12, letterSpacing: '-0.5px' }}>
               {pendingWin.value > 0 ? 'REAL CASH SECURED!' : 'KEEP SPINNING'}
