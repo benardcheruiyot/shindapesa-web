@@ -56,20 +56,26 @@ export async function POST(request: Request) {
     // 2. Prepare STK Push Request
     const timestamp = generateTimestamp();
     
-    // FORCE FIX: ShortCode and Passkey logic for Production
-    // If you are using a Paybill, both BusinessShortCode and PartyB should be the same Shortcode.
-    // If you are using a Till Number, the BusinessShortCode is the STORE NUMBER.
+    // FORCE FIX: Production Logic for Paybill / Till Number
+    // If you are using a TILL NUMBER, ShortCode must be the STORE NUMBER.
+    // If you are using a PAYBILL, ShortCode and PartyB are the same.
+    const rawShortCode = (process.env.MPESA_SHORTCODE || '').trim();
+    const rawTill = (process.env.MPESA_TILL_NUMBER || '').trim();
+    const rawStore = (process.env.MPESA_STORE_NUMBER || '').trim();
+    const txType = process.env.MPESA_TRANSACTION_TYPE || 'CustomerPayBillOnline';
     
-    const businessShortCode = (mpesaConfig.transactionType === 'CustomerBuyGoodsOnline' 
-      ? mpesaConfig.storeNumber 
-      : mpesaConfig.shortcode).trim();
+    let businessShortCode = rawShortCode;
+    let partyB = rawShortCode;
+
+    if (txType === 'CustomerBuyGoodsOnline') {
+      // For Till Numbers, Safaricom requires the Store Number for the password, 
+      // but the Till Number as the Recipient (PartyB)
+      businessShortCode = rawStore || rawShortCode; 
+      partyB = rawTill || rawShortCode;
+    }
       
-    const partyB = (mpesaConfig.transactionType === 'CustomerBuyGoodsOnline'
-      ? mpesaConfig.tillNumber
-      : mpesaConfig.shortcode).trim();
-      
-    // Security check: Use the environment passkey directly to ensure no config lag
-    const passkey = (process.env.MPESA_PASSKEY || mpesaConfig.passkey || '').trim();
+    // Security check: Use the environment passkey directly
+    const passkey = (process.env.MPESA_PASSKEY || '').trim();
     
     if (!passkey) {
       throw new Error("Missing MPESA_PASSKEY in production environment.");
