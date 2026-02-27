@@ -41,15 +41,21 @@ const NavLinks = styled.div`
 const BalanceItem = styled.div<{ $type: 'unlocked' | 'pending' }>`
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.8rem;
-  font-weight: 700;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 800;
   color: ${props => props.$type === 'unlocked' ? '#4cd137' : '#ffffff'};
   
   span.label {
-    font-size: 0.6rem;
-    opacity: 0.5;
+    font-size: 0.55rem;
+    opacity: 0.6;
     text-transform: uppercase;
+    font-weight: 900;
+  }
+
+  @media (max-width: 360px) {
+    font-size: 0.7rem;
+    span.label { font-size: 0.5rem; }
   }
 `;
 

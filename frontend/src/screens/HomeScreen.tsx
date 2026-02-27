@@ -190,17 +190,7 @@ const BalanceBadge = styled.div`
   }
 
   @media (max-width: 600px) {
-    padding: 6px 10px;
-    font-size: 0.85rem;
-    
-    span:first-child {
-      display: none;
-    }
-    
-    &::before {
-      content: '💰';
-      font-size: 0.7rem;
-    }
+    display: none;
   }
 `;
 
@@ -224,6 +214,36 @@ const HeaderActions = styled.div`
 
   @media (max-width: 400px) {
     gap: 4px;
+  }
+`;
+
+const LiveStats = styled.div`
+  display: flex;
+  align-items: center;
+  background: rgba(57, 181, 74, 0.1);
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(57, 181, 74, 0.2);
+  margin-right: 4px;
+
+  span {
+    font-size: 0.75rem;
+    font-weight: 900;
+    color: #39b54a;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 600px) {
+    padding: 4px 8px;
+    span { font-size: 0.65rem; }
+  }
+
+  @media (max-width: 480px) {
+    span {
+      display: flex;
+      gap: 4px;
+      &::after { content: ''; }
+    }
   }
 `;
 
@@ -430,6 +450,7 @@ const WinningToast = styled.div<{ $visible: boolean }>`
   gap: 12px;
   z-index: 2000;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  max-width: calc(100% - 40px);
   transform: translateY(${props => props.$visible ? '0' : '150px'});
   opacity: ${props => props.$visible ? '1' : '0'};
   transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -564,10 +585,10 @@ export default function HomeScreen() {
             <span className="label">PORTAL ACTIVE</span>
           </MarketClock>
 
-          <div className="live-stats" style={{ display: 'flex', alignItems: 'center', background: 'rgba(57, 181, 74, 0.1)', padding: '6px 14px', borderRadius: '10px', border: '1px solid rgba(57, 181, 74, 0.2)', marginRight: 4 }}>
+          <LiveStats className="live-stats">
             <PulseIndicator />
-            <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#39b54a', letterSpacing: '0.5px' }}>{livePlayers.toLocaleString()} ONLINE</span>
-          </div>
+            <span>{livePlayers.toLocaleString()} ONLINE</span>
+          </LiveStats>
           
           <BalanceBadge onClick={() => router.push("/activate-account")} style={{ background: 'rgba(76, 209, 55, 0.05)', borderColor: 'rgba(76, 209, 55, 0.2)' }}>
             <span style={{ color: '#4cd137', background: 'rgba(76, 209, 55, 0.1)' }}>UNLOCKED</span>

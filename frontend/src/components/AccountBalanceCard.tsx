@@ -87,6 +87,10 @@ const MainBalance = styled.div`
   display: flex;
   align-items: baseline;
   gap: 12px;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 
   span {
     font-size: 1.25rem;
@@ -105,7 +109,11 @@ const MainBalance = styled.div`
   }
 
   @media (max-width: 400px) {
-    font-size: 2.25rem;
+    font-size: 2rem;
+  }
+
+  @media (max-width: 340px) {
+    font-size: 1.75rem;
   }
 `;
 
