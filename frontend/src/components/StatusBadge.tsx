@@ -33,6 +33,21 @@ const Badge = styled.div<{ $isActivated: boolean }>`
     }
   }
 
+  @media (max-width: 600px) {
+    padding: 8px 12px;
+    font-size: 0.6rem;
+    gap: 8px;
+    
+    span:first-child {
+      &::before { font-size: 0.85rem; }
+    }
+    
+    .status-tag {
+      padding: 2px 6px;
+      font-size: 0.5rem;
+    }
+  }
+
   .status-tag {
     background: ${props => props.$isActivated ? '#22c55e' : '#ef4444'};
     color: #ffffff;

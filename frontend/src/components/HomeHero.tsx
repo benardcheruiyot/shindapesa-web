@@ -95,7 +95,21 @@ const HeroTitle = styled.h1`
   }
 
   @media (max-width: 600px) {
-    font-size: 2.25rem;
+    font-size: 1.75rem;
+  }
+`;
+
+const HeroDescription = styled.p`
+  opacity: 0.7;
+  font-size: 1.05rem;
+  font-weight: 400;
+  margin-bottom: 32px;
+  line-height: 1.6;
+  color: #94a3b8;
+
+  @media (max-width: 600px) {
+    font-size: 0.9rem;
+    margin-bottom: 24px;
   }
 `;
 
@@ -161,9 +175,9 @@ const HomeHero = ({ livePlayers, onAction }: HomeHeroProps) => {
                     Exclusive Reward: <br/>
                     <span>KES 25,000</span> Final Payout Locked
                 </HeroTitle>
-                <p style={{ opacity: 0.7, fontSize: '1.05rem', fontWeight: 400, marginBottom: 32, lineHeight: 1.6, color: '#94a3b8' }}>
+                <HeroDescription>
                     Join <strong>{livePlayers.toLocaleString()}</strong> verified players in the current session. Your potential reward pool is ready for disbursement.
-                </p>
+                </HeroDescription>
                 <div style={{ marginBottom: 24, background: 'rgba(255, 255, 255, 0.02)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.04)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', fontWeight: 600, marginBottom: 8, color: '#64748b', letterSpacing: '0.05em' }}>
                         <span>SYSTEM TRUST SCORE</span>

@@ -124,8 +124,8 @@ const Header = styled.header`
   height: 72px;
 
   @media (max-width: 600px) {
-    padding: 0 16px;
-    height: 64px;
+    padding: 0 12px;
+    height: 60px;
   }
 `;
 
@@ -146,12 +146,18 @@ const LogoText = styled.div`
   }
 
   &::before {
-    content: 'âš¡';
+    content: '⚡';
     font-size: 1.25rem;
   }
 
   @media (max-width: 600px) {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
+    &::before { font-size: 1rem; }
+  }
+
+  @media (max-width: 380px) {
+    font-size: 1rem;
+    gap: 4px;
   }
 `;
 
@@ -207,26 +213,17 @@ const HeaderActions = styled.div`
     gap: 6px;
     
     .live-stats {
-      padding: 4px 8px !important;
+      padding: 4px 6px !important;
       margin-right: 0 !important;
       
       span {
-        font-size: 0.65rem !important;
+        font-size: 0.6rem !important;
       }
-    }
-    
-    button {
-      padding: 8px !important;
-      font-size: 1rem !important;
     }
   }
 
   @media (max-width: 400px) {
     gap: 4px;
-    
-    button {
-      display: none !important;
-    }
   }
 `;
 
@@ -285,6 +282,12 @@ const MarketClock = styled.div`
   }
 
   @media (max-width: 600px) {
+    margin-right: 6px;
+    .time { font-size: 0.7rem; }
+    .label { font-size: 0.45rem; letter-spacing: 0.5px; }
+  }
+
+  @media (max-width: 380px) {
     display: none;
   }
 `;
@@ -305,6 +308,13 @@ const StyledSectionTitle = styled.h2`
     height: 32px;
     background: #3b82f6;
     border-radius: 4px;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 1.4rem;
+    margin: 40px 0 20px;
+    gap: 12px;
+    &::before { height: 24px; }
   }
 `;
 

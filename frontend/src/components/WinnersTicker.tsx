@@ -18,6 +18,22 @@ const TickerWrapper = styled.div`
   font-weight: 700;
   position: relative;
   z-index: 5;
+  display: flex;
+  align-items: center;
+
+  &::before {
+    content: 'LIVE PAYOUTS';
+    background: #3b82f6;
+    color: white;
+    font-size: 0.55rem;
+    font-weight: 900;
+    padding: 4px 8px;
+    margin-right: 12px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    z-index: 10;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.3);
+  }
 `;
 
 const TickerContent = styled.div`

@@ -46,6 +46,11 @@ const GlassCard = styled.div`
     top: 0; left: 0; width: 100%; height: 2px;
     background: linear-gradient(90deg, transparent, #3b82f6, transparent);
   }
+
+  @media (max-width: 600px) {
+    padding: 32px 24px;
+    border-radius: 24px;
+  }
 `;
 
 const IconWrapper = styled.div`
@@ -59,6 +64,14 @@ const IconWrapper = styled.div`
   justify-content: center;
   margin: 0 auto 32px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 600px) {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 24px;
+    
+    svg { width: 32px; height: 32px; }
+  }
 `;
 
 const Title = styled.h1`
@@ -69,6 +82,10 @@ const Title = styled.h1`
   margin-bottom: 12px;
   line-height: 1.1;
   color: #ffffff;
+
+  @media (max-width: 600px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const Subtitle = styled.p`
@@ -77,6 +94,11 @@ const Subtitle = styled.p`
   margin-bottom: 40px;
   font-weight: 500;
   line-height: 1.6;
+
+  @media (max-width: 600px) {
+    font-size: 0.9rem;
+    margin-bottom: 32px;
+  }
 `;
 
 const StepList = styled.div`
@@ -89,6 +111,11 @@ const StepItem = styled.div`
   align-items: flex-start;
   gap: 16px;
   margin-bottom: 24px;
+
+  @media (max-width: 600px) {
+    gap: 12px;
+    margin-bottom: 20px;
+  }
 `;
 
 const StepIcon = styled.div`
@@ -102,6 +129,12 @@ const StepIcon = styled.div`
   justify-content: center;
   color: #3b82f6;
   flex-shrink: 0;
+
+  @media (max-width: 600px) {
+    width: 40px;
+    height: 40px;
+    svg { width: 18px; height: 18px; }
+  }
 `;
 
 const StepContent = styled.div`
@@ -117,6 +150,11 @@ const StepContent = styled.div`
     font-size: 0.85rem;
     color: #64748b;
     line-height: 1.4;
+  }
+
+  @media (max-width: 600px) {
+    .step-title { font-size: 0.85rem; }
+    .step-desc { font-size: 0.75rem; }
   }
 `;
 
@@ -138,6 +176,12 @@ const ActionButton = styled.button`
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 15px 35px rgba(59, 130, 246, 0.35);
+  }
+
+  @media (max-width: 600px) {
+    padding: 16px;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
   }
 `;
 

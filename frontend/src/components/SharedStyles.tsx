@@ -47,6 +47,13 @@ export const AuthCard = styled.div`
   animation: ${fadeIn} 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 2;
 
+  @media (max-width: 480px) {
+    padding: 32px 20px;
+    margin-top: 40px;
+    border-radius: 24px;
+    width: 90vw;
+  }
+
   &::after {
     content: '';
     position: absolute;
@@ -66,6 +73,10 @@ export const StyledTitle = styled.h1`
   background: linear-gradient(to bottom right, #fff, #94a3b8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+
+  @media (max-width: 480px) {
+    font-size: 1.75rem;
+  }
 `;
 
 export const StyledInput = styled.input`
@@ -208,6 +219,12 @@ const StyledBackHeader = styled.div`
   z-index: 10;
   font-size: 0.875rem;
   transition: all 0.2s ease;
+
+  @media (max-width: 480px) {
+    top: 24px;
+    left: 20px;
+    font-size: 0.75rem;
+  }
 
   &:hover {
     color: #ffffff;
