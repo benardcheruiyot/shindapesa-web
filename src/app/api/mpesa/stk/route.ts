@@ -11,22 +11,33 @@ export async function POST(request: Request) {
     const { phone, amount, accountReference } = await request.json();
 
     if (!phone || !amount) {
+      console.error("STK Push Request error: Missing phone or amount", { phone, amount });
       return NextResponse.json({ error: "Phone and Amount are required" }, { status: 400 });
     }
 
     const baseUrl = getBaseUrl();
+    console.log(`Using Base URL: ${baseUrl}`);
     
-    // --- SIMULATION MODE ---
+    // --- CONFIG CHECK ---
     if (!isConfigValid('stk')) {
       const missingFields = [];
       if (!mpesaConfig.consumerKey) missingFields.push("Consumer Key");
       if (!mpesaConfig.consumerSecret) missingFields.push("Consumer Secret");
       if (!mpesaConfig.passkey) missingFields.push("Passkey");
       if (!mpesaConfig.callbackUrl) missingFields.push("Callback URL");
-      if (mpesaConfig.transactionType === 'CustomerBuyGoodsOnline' && !mpesaConfig.storeNumber) missingFields.push("Store Number");
+      
+      const isBuyGoods = mpesaConfig.transactionType === 'CustomerBuyGoodsOnline';
+      if (isBuyGoods && !mpesaConfig.storeNumber) missingFields.push("Store Number");
+      if (isBuyGoods && !mpesaConfig.tillNumber) missingFields.push("Till Number");
 
       if (process.env.NODE_ENV === 'production' || mpesaConfig.env === 'production') {
-        console.error("CRITICAL: M-Pesa Production Variables Missing!", missingFields);
+        console.error("CRITICAL: M-Pesa Production Variables Missing!", {
+          hasKey: !!mpesaConfig.consumerKey,
+          hasSecret: !!mpesaConfig.consumerSecret,
+          hasPasskey: !!mpesaConfig.passkey,
+          env: mpesaConfig.env,
+          missingFields
+        });
         return NextResponse.json({ 
           error: `Production setup error: Missing variables [${missingFields.join(", ")}]`,
           help: "Ensure all M-Pesa variables are set in your Render dashboard."
