@@ -10,7 +10,7 @@ const rotate = keyframes`
 
 const LoaderWrapper = styled.div`
   min-height: 100vh;
-  background: #001f3f;
+  background: #0a0a0b;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,14 +20,14 @@ const LoaderWrapper = styled.div`
 const Spinner = styled.div`
   width: 50px;
   height: 50px;
-  border: 5px solid rgba(255, 224, 102, 0.1);
-  border-top: 5px solid #ffe066;
+  border: 5px solid rgba(212, 175, 55, 0.1);
+  border-top: 5px solid #d4af37;
   border-radius: 50%;
   animation: ${rotate} 1s linear infinite;
 `;
 
 const Text = styled.p`
-  color: #ffe066;
+  color: #d4af37;
   margin-top: 20px;
   font-weight: 600;
   letter-spacing: 1px;

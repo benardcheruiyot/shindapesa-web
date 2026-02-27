@@ -15,12 +15,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ShindaPesa - Spin & Win Real M-Pesa Cash",
-  description: "Join ShindaPesa today, spin the wheel of fortune, and win instant cash prizes sent directly to your M-Pesa wallet.",
-  keywords: ["M-Pesa", "Spin and Win", "Kenya Cash Games", "ShindaPesa", "Online Earnings"],
-  authors: [{ name: "ShindaPesa Team" }],
+  title: "SHINDAPESA - Win Real M-Pesa Cash",
+  description: "Join SHINDAPESA today, spin the wheel of fortune, and win instant cash prizes sent directly to your M-Pesa wallet.",
+  keywords: ["M-Pesa", "SHINDAPESA", "Kenya Cash Games", "Spin and Win", "Online Earnings"],
+  authors: [{ name: "SHINDAPESA Team" }],
   openGraph: {
-    title: "ShindaPesa - Win Real Cash",
+    title: "SHINDAPESA - Win Real Cash",
     description: "Instant M-Pesa payouts. Spin now!",
     type: "website",
   }

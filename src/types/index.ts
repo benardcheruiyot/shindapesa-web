@@ -5,6 +5,7 @@ export interface User {
   phoneNumber?: string; 
   password?: string;
   balance: number;
+  withdrawableBalance: number;
   clicks: number;
   freeSpins: number; // For new users
   referralCredits: number;

@@ -10,264 +10,243 @@ const fadeIn = keyframes`
 
 const PageWrapper = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #001f3f 0%, #003366 50%, #1851a3 100%);
-  color: #fff;
+  background-color: #0a0a0b;
+  color: #ffffff;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  padding: 80px 20px 40px 20px;
+  padding: 100px 20px 60px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-const HeaderBar = styled.div`
-  width: 100vw;
-  height: 60px;
-  background: rgba(0, 31, 63, 0.8);
-  backdrop-filter: blur(10px);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  box-sizing: border-box;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-`;
-
-const BackArrow = styled.span`
-  font-size: 1.5rem;
-  margin-right: 15px;
-  cursor: pointer;
-  transition: transform 0.2s;
-  &:hover {
-    transform: translateX(-3px);
+const ContentContainer = styled.div`
+  width: 100%;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+  @media (max-width: 850px) {
+    grid-template-columns: 1fr;
   }
 `;
 
-const HeaderTitle = styled.span`
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-`;
-
-const ContentContainer = styled.div`
-  width: 100%;
-  max-width: 1200px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 32px;
-  margin-top: 40px;
-`;
-
 const MainCard = styled.div`
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(15px);
+  background: rgba(24, 24, 27, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 32px;
-  padding: 48px;
-  text-align: left;
+  border-radius: 24px;
+  padding: 40px;
   animation: ${fadeIn} 0.6s ease-out;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 4px;
+    background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
+  }
 `;
 
 const SidebarCard = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 `;
 
 const Title = styled.h1`
-  font-size: 2.2rem;
-  font-weight: 800;
-  margin-bottom: 12px;
-  background: linear-gradient(to right, #fff, #ffe066);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 8px;
+  color: #fff;
+  letter-spacing: -0.5px;
 `;
 
 const Description = styled.p`
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   line-height: 1.6;
-  color: #ccd6f6;
-  margin-bottom: 32px;
+  color: #94a3b8;
+  margin-bottom: 30px;
 `;
 
 const CodeBox = styled.div`
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px dashed rgba(255, 224, 102, 0.3);
-  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   padding: 24px;
   margin-bottom: 24px;
   text-align: center;
+  position: relative;
 `;
 
 const CodeLabel = styled.div`
-  font-size: 0.8rem;
-  color: rgba(255, 224, 102, 0.7);
+  font-size: 0.6rem;
+  color: #d4af37;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   margin-bottom: 8px;
-  font-weight: 700;
+  font-weight: 800;
 `;
 
 const CodeText = styled.div`
-  font-size: 2rem;
-  font-weight: 900;
+  font-size: 1.8rem;
+  font-weight: 950;
   color: #fff;
-  letter-spacing: 4px;
+  letter-spacing: 2px;
 `;
 
 const ShareButton = styled.button`
   width: 100%;
-  background: #ffe066;
-  color: #001f3f;
+  background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
+  color: #000;
   border: none;
   border-radius: 12px;
   padding: 18px;
-  font-weight: 800;
-  font-size: 1.1rem;
+  font-weight: 900;
+  font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 10px 20px -5px rgba(255, 224, 102, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
 
   &:hover {
     transform: translateY(-2px);
-    background: #fff;
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3);
   }
 `;
 
 const StatsGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 12px;
 `;
 
 const StatCard = styled.div`
-  background: rgba(255, 255, 255, 0.05);
-  padding: 20px 10px;
-  border-radius: 16px;
-  text-align: center;
+  background: rgba(24, 24, 27, 0.7);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 `;
 
 const StatValue = styled.div`
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: #ffe066;
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #fff;
   margin-bottom: 4px;
 `;
 
 const StatLabel = styled.div`
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.4);
-  font-weight: 600;
+  font-size: 0.65rem;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+`;
+
+const PayoutTier = styled.div`
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
 `;
 
 export default function Referral() {
   const router = useRouter();
   const [referralCode, setReferralCode] = React.useState("SHINDA99");
-  const [totalClicks, setTotalClicks] = React.useState(0);
   const [currentUser, setCurrentUser] = React.useState<any>(null);
 
   React.useEffect(() => {
     const savedName = localStorage.getItem("userName");
     if (savedName) {
-      setReferralCode(savedName);
-      
+      setReferralCode(savedName.toUpperCase());
       const users = JSON.parse(localStorage.getItem("users") || "[]");
       const user = users.find((u: any) => u.username === savedName);
-      if (user) {
-        setCurrentUser(user);
-        setTotalClicks(user.clicks || 0);
-      }
+      if (user) setCurrentUser(user);
     }
   }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralCode);
-    alert('Referral code copied!');
+    alert('Referral code copied to clipboard!');
   };
-
-  const recentReferrals = [
-    { name: 'John D.', date: '2 hours ago', status: 'Active' },
-    { name: 'Sarah K.', date: '5 hours ago', status: 'Pending' },
-    { name: 'Mike O.', date: '1 day ago', status: 'Active' },
-  ];
 
   return (
     <PageWrapper>
-      <div style={{ width: '100%', maxWidth: 1200, display: 'flex', alignItems: 'center', marginBottom: 20 }}>
-        <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginRight: 20 }} onClick={() => router.push('/home')}>
-           ←
+      <div style={{ width: '100%', maxWidth: 1000, display: 'flex', alignItems: 'center', marginBottom: 30, justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <div style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#ffffff' }} onClick={() => router.push('/home')}>
+             &larr;
+          </div>
+          <div style={{ fontWeight: 950, fontSize: '1.2rem' }}>INVITE & WIN</div>
         </div>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 900 }}>Partnership Program</h1>
+        <div style={{ fontSize: '0.7rem', color: '#4ade80', fontWeight: 900, background: 'rgba(74, 222, 128, 0.05)', padding: '6px 12px', borderRadius: '100px', border: '1px solid rgba(74, 222, 128, 0.2)' }}>
+          ● LIVE
+        </div>
       </div>
 
       <ContentContainer>
         <MainCard>
-          <div style={{ fontSize: '3rem', marginBottom: 20 }}>🤝</div>
-          <Title>Scale Your Earnings</Title>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+             <div style={{ width: 40, height: 2, background: '#d4af37' }} />
+             <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#d4af37', letterSpacing: '2px' }}>REFERRAL DASHBOARD</div>
+          </div>
+          <Title>Invite Friends & Win</Title>
           <Description>
-            Join our elite partnership program. Share your unique code with your network and earn <b>KES 100</b> for every verified activation.
+            Share your unique referral code with friends and earn KES 100 for every friend who joins and activates their account.
           </Description>
 
           <CodeBox>
-            <CodeLabel>Your Exclusive Partner Code</CodeLabel>
+            <CodeLabel>Your Referral Code</CodeLabel>
             <CodeText>{referralCode}</CodeText>
           </CodeBox>
 
-          <ShareButton onClick={handleCopy}>Copy Code & Share</ShareButton>
+          <ShareButton onClick={handleCopy}>
+            Copy Referral Code
+          </ShareButton>
           
-          <div style={{ marginTop: 40 }}>
-             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: 16 }}>Program Benefits:</h3>
-             <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '0.95rem', color: 'rgba(255,255,255,0.7)' }}>
-                   <span style={{ color: '#ffe066' }}>✔</span> Instant KES 100 upon activation
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '0.95rem', color: 'rgba(255,255,255,0.7)' }}>
-                   <span style={{ color: '#ffe066' }}>✔</span> Multi-tier bonus potential
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '0.95rem', color: 'rgba(255,255,255,0.7)' }}>
-                   <span style={{ color: '#ffe066' }}>✔</span> Real-time performance tracking
-                </li>
-             </ul>
+          <div style={{ marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+             <div style={{ fontSize: '0.7rem', fontWeight: 900, color: '#94a3b8', textTransform: 'uppercase' }}>Affiliate Rewards</div>
+             <PayoutTier>
+                <span>Direct Referral</span>
+                <span style={{ color: '#4ade80', fontWeight: 800 }}>KES 100.00</span>
+             </PayoutTier>
+             <PayoutTier>
+                <span>Team Bonus</span>
+                <span style={{ color: '#4ade80', fontWeight: 800 }}>KES 50.00</span>
+             </PayoutTier>
           </div>
         </MainCard>
 
         <SidebarCard>
-          <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 24, padding: 32 }}>
-             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: 24 }}>Partnership Stats</h3>
-             <StatsGrid>
-               <StatCard>
-                 <StatValue>{totalClicks}</StatValue>
-                 <StatLabel>Total Referrals</StatLabel>
-               </StatCard>
-               <StatCard>
-                 <StatValue>KES {(totalClicks * 100).toLocaleString()}</StatValue>
-                 <StatLabel>Total Earned</StatLabel>
-               </StatCard>
-             </StatsGrid>
-             
-             <div style={{ marginTop: 24, background: 'rgba(255,224,102,0.1)', borderRadius: 12, padding: 16, textAlign: 'center' }}>
-                <div style={{ fontSize: '0.8rem', color: '#ffe066', fontWeight: 700, textTransform: 'uppercase' }}>Current Rank</div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 900 }}>Silver Partner</div>
-             </div>
-          </div>
+          <StatsGrid>
+            <StatCard>
+              <StatLabel>Direct Partners</StatLabel>
+              <StatValue>{currentUser?.referrals?.length || 0}</StatValue>
+            </StatCard>
+            <StatCard>
+              <StatLabel>Network Reach</StatLabel>
+              <StatValue>{(currentUser?.referrals?.length || 0) * 3}</StatValue>
+            </StatCard>
+          </StatsGrid>
+          
+          <StatCard style={{ textAlign: 'center' }}>
+             <StatLabel>Total Commissions</StatLabel>
+             <StatValue style={{ fontSize: '2rem', color: '#d4af37' }}>KES {Number(currentUser?.referralCredits || 0).toLocaleString()}.00</StatValue>
+          </StatCard>
 
-          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 24, padding: 32 }}>
-             <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 20 }}>Recent Activities</h3>
-             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                {recentReferrals.map((ref, i) => (
-                   <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, borderBottom: i < 2 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
-                      <div>
-                         <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{ref.name}</div>
-                         <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>{ref.date}</div>
-                      </div>
-                      <div style={{ fontSize: '0.8rem', fontWeight: 700, color: ref.status === 'Active' ? '#4ade80' : '#ffe066', background: 'rgba(255,255,255,0.05)', padding: '4px 12px', borderRadius: 20 }}>
-                         {ref.status}
-                      </div>
-                   </div>
-                ))}
+          <div style={{ background: 'rgba(24, 24, 27, 0.7)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
+             <div style={{ fontWeight: 800, fontSize: '0.9rem', marginBottom: '15px' }}>Instant Settlement</div>
+             <div style={{ fontSize: '0.8rem', color: '#94a3b8', lineHeight: '1.6' }}>
+                All alliance commissions are settled instantly into your core wallet upon partner verification. 
+                <br/><br/>
+                <span style={{ color: '#d4af37' }}>✓ M-PESA Integrated</span><br/>
+                <span style={{ color: '#d4af37' }}>✓ 24/7 Tracking</span>
              </div>
           </div>
         </SidebarCard>

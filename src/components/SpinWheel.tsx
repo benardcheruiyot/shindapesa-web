@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/UserContext';
 import { userService } from '@/services/userService';
 
@@ -28,63 +29,80 @@ const Pointer = styled.div`
   height: 0;
   border-left: 18px solid transparent;
   border-right: 18px solid transparent;
-  border-bottom: 32px solid #222;
+  border-bottom: 32px solid #d4af37;
   z-index: 5;
 `;
 
 const SpinButton = styled.button`
-  background: linear-gradient(135deg, #0a3570 0%, #1c5ba9 100%);
+  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
   color: #fff;
   font-size: 1.4rem;
-  font-weight: 800;
-  border: 4px solid #ffe066;
+  font-weight: 950;
+  border: none;
   border-radius: 40px;
-  padding: 18px 56px;
-  box-shadow: 0 8px 24px rgba(255, 224, 102, 0.3);
+  padding: 20px 60px;
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  animation: pulse-glow 2s infinite;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   
-  @keyframes pulse-glow {
-    0% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 224, 102, 0); }
-    50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 224, 102, 0.6); }
-    100% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 224, 102, 0); }
-  }
-
-  &:hover {
-    transform: translateY(-4px) scale(1.05);
-    background: linear-gradient(135deg, #1c5ba9 0%, #0a3570 100%);
-    box-shadow: 0 12px 30px rgba(255, 224, 102, 0.4);
+  &:hover:not(:disabled) {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.25);
   }
   
-  &:active {
-    transform: scale(0.95);
+  &:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
   }
   
   &:disabled {
-    background: #ccc;
-    border-color: #999;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.3);
     cursor: not-allowed;
-    animation: none;
     box-shadow: none;
   }
 `;
 
+const WinOverlay = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  background: #0a0a0b;
+  padding: 30px;
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  min-width: 280px;
+  color: #ffffff;
+
+  @keyframes popIn {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+`;
+
 const wheelData = [
-  { label: 'KES 15,000', color: '#ffe066', value: 15000 },
-  { label: 'KES 0', color: '#001f3f', value: 0 },
-  { label: 'KES 20,000', color: '#1851a3', value: 20000 },
-  { label: 'KES 0', color: '#001f3f', value: 0 },
-  { label: 'KES 12,000', color: '#ffe066', value: 12000 },
-  { label: 'KES 0', color: '#001f3f', value: 0 },
-  { label: 'KES 18,000', color: '#1851a3', value: 18000 },
-  { label: 'KES 0', color: '#001f3f', value: 0 },
+  { label: 'x20', color: '#d4af37', min: 10001, max: 20000 },
+  { label: 'x0', color: '#0a0a0b', min: 0, max: 0 },
+  { label: 'x10', color: '#ffffff', min: 5001, max: 10000 },
+  { label: 'x0', color: '#0a0a0b', min: 0, max: 0 },
+  { label: 'x5', color: '#d4af37', min: 1000, max: 5000 },
+  { label: 'x0', color: '#0a0a0b', min: 0, max: 0 },
+  { label: 'x1', color: '#ffffff', min: 100, max: 999 },
+  { label: 'x0', color: '#0a0a0b', min: 0, max: 0 },
 ];
 
 const SpinWheel = () => {
   const { user, updateUser } = useUser();
+  const router = useRouter();
   const [rotation, setRotation] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [pendingWin, setPendingWin] = useState<{ value: number, label: string } | null>(null);
   const [result, setResult] = useState<string | null>(null);
 
   // Debug log to trace spins
@@ -94,8 +112,33 @@ const SpinWheel = () => {
     }
   }, [user]);
 
+  const collectWinnings = () => {
+    if (!user || !pendingWin) return;
+
+    const currentSpins = Number(user.freeSpins) || 0;
+    const isFreeSpin = currentSpins > 0;
+    const cost = isFreeSpin ? 0 : 100;
+    const nextSpins = isFreeSpin ? currentSpins - 1 : 0;
+    const currentBalance = Number(user.balance) || 0;
+
+    updateUser({
+      balance: currentBalance + pendingWin.value - cost,
+      clicks: (Number(user.clicks) || 0) + 1,
+      freeSpins: nextSpins,
+      welcomeSpinsFinished: isFreeSpin ? (nextSpins === 0) : true
+    });
+
+    setPendingWin(null);
+    setResult(null);
+
+    // If it was the last free spin, redirect home immediately on collection
+    if (isFreeSpin && nextSpins === 0) {
+      router.push("/home");
+    }
+  };
+
   const spin = () => {
-    if (isSpinning || !user) return;
+    if (isSpinning || !user || pendingWin) return;
     
     // Explicitly check for free spins
     const currentSpins = Number(user.freeSpins) || 0;
@@ -122,11 +165,16 @@ const SpinWheel = () => {
     let wonSliceIndex: number;
 
     if (isFreeSpin) {
-      // Sequence: Loss (5), Win 20k (4), Loss (3), Win 15k (2), Loss (1)
-      // If we have 5 spins left, we're on the 1st spin (idx 0)
+      // Sequence for exactly 3 wins:
+      // Spin 1: Loss (Index 1)
+      // Spin 2: Win x5 (Index 4) -> (KES 1,000 - 5,000)
+      // Spin 3: Win x10 (Index 2) -> (KES 5,001 - 10,000)
+      // Spin 4: Loss (Index 5)
+      // Spin 5: Win x20 (Index 0) -> (KES 10,001 - 20,000)
+      // Total potential: KES 16,000 - KES 35,000
       const sequenceIndex = 5 - currentSpins; 
-      const indices = [1, 2, 5, 0, 7]; // Sequence of slice indices
-      wonSliceIndex = indices[sequenceIndex] ?? 7; 
+      const indices = [1, 4, 2, 5, 0]; 
+      wonSliceIndex = indices[sequenceIndex] ?? 5; 
       console.log(`Executing Promo Spin #${sequenceIndex + 1}, target index: ${wonSliceIndex}`);
     } else {
       wonSliceIndex = Math.floor(Math.random() * wheelData.length);
@@ -143,18 +191,14 @@ const SpinWheel = () => {
     setTimeout(() => {
       setIsSpinning(false);
       const wonSlice = wheelData[wonSliceIndex];
-      setResult(`You won ${wonSlice.label}!`);
+      // Generate actual winning amount randomly within the slice range
+      let actualWin = 0;
+      if (wonSlice.max > 0) {
+        actualWin = Math.floor(Math.random() * (wonSlice.max - wonSlice.min + 1)) + wonSlice.min;
+      }
       
-      const currentBalance = Number(user.balance) || 0;
-      const nextSpins = isFreeSpin ? currentSpins - 1 : 0;
-
-      updateUser({
-        balance: currentBalance + (wonSlice.value || 0) - 100, 
-        clicks: (Number(user.clicks) || 0) + 1,
-        freeSpins: nextSpins,
-        welcomeSpinsFinished: isFreeSpin ? (nextSpins === 0) : true
-      });
-
+      setResult(`You won ${wonSlice.label}!`);
+      setPendingWin({ value: actualWin, label: wonSlice.label });
     }, 4000);
   };
 
@@ -180,7 +224,7 @@ const SpinWheel = () => {
     const end = getCoordsForAngle(endAngle);
     const largeArc = angle > 180 ? 1 : 0;
     const pathData = [`M ${center} ${center}`, `L ${start.x} ${start.y}`, `A ${radius} ${radius} 0 ${largeArc} 1 ${end.x} ${end.y}`, 'Z'].join(' ');
-    paths.push(<path key={i} d={pathData} fill={wheelData[i].color} stroke="#fff" strokeWidth={3} />);
+    paths.push(<path key={i} d={pathData} fill={wheelData[i].color} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />);
   }
 
   let labels = [];
@@ -195,10 +239,9 @@ const SpinWheel = () => {
         y={coords.y}
         textAnchor="middle"
         dominantBaseline="middle"
-        fontSize="1rem"
-        fontWeight="bold"
-        fill="#fff"
-        style={{ textShadow: '0 1px 4px #222' }}
+        fontSize="0.85rem"
+        fontWeight="800"
+        fill={wheelData[i].color === '#ffffff' ? '#0a0a0b' : '#fff'}
         transform={`rotate(${labelAngle},${coords.x},${coords.y})`}
       >
         {wheelData[i].label}
@@ -208,29 +251,51 @@ const SpinWheel = () => {
 
   return (
     <WheelContainer>
-      <div style={{ color: '#0a3570', fontWeight: 700, marginBottom: 10, fontSize: '0.9rem' }}>
-        {user?.freeSpins ? `🎁 PROMO SPINS DETECTED (${user.freeSpins} left)` : 'LUCKY SPIN ACTIVE'}
+      <div style={{ color: '#d4af37', fontWeight: 950, marginBottom: 15, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: 3 }}>
+        {user?.freeSpins ? `🎡 ${user.freeSpins} FREE SPINS LEFT` : '✨ GRAND PRIZE WHEEL'}
       </div>
+      
       <div style={{ position: 'relative' }}>
         <Pointer />
         <WheelWrapper rotation={rotation} transitioning={isSpinning}>
           <svg width={size} height={size}>
             {paths}
             {labels}
-            <circle cx={center} cy={center} r={32} fill="#fff" stroke="#eee" strokeWidth={2} />
+            <circle cx={center} cy={center} r={24} fill="#0a0a0b" stroke="#d4af37" strokeWidth={4} />
+            <text x={center} y={center} textAnchor="middle" dominantBaseline="middle" dy=".3em" fontSize="1.2rem">🎰</text>
           </svg>
         </WheelWrapper>
+
+        {pendingWin && (
+          <WinOverlay>
+            <div style={{ fontSize: '3rem', marginBottom: 15 }}>{pendingWin.value > 0 ? '🎉' : '💫'}</div>
+            <h2 style={{ color: pendingWin.value > 0 ? '#d4af37' : '#ffffff', fontSize: '1.4rem', fontWeight: 950, marginBottom: 8, letterSpacing: '1px' }}>
+              {pendingWin.value > 0 ? 'CONGRATULATIONS!' : 'BETTER LUCK NEXT TIME'}
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.1rem', fontWeight: 800, marginBottom: 25 }}>
+              {pendingWin.value > 0 
+                ? `You just won ${pendingWin.label} (KES ${pendingWin.value.toLocaleString()})` 
+                : `Outcome: ${pendingWin.label}. The next spin could be your jackpot!`}
+            </p>
+            <SpinButton onClick={collectWinnings}>
+              {pendingWin.value > 0 
+                ? (user && user.freeSpins === 1 ? 'COLLECT EARNINGS' : 'COLLECT & CONTINUE')
+                : (user && user.freeSpins === 1 ? 'FINISH' : 'TRY AGAIN')
+              }
+            </SpinButton>
+          </WinOverlay>
+        )}
       </div>
 
-      <div style={{ textAlign: 'center' }}>
-        {result && (
-          <div style={{ marginBottom: 16, fontSize: '1.2rem', fontWeight: 800, color: '#1b7e1b' }}>
-            {result}
-          </div>
+      <div style={{ textAlign: 'center', marginTop: 30 }}>
+        {!pendingWin && (
+          <SpinButton 
+            onClick={user && Number(user.freeSpins) > 0 ? spin : () => router.push("/activate-account")} 
+            disabled={isSpinning}
+          >
+            {isSpinning ? 'SPINNING...' : (user && Number(user.freeSpins) > 0 ? 'SPIN NOW' : 'ACTIVATE & WIN 🎁')}
+          </SpinButton>
         )}
-        <SpinButton onClick={spin} disabled={isSpinning}>
-          {isSpinning ? 'SPINNING...' : (user && user.freeSpins > 0 ? `PROMO SPIN (${user.freeSpins} Left)` : 'LUCKY SPIN (KES 100)')}
-        </SpinButton>
       </div>
     </WheelContainer>
   );

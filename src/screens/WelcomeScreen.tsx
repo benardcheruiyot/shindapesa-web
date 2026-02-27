@@ -22,7 +22,7 @@ const float = keyframes`
 
 const Container = styled.div`
   min-height: 100vh;
-  background: radial-gradient(circle at top right, #1851a3, #001f3f 60%);
+  background-color: #0a0a0b;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,7 +30,7 @@ const Container = styled.div`
   padding: 24px;
   position: relative;
   overflow: hidden;
-  color: #fff;
+  color: #ffffff;
 `;
 
 const FloatingElement = styled.div<{ $top: string; $left: string; $duration: string }>`
@@ -39,7 +39,7 @@ const FloatingElement = styled.div<{ $top: string; $left: string; $duration: str
   left: ${props => props.$left};
   width: 15vw;
   height: 15vw;
-  background: radial-gradient(circle, rgba(255,224,102,0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
   border-radius: 50%;
   animation: ${float} ${props => props.$duration} ease-in-out infinite;
   pointer-events: none;
@@ -66,46 +66,43 @@ const GlowRing = styled.div`
   width: 160px;
   height: 160px;
   border-radius: 50%;
-  border: 2px solid rgba(255,224,102,0.2);
+  border: 4px solid rgba(212, 175, 55, 0.1);
   animation: ${spin} 8s linear infinite;
   &:before {
     content: '';
     position: absolute;
     top: -5px;
     left: 50%;
-    width: 10px;
-    height: 10px;
-    background: #ffe066;
+    width: 12px;
+    height: 12px;
+    background: #d4af37;
     border-radius: 50%;
-    box-shadow: 0 0 15px #ffe066;
   }
 `;
 
 const LogoBody = styled.div`
   width: 100px;
   height: 100px;
-  background: linear-gradient(135deg, #ffe066, #ffc107);
+  background: linear-gradient(135deg, #d4af37, #b8860b);
   border-radius: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
   transform: rotate(-10deg);
 `;
 
 const Title = styled.h1`
-  font-size: 3rem;
-  font-weight: 900;
+  font-size: 3.2rem;
+  font-weight: 950;
   margin-bottom: 8px;
-  letter-spacing: -1px;
-  background: linear-gradient(to right, #fff, #ffe066);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  letter-spacing: -2px;
+  color: #ffffff;
 `;
 
 const Subtitle = styled.div`
   font-size: 1.25rem;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   font-weight: 500;
   margin-bottom: 40px;
 `;
@@ -114,7 +111,7 @@ const LoadingText = styled.div`
   margin-top: 20px;
   font-size: 0.9rem;
   font-weight: 700;
-  color: rgba(255,255,255,0.4);
+  color: #aaa;
   letter-spacing: 3px;
   text-transform: uppercase;
 `;
@@ -122,8 +119,8 @@ const LoadingText = styled.div`
 const Spinner = styled.div`
   width: 40px;
   height: 40px;
-  border: 4px solid rgba(255,255,255,0.05);
-  border-top-color: #ffe066;
+  border: 4px solid #f1f2f6;
+  border-top-color: #d4af37;
   border-radius: 50%;
   animation: ${spin} 1s linear infinite;
   margin: 0 auto;
@@ -133,8 +130,15 @@ const WelcomeScreen = () => {
   const router = useRouter();
 
   useEffect(() => {
+    // Persistent Login Check: If user is already in localStorage, skip delay and go home
+    const savedUser = localStorage.getItem('shindapesa_user');
+    if (savedUser) {
+      router.push('/home');
+      return;
+    }
+
     const timer = setTimeout(() => {
-      router.push('/landing');
+      router.push('/');
     }, 3000);
     return () => clearTimeout(timer);
   }, [router]);
@@ -148,11 +152,11 @@ const WelcomeScreen = () => {
         <LogoContainer>
           <GlowRing />
           <LogoBody>
-            <span style={{fontSize:'2.5rem', color:'#001f3f', fontWeight:900}}>K</span>
+            <span style={{fontSize:'2.5rem', color:'#0a0a0b', fontWeight:900}}>S</span>
           </LogoBody>
         </LogoContainer>
 
-        <Title>ShindaPesa</Title>
+        <Title>SHINDAPESA</Title>
         <Subtitle>East Africa's Premium Rewards</Subtitle>
 
         <div style={{marginTop: 40}}>

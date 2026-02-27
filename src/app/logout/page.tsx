@@ -1,27 +1,32 @@
 "use client";
 
 import { useEffect } from "react";
+import { useUser } from "@/context/UserContext";
 
 export default function Logout() {
+  const { logout } = useUser();
+  
   useEffect(() => {
-    // Collect users list to preserve across logout
-    const users = localStorage.getItem("users");
-    // Clear only session data
-    localStorage.removeItem("userName");
-    localStorage.removeItem("userPhone");
-    localStorage.removeItem("collectedAmount");
-    localStorage.removeItem("userClicks");
-    localStorage.removeItem("welcomeSpinsFinished");
-    
-    // In a real environment we'd keep 'users', but for this demo clearing everything might be expected
-    // However the request asks for "amount won should be available as it was even if user log out and in"
-    // So we MUST NOT clear the 'users' database.
-    
-    // Redirect to login page
-    window.location.href = "/login";
-  }, []);
+    // Standardized manual logout
+    logout();
+  }, [logout]);
 
   return (
-    <div style={{padding:'48px',textAlign:'center',fontWeight:800,fontSize:'2rem',color:'#1851a3'}}>Logging out...</div>
+    <div style={{
+      padding: '48px',
+      textAlign: 'center',
+      fontWeight: 950,
+      fontSize: '2rem',
+      color: '#ffffff',
+      backgroundColor: '#0a0a0b',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: 'Inter, sans-serif',
+      letterSpacing: '-1px'
+    }}>
+      Logging out...
+    </div>
   );
 }

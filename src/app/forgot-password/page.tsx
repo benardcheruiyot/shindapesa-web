@@ -10,8 +10,8 @@ const fadeIn = keyframes`
 
 const PageWrapper = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #001f3f 0%, #003366 50%, #1851a3 100%);
-  color: #fff;
+  background-color: #0a0a0b;
+  color: #ffffff;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   padding: 80px 20px 40px 20px;
   display: flex;
@@ -28,9 +28,9 @@ const ContentContainer = styled.div`
 const HeaderBar = styled.div`
   width: 100%;
   height: 64px;
-  background: rgba(0, 31, 63, 0.8);
+  background: rgba(10, 10, 11, 0.95);
   backdrop-filter: blur(15px);
-  color: #fff;
+  color: #ffffff;
   display: flex;
   align-items: center;
   padding: 0 24px;
@@ -52,6 +52,7 @@ const BackArrow = styled.span`
   transition: transform 0.2s;
   &:hover {
     transform: translateX(-3px);
+    color: #d4af37;
   }
 `;
 
@@ -62,27 +63,28 @@ const HeaderTitle = styled.span`
 `;
 
 const MainCard = styled.div`
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(24, 24, 27, 0.7);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   padding: 40px 32px;
   animation: ${fadeIn} 0.6s ease-out;
   text-align: center;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
 `;
 
 const Title = styled.h1`
   font-size: 1.8rem;
   font-weight: 800;
   margin-bottom: 12px;
-  background: linear-gradient(to right, #fff, #ffe066);
+  background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 `;
 
 const Description = styled.p`
   font-size: 1rem;
-  color: #ccd6f6;
+  color: #94a3b8;
   margin-bottom: 32px;
   line-height: 1.5;
 `;
@@ -111,26 +113,29 @@ const Input = styled.input`
   outline: none;
   box-sizing: border-box;
   &:focus {
-    border-color: #ffe066;
+    border-color: #d4af37;
+    background: rgba(255, 255, 255, 0.08);
   }
 `;
 
 const ResetButton = styled.button`
   width: 100%;
-  background: #ffe066;
-  color: #001f3f;
+  background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
+  color: #000;
   border: none;
   border-radius: 12px;
   padding: 16px;
-  font-weight: 800;
-  font-size: 1.1rem;
+  font-weight: 900;
+  font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 10px 20px -5px rgba(255, 224, 102, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
 
   &:hover {
     transform: translateY(-2px);
-    background: #fff;
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
   }
 `;
 

@@ -39,6 +39,19 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
           localStorage.setItem('freeSpins', '5');
         }
 
+        // --- BALANCE MIGRATION ---
+        // If a user was initialized with the legacy 1000 KES, we reset them to 0.
+        if (Number(parsed.balance) === 1000 && !parsed.isActivated) {
+           parsed.balance = 0;
+           localStorage.setItem('currentUser', JSON.stringify(parsed));
+        }
+
+        // Initialize withdrawableBalance if it doesn't exist
+        if (parsed.withdrawableBalance === undefined) {
+          parsed.withdrawableBalance = 0;
+          localStorage.setItem('currentUser', JSON.stringify(parsed));
+        }
+
         setUser(parsed);
       } else {
         setUser(null);

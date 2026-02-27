@@ -5,14 +5,36 @@ interface ReferralCardProps {
 }
 
 const ReferralCard: React.FC<ReferralCardProps> = ({ referral }) => (
-  <section style={{background:'#fff',color:'#0a3570',borderRadius:16,padding:'18px 18px 12px 18px',marginBottom:18,boxShadow:'0 2px 12px rgba(0,0,0,0.08)'}}>
-    <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:8}}>
-      <span role="img" aria-label="referral">💵</span>
-      <span style={{fontWeight:700,fontSize:'1.08rem'}}>Referral Earnings</span>
+  <section style={{
+    background: 'rgba(24, 24, 27, 0.7)',
+    color: '#ffffff',
+    borderRadius: 24,
+    padding: '24px',
+    marginBottom: 18,
+    boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+    border: '1px solid rgba(255,255,255,0.1)'
+  }}>
+    <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
+      <span style={{fontSize: '1.5rem'}}>💵</span>
+      <span style={{fontWeight:900,fontSize:'1.1rem', color: '#ffffff'}}>Referral Earnings</span>
     </div>
-    <div style={{fontSize:'1.01rem',marginBottom:8}}>KES {referral}</div>
-    <button style={{background:'#36A2EB',color:'#fff',border:'none',borderRadius:8,padding:'8px 18px',fontWeight:700,fontSize:'1rem',cursor:'pointer',boxShadow:'0 1px 4px #0a357033'}} onClick={()=>alert('Referral feature coming soon!')}>
-      Refer & Earn
+    <div style={{fontSize:'1.8rem', fontWeight: 950, marginBottom: 16, color: '#d4af37'}}>KES {referral.toLocaleString()}</div>
+    <button 
+      style={{
+        background: 'rgba(255, 255, 255, 0.05)',
+        color: '#ffffff',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: 12,
+        padding: '12px 20px',
+        fontWeight: 800,
+        fontSize: '0.95rem',
+        cursor: 'pointer',
+        width: '100%',
+        transition: 'all 0.2s'
+      }} 
+      onClick={()=>alert('Referral feature coming soon!')}
+    >
+      Copy Invite Link
     </button>
   </section>
 );

@@ -5,26 +5,26 @@ import styled from 'styled-components';
 
 const ErrorWrapper = styled.div`
   min-height: 100vh;
-  background: #001f3f;
-  color: #fff;
+  background: #0a0a0b;
+  color: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px;
   text-align: center;
-  font-family: sans-serif;
+  font-family: 'Inter', sans-serif;
 `;
 
 const ErrorTitle = styled.h2`
-  color: #ffe066;
+  color: #d4af37;
   font-size: 2rem;
   margin-bottom: 1rem;
 `;
 
 const RetryButton = styled.button`
-  background: #ffe066;
-  color: #001f3f;
+  background: #d4af37;
+  color: #fff;
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
