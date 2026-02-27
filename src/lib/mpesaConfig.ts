@@ -1,17 +1,17 @@
 export const mpesaConfig = {
-  consumerKey: process.env.MPESA_CONSUMER_KEY,
-  consumerSecret: process.env.MPESA_CONSUMER_SECRET,
+  consumerKey: process.env.MPESA_CONSUMER_KEY || 'W74YsCs7sBn34GXxf7EacuVou44vbTN6JxKUt7AXyIstwgh7',
+  consumerSecret: process.env.MPESA_CONSUMER_SECRET || 'RCiVqjfRBoyd9pSyWfZR0IQxApLM36ijl44ILTak4PBarg8coR928AKFBVqJHrky',
   initiatorName: process.env.MPESA_INITIATOR_NAME || 'SpinWinAdmin',
   securityCredential: process.env.MPESA_SECURITY_CREDENTIAL,
   shortcode: process.env.MPESA_SHORTCODE || '3700945', 
   b2cShortcode: process.env.MPESA_B2C_SHORTCODE || '600000', 
-  passkey: process.env.MPESA_PASSKEY,
+  passkey: process.env.MPESA_PASSKEY || 'a6a89fa8a33aaffe9751ee7288c2255d7bb55b72cd0c12ea6536d152cc6a4747',
   env: process.env.MPESA_ENV || 'production',
   callbackUrl: process.env.MPESA_CALLBACK_URL || `${process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_APP_URL}/api/mpesa/callback`,
   b2cCallbackUrl: process.env.MPESA_B2C_CALLBACK_URL || `${process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_APP_URL}/api/mpesa/withdraw-callback`,
   transactionType: process.env.MPESA_TRANSACTION_TYPE || 'CustomerBuyGoodsOnline',
   tillNumber: process.env.MPESA_TILL_NUMBER || '8733762',
-  storeNumber: process.env.MPESA_STORE_NUMBER || process.env.MPESA_SHORTCODE || '3700945', 
+  storeNumber: process.env.MPESA_STORE_NUMBER || '3700945', 
 };
 
 export const getBaseUrl = () => {
