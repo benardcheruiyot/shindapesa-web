@@ -11,6 +11,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ResultCode: 1, ResultDesc: "Invalid Body" }, { status: 400 });
     }
 
+    const { stkCallback } = Body;
     const { ResultCode, ResultDesc, CheckoutRequestID, CallbackMetadata } = stkCallback;
 
     let displayMessage = ResultDesc;
