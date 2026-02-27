@@ -26,20 +26,18 @@ export async function POST(request: Request) {
       if (mpesaConfig.transactionType === 'CustomerBuyGoodsOnline' && !mpesaConfig.storeNumber) missingFields.push("Store Number");
 
       if (process.env.NODE_ENV === 'production' || mpesaConfig.env === 'production') {
+        console.error("CRITICAL: M-Pesa Production Variables Missing!", missingFields);
         return NextResponse.json({ 
           error: `Production setup error: Missing variables [${missingFields.join(", ")}]`,
-          help: "Ensure all M-Pesa variables are set in your .env file or hosting provider dashboard."
+          help: "Ensure all M-Pesa variables are set in your Render dashboard."
         }, { status: 500 });
       }
 
-      console.warn("M-Pesa environment variables missing - RUNNING IN SIMULATION MODE");
-      return NextResponse.json({
-        MerchantRequestID: "SIM-" + Date.now(),
-        CheckoutRequestID: "SIM-" + Math.random().toString(36).substr(2, 9),
-        ResponseCode: "0",
-        ResponseDescription: "Success. Request accepted for processing",
-        CustomerMessage: "Success. Request accepted for processing"
-      });
+      // STRICT MODE: No longer returning fake success here
+      return NextResponse.json({ 
+        error: "M-Pesa Configuration Missing (STRICT MODE)",
+        missing: missingFields
+      }, { status: 500 });
     }
 
     let access_token = cachedToken;
