@@ -65,10 +65,15 @@ export async function POST(request: Request) {
     // 2. Prepare STK Push Request
     const timestamp = generateTimestamp();
     
-    // HARDCODED PRODUCTION VALUES (Buy Goods Setup)
-    // The shortcode used for password generation is the STORE NUMBER
-    const businessShortCode = "3700945";
-    const partyB = "8733762"; // The 7-digit Till Number receiving the payment
+    // For Buy Goods (Till), the shortcode used for password generation is the STORE NUMBER
+    const businessShortCode = mpesaConfig.transactionType === 'CustomerBuyGoodsOnline' 
+      ? mpesaConfig.storeNumber 
+      : mpesaConfig.shortcode;
+      
+    // Recipient of payment
+    const partyB = mpesaConfig.transactionType === 'CustomerBuyGoodsOnline'
+      ? mpesaConfig.tillNumber
+      : mpesaConfig.shortcode;
       
     const password = Buffer.from(`${businessShortCode}${mpesaConfig.passkey}${timestamp}`).toString('base64');
     
@@ -79,7 +84,7 @@ export async function POST(request: Request) {
       BusinessShortCode: businessShortCode,
       Password: password,
       Timestamp: timestamp,
-      TransactionType: "CustomerBuyGoodsOnline", 
+      TransactionType: mpesaConfig.transactionType, 
       Amount: Math.round(amount), // Ensure amount is integer
       PartyA: formattedPhone,
       PartyB: partyB,
