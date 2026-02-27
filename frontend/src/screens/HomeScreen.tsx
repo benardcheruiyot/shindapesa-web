@@ -152,8 +152,17 @@ const BalanceBadge = styled.div`
   }
 
   @media (max-width: 600px) {
-    padding: 5px 12px;
+    padding: 6px 10px;
     font-size: 0.85rem;
+    
+    span:first-child {
+      display: none;
+    }
+    
+    &::before {
+      content: '💰';
+      font-size: 0.7rem;
+    }
   }
 `;
 

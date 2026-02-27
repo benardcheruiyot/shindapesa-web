@@ -2,22 +2,55 @@
 import React from "react";
 import styled from "styled-components";
 import { useRouter, usePathname } from "next/navigation";
+import { useUser } from "@/hooks/useUser";
 
 const NavContainer = styled.nav`
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 80px;
-  background: rgba(13, 21, 38, 0.85);
+  background: rgba(13, 21, 38, 0.9);
   backdrop-filter: blur(24px);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 0 8px 10px;
+  flex-direction: column;
   z-index: 4000;
   box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.5);
+`;
+
+const MobileBalanceRow = styled.div`
+  display: none;
+  @media (max-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.02);
+  }
+`;
+
+const NavLinks = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 70px;
+  padding: 0 8px 5px;
+`;
+
+const BalanceItem = styled.div<{ $type: 'unlocked' | 'pending' }>`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: ${props => props.$type === 'unlocked' ? '#4cd137' : '#ffffff'};
+  
+  span.label {
+    font-size: 0.6rem;
+    opacity: 0.5;
+    text-transform: uppercase;
+  }
 `;
 
 const NavItem = styled.div<{ $active?: boolean }>`
@@ -69,31 +102,47 @@ interface BottomNavProps {
 const BottomNav = ({ onLogout }: BottomNavProps) => {
   const router = useRouter();
   const pathname = usePathname();
+  const { user } = useUser();
 
   const isActive = (path: string) => pathname === path;
 
+  if (!user) return null;
+
   return (
     <NavContainer>
-      <NavItem $active={isActive("/home")} onClick={() => router.push("/home")}>
-        <span>🏠</span>
-        <span>HOME</span>
-      </NavItem>
-      <NavItem $active={isActive("/spin")} onClick={() => router.push("/spin")}>
-        <span>🎡</span>
-        <span>SPIN</span>
-      </NavItem>
-      <NavItem $active={isActive("/wallet")} onClick={() => router.push("/wallet")}>
-        <span>💰</span>
-        <span>WALLET</span>
-      </NavItem>
-      <NavItem $active={isActive("/referral")} onClick={() => router.push("/referral")}>
-        <span>👥</span>
-        <span>INVITE</span>
-      </NavItem>
-      <NavItem onClick={onLogout} style={{ color: "#ff4d4d" }}>
-        <span>🚪</span>
-        <span>LOGOUT</span>
-      </NavItem>
+      <MobileBalanceRow onClick={() => router.push("/wallet")}>
+        <BalanceItem $type="unlocked">
+          <span className="label">Unlocked:</span>
+          KES {Number(user.withdrawableBalance).toLocaleString()}
+        </BalanceItem>
+        <BalanceItem $type="pending">
+          <span className="label">Pending:</span>
+          KES {Number(user.balance).toLocaleString()}
+        </BalanceItem>
+      </MobileBalanceRow>
+      
+      <NavLinks>
+        <NavItem $active={isActive("/home")} onClick={() => router.push("/home")}>
+          <span>🏠</span>
+          <span>HOME</span>
+        </NavItem>
+        <NavItem $active={isActive("/spin")} onClick={() => router.push("/spin")}>
+          <span>🎡</span>
+          <span>SPIN</span>
+        </NavItem>
+        <NavItem $active={isActive("/wallet")} onClick={() => router.push("/wallet")}>
+          <span>💰</span>
+          <span>WALLET</span>
+        </NavItem>
+        <NavItem $active={isActive("/referral")} onClick={() => router.push("/referral")}>
+          <span>👥</span>
+          <span>INVITE</span>
+        </NavItem>
+        <NavItem onClick={onLogout} style={{ color: "#ff4d4d" }}>
+          <span>🚪</span>
+          <span>LOGOUT</span>
+        </NavItem>
+      </NavLinks>
     </NavContainer>
   );
 };
