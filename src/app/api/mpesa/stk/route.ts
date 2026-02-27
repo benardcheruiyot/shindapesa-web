@@ -102,6 +102,16 @@ export async function POST(request: Request) {
     });
 
     const stkData = await stkResponse.json();
+    
+    // LOGGING FOR PRODUCTION DEBUGGING
+    console.log('--- Safaricom STK Response ---');
+    console.log('Status Code:', stkResponse.status);
+    console.log('Payload:', JSON.stringify(stkData, null, 2));
+    
+    if (stkResponse.status !== 200) {
+      console.error('STK Push Failed:', stkData.errorMessage || stkData.ResponseDescription || 'Unknown Error');
+    }
+
     return NextResponse.json(stkData);
 
   } catch (error: any) {
