@@ -35,24 +35,26 @@ export const getAuthToken = async (consumerKey: string, consumerSecret: string, 
 };
 
 const getApiBaseUrl = () => {
-  // Always use relative paths in the browser for reliability across localhost/production
+  // Point to the standalone backend URL if provided, otherwise fallback to local Relative path
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
+  if (baseUrl) return baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  
   if (typeof window !== 'undefined') {
     return '';
   }
-  
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_APP_URL || '';
-  return baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  return '';
 };
 
 /**
- * Frontend Client to interact with our Next.js M-Pesa API routes
+ * Frontend Client to interact with our Standalone Backend API
  */
 export const mpesaApi = {
   /**
    * Initiate an STK Push (C2B Payment)
    */
   initiateStkPush: async (phone: string, amount: number, accountRef: string) => {
-    const response = await fetch(`${getApiBaseUrl()}/api/mpesa/stk`, {
+    // STK route in standalone backend is just "/stk"
+    const response = await fetch(`${getApiBaseUrl()}/stk`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ phone, amount, accountReference: accountRef })
