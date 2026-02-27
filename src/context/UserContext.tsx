@@ -24,35 +24,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       if (savedUser) {
         let parsed: User = JSON.parse(savedUser);
         
-        // --- EMERGENCY PROMO SPIN RESET ---
-        // If a user has 0 spins but hasn_t completed the welcome sequence, 
-        // OR if the spins are missing entirely, we force them to 5.
-        const spins = Number(parsed.freeSpins);
+        // Clean and apply migrations
+        const cleanedUser = userService.cleanUserData(parsed);
         
-        if (isNaN(spins) || (spins === 0 && !parsed.welcomeSpinsFinished)) {
-          parsed.freeSpins = 5;
-          parsed.welcomeSpinsFinished = false;
-          console.log("Context: Forcing 5 spins for user", parsed.username);
-          localStorage.setItem('currentUser', JSON.stringify(parsed));
-          
-          // Also update the individual legacy key
-          localStorage.setItem('freeSpins', '5');
+        // If the user was changed during cleaning, save it back
+        if (JSON.stringify(cleanedUser) !== JSON.stringify(parsed)) {
+          console.log("Context: Cleaning user data for", cleanedUser.username);
+          userService.saveUser(cleanedUser, true);
         }
 
-        // --- BALANCE MIGRATION ---
-        // If a user was initialized with the legacy 1000 KES, we reset them to 0.
-        if (Number(parsed.balance) === 1000 && !parsed.isActivated) {
-           parsed.balance = 0;
-           localStorage.setItem('currentUser', JSON.stringify(parsed));
-        }
-
-        // Initialize withdrawableBalance if it doesn't exist
-        if (parsed.withdrawableBalance === undefined) {
-          parsed.withdrawableBalance = 0;
-          localStorage.setItem('currentUser', JSON.stringify(parsed));
-        }
-
-        setUser(parsed);
+        setUser(cleanedUser);
       } else {
         setUser(null);
       }

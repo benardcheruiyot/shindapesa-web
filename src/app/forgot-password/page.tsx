@@ -10,7 +10,7 @@ const fadeIn = keyframes`
 
 const PageWrapper = styled.div`
   min-height: 100vh;
-  background-color: #0a0a0b;
+  background-color: #0b1a30;
   color: #ffffff;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   padding: 80px 20px 40px 20px;
@@ -28,7 +28,7 @@ const ContentContainer = styled.div`
 const HeaderBar = styled.div`
   width: 100%;
   height: 64px;
-  background: rgba(10, 10, 11, 0.95);
+  background: #002d58;
   backdrop-filter: blur(15px);
   color: #ffffff;
   display: flex;
@@ -40,7 +40,7 @@ const HeaderBar = styled.div`
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid #fbdf07;
   max-width: 1200px;
   border-radius: 0 0 16px 16px;
 `;
@@ -52,7 +52,7 @@ const BackArrow = styled.span`
   transition: transform 0.2s;
   &:hover {
     transform: translateX(-3px);
-    color: #d4af37;
+    color: #fbdf07;
   }
 `;
 
@@ -63,10 +63,9 @@ const HeaderTitle = styled.span`
 `;
 
 const MainCard = styled.div`
-  background: rgba(24, 24, 27, 0.7);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
+  background: #002d58;
+  border: 4px solid #fbdf07;
+  border-radius: 40px;
   padding: 40px 32px;
   animation: ${fadeIn} 0.6s ease-out;
   text-align: center;
@@ -77,9 +76,8 @@ const Title = styled.h1`
   font-size: 1.8rem;
   font-weight: 800;
   margin-bottom: 12px;
-  background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #ffffff;
+  text-transform: uppercase;
 `;
 
 const Description = styled.p`
@@ -113,14 +111,14 @@ const Input = styled.input`
   outline: none;
   box-sizing: border-box;
   &:focus {
-    border-color: #d4af37;
+    border-color: #fbdf07;
     background: rgba(255, 255, 255, 0.08);
   }
 `;
 
 const ResetButton = styled.button`
   width: 100%;
-  background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
+  background: #fbdf07;
   color: #000;
   border: none;
   border-radius: 12px;
@@ -131,11 +129,11 @@ const ResetButton = styled.button`
   transition: all 0.3s;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 10px 30px rgba(251, 223, 7, 0.2);
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 15px 40px rgba(251, 223, 7, 0.3);
   }
 `;
 

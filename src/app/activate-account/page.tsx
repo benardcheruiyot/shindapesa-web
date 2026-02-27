@@ -1,58 +1,25 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import styled, { keyframes } from "styled-components";
-import { useUser } from "@/context/UserContext";
-
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const PageWrapper = styled.div`
-  min-height: 100vh;
-  background-color: #0a0a0b;
-  color: #ffffff;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  padding: 100px 20px 40px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import styled from "styled-components";
+import { useUser } from "@/hooks/useUser";
+import { PageWrapper, BackHeader } from "@/components/SharedStyles";
+import { mpesaApi } from "@/services/mpesaService";
 
 const ContentContainer = styled.div`
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
   margin-top: 20px;
 `;
 
-const HeaderBar = styled.div`
-  width: 100%;
-  height: 70px;
-  background: rgba(10, 10, 11, 0.95);
-  backdrop-filter: blur(20px);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  padding: 0 40px;
-  box-sizing: border-box;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  justify-content: space-between;
-`;
-
 const MainCard = styled.div`
-  background: rgba(24, 24, 27, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  padding: 40px;
-  animation: ${fadeIn} 0.6s ease-out;
+  background: #002d58;
+  border: 4px solid #fbdf07;
+  border-radius: 40px;
+  padding: 45px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
 
   &::before {
     content: '';
@@ -61,45 +28,45 @@ const MainCard = styled.div`
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
+    background: linear-gradient(90deg, #005baa, #fbdf07, #005baa);
   }
 `;
 
 const Title = styled.h1`
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 950;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   color: #ffffff;
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
   text-transform: uppercase;
 `;
 
 const Subtitle = styled.p`
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: #94a3b8;
-  margin-bottom: 30px;
+  margin-bottom: 35px;
   line-height: 1.6;
   font-weight: 600;
 `;
 
 const ActivateButton = styled.button`
   width: 100%;
-  background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
+  background: #fbdf07;
   color: #000;
   border: none;
-  border-radius: 12px;
-  padding: 18px;
-  font-weight: 900;
-  font-size: 1rem;
+  border-radius: 20px;
+  padding: 22px;
+  font-weight: 950;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+  letter-spacing: 2px;
+  box-shadow: 0 15px 35px rgba(251, 223, 7, 0.2);
 
   &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 45px rgba(59, 130, 246, 0.35);
   }
 
   &:disabled {
@@ -145,30 +112,58 @@ export default function ActivateAccount() {
     setStep("processing");
 
     try {
-      const response = await fetch('/api/mpesa/stk', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          phone: user?.phoneNumber || user?.phone,
-          amount: activationFee,
-          accountReference: "LIQUIDITY_UNLOCK"
-        })
-      });
+      const data = await mpesaApi.initiateStkPush(
+        user?.phoneNumber || user?.phone || "",
+        activationFee,
+        "LIQUIDITY_UNLOCK"
+      );
 
-      const data = await response.json();
       if (data.ResponseCode === "0") {
         setStep("waiting");
         
+        // Start polling for real status from the store
+        const checkoutID = data.CheckoutRequestID;
+        let pollCount = 0;
+        const maxPolls = 60; // 60 seconds max
+
+        const pollTimer = setInterval(async () => {
+          pollCount++;
+          if (pollCount > maxPolls) {
+            clearInterval(pollTimer);
+            alert("Verification Timeout. If transaction was successful, funds will sync automatically.");
+            setStep("initial");
+            setIsProcessing(false);
+            return;
+          }
+
+          try {
+            const statusData = await mpesaApi.checkStkStatus(checkoutID);
+
+            if (statusData.status === "SUCCESS") {
+              clearInterval(pollTimer);
+              handleSuccess();
+            } else if (statusData.status === "FAILED") {
+              clearInterval(pollTimer);
+              alert(`Payment Failed: ${statusData.resultDesc}`);
+              setStep("initial");
+              setIsProcessing(false);
+            }
+          } catch (pollErr) {
+            console.error("Status check failed", pollErr);
+          }
+        }, 1500);
+
+        // Keep the visual countdown timer as well for the UI
         const countdown = setInterval(() => {
           setTimer(prev => {
             if (prev <= 1) {
               clearInterval(countdown);
-              handleSuccess();
               return 0;
             }
             return prev - 1;
           });
         }, 1000);
+
       } else {
         alert("Gateway Rejected: " + (data.errorMessage || data.error));
         setStep("initial");
@@ -207,31 +202,20 @@ export default function ActivateAccount() {
 
   return (
     <PageWrapper>
-      <HeaderBar>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <span 
-            onClick={() => router.push('/home')} 
-            style={{ cursor: 'pointer', color: '#ffffff', fontSize: '1.2rem', fontWeight: 900 }}
-          >
-            &larr;
-          </span>
-          <span style={{ fontWeight: 950, fontSize: '0.8rem', letterSpacing: '2px' }}>ACCOUNT ACTIVATION HUB</span>
-        </div>
-      </HeaderBar>
+      <BackHeader title="Account Trust" onBack={() => router.push('/home')} />
 
       <ContentContainer>
         <MainCard>
           {step !== "success" ? (
             <>
-              <Title>Activate Your Account</Title>
+              <Title>Instant Withdrawal Activation</Title>
               <Subtitle>
-                To enable instant withdrawals and verify your M-PESA account, a one-time activation fee is required. 
-                <b>Note:</b> The activation fee is dynamic and scales depending on the total amount you wish to withdraw today.
+                Secure your withdrawal channel by authorizing a one-time activation. This verification is required by Safaricom for instant payouts.
               </Subtitle>
 
               <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', marginBottom: '30px' }}>
-                <div style={{ marginBottom: '20px', padding: '12px', borderLeft: '3px solid #d4af37', background: 'rgba(212, 175, 55, 0.05)', fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', lineHeight: '1.4' }}>
-                  💡 <b>LIQUIDITY SPLIT:</b> Your account balance is currently locked. Entering a withdrawal amount and authorizing activation will unlock that specific amount into your <b>Withdrawable Balance</b> instantly.
+                <div style={{ marginBottom: '20px', padding: '12px', borderLeft: '3px solid #3b82f6', background: 'rgba(59, 130, 246, 0.05)', fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', lineHeight: '1.4' }}>
+                  💡 <b>PROCEED:</b> Enter the amount you wish to withdraw first. The system will calculate your one-time activation fee.
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '15px' }}>
                   <label style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: 600 }}>Amount to Withdraw (Min 100):</label>
@@ -241,7 +225,7 @@ export default function ActivateAccount() {
                     onChange={(e) => setWithdrawInput(e.target.value)}
                     style={{
                       background: 'rgba(0,0,0,0.3)',
-                      border: '1px solid rgba(212, 175, 55, 0.3)',
+                      border: '1px solid rgba(59, 130, 246, 0.3)',
                       borderRadius: '8px',
                       padding: '12px',
                       color: '#ffffff',
@@ -251,7 +235,7 @@ export default function ActivateAccount() {
                     }}
                     placeholder="Enter amount..."
                   />
-                  <span style={{ fontSize: '0.65rem', color: '#d4af37', fontWeight: 700 }}>Withdrawal limit: KES {Number(user.balance).toLocaleString()}</span>
+                  <span style={{ fontSize: '0.65rem', color: '#3b82f6', fontWeight: 700 }}>Total Wallet: KES {Number(user.balance).toLocaleString()}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
                   <span style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: 600 }}>Activation Fee:</span>
@@ -279,7 +263,7 @@ export default function ActivateAccount() {
                   <div style={{ fontSize: '0.9rem', color: '#94a3b8', marginBottom: '20px', fontWeight: 600 }}>
                     {step === "processing" ? "Securing handshake with Safaricom..." : "Enter M-PESA PIN to complete activation."}
                   </div>
-                  <div style={{ fontSize: '2.5rem', fontWeight: 950, color: '#d4af37' }}>{timer}s</div>
+                  <div style={{ fontSize: '2.5rem', fontWeight: 950, color: '#3b82f6' }}>{timer}s</div>
                 </div>
               )}
             </>

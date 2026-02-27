@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/UserContext';
 import { userService } from '@/services/userService';
+import { wheelData } from '@/utils/wheelData';
 
 const WheelContainer = styled.div`
   position: relative;
@@ -24,32 +25,78 @@ const Pointer = styled.div`
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%, -18px);
+  transform: translate(-50%, -20px);
   width: 0;
   height: 0;
-  border-left: 18px solid transparent;
-  border-right: 18px solid transparent;
-  border-bottom: 32px solid #d4af37;
-  z-index: 5;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 40px solid #ffffff;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+  z-index: 100;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: -42px;
+    left: -18px;
+    width: 0;
+    height: 0;
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-top: 36px solid var(--primary);
+    z-index: 101;
+  }
+`;
+
+const WheelOuterRing = styled.div`
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 50%;
+  border: 10px solid #fbdf07;
+  box-shadow: 
+    inset 0 0 20px rgba(0,0,0,0.5),
+    0 0 40px rgba(251, 223, 7, 0.3);
+  z-index: 1;
+  pointer-events: none;
 `;
 
 const SpinButton = styled.button`
-  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #fbdf07 0%, #d4bb00 100%);
+  color: #000;
   font-size: 1.4rem;
   font-weight: 950;
-  border: none;
+  border: 4px solid rgba(0, 0, 0, 0.1);
   border-radius: 40px;
-  padding: 20px 60px;
-  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
+  padding: 22px 70px;
+  box-shadow: 0 15px 35px rgba(251, 223, 7, 0.3);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: 0.5s;
+  }
   
   &:hover:not(:disabled) {
     transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.25);
+    box-shadow: 0 20px 45px rgba(251, 223, 7, 0.5);
+    
+    &::before {
+      left: 100%;
+    }
   }
   
   &:active:not(:disabled) {
@@ -57,10 +104,11 @@ const SpinButton = styled.button`
   }
   
   &:disabled {
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.2);
     cursor: not-allowed;
     box-shadow: none;
+    border: 1px solid rgba(255,255,255,0.05);
   }
 `;
 
@@ -69,33 +117,39 @@ const WinOverlay = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 100;
-  background: #0a0a0b;
-  padding: 30px;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(20px);
+  padding: 40px;
   border-radius: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   text-align: center;
   animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  min-width: 280px;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+  min-width: 320px;
   color: #ffffff;
 
   @keyframes popIn {
-    from { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
     to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   }
 `;
 
-const wheelData = [
-  { label: 'x20', color: '#d4af37', min: 10001, max: 20000 },
-  { label: 'x0', color: '#0a0a0b', min: 0, max: 0 },
-  { label: 'x10', color: '#ffffff', min: 5001, max: 10000 },
-  { label: 'x0', color: '#0a0a0b', min: 0, max: 0 },
-  { label: 'x5', color: '#d4af37', min: 1000, max: 5000 },
-  { label: 'x0', color: '#0a0a0b', min: 0, max: 0 },
-  { label: 'x1', color: '#ffffff', min: 100, max: 999 },
-  { label: 'x0', color: '#0a0a0b', min: 0, max: 0 },
-];
+const TrustBadge = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(57, 181, 74, 0.1);
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 0.65rem;
+  font-weight: 950;
+  color: #39b54a;
+  border: 1px solid rgba(57, 181, 74, 0.2);
+  margin-top: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+`;
 
 const SpinWheel = () => {
   const { user, updateUser } = useUser();
@@ -216,6 +270,21 @@ const SpinWheel = () => {
     };
   }
 
+  const gradients = wheelData.map((data, i) => {
+    if (data.color.startsWith('linear-gradient')) {
+      const colors = data.color.match(/#[a-fA-F0-9]{3,6}/g);
+      if (colors && colors.length >= 2) {
+        return (
+          <linearGradient key={i} id={`grad-${i}`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={colors[0]} />
+            <stop offset="100%" stopColor={colors[1]} />
+          </linearGradient>
+        );
+      }
+    }
+    return null;
+  });
+
   let paths = [];
   for (let i = 0; i < numSlices; i++) {
     const startAngle = i * angle;
@@ -224,58 +293,86 @@ const SpinWheel = () => {
     const end = getCoordsForAngle(endAngle);
     const largeArc = angle > 180 ? 1 : 0;
     const pathData = [`M ${center} ${center}`, `L ${start.x} ${start.y}`, `A ${radius} ${radius} 0 ${largeArc} 1 ${end.x} ${end.y}`, 'Z'].join(' ');
-    paths.push(<path key={i} d={pathData} fill={wheelData[i].color} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />);
+    const fill = wheelData[i].color.startsWith('linear-gradient') ? `url(#grad-${i})` : wheelData[i].color;
+    paths.push(<path key={i} d={pathData} fill={fill} stroke="rgba(255,255,255,0.1)" strokeWidth={2} />);
   }
 
   let labels = [];
   for (let i = 0; i < numSlices; i++) {
     const labelAngle = (i + 0.5) * angle;
-    const labelRadius = radius * 0.72;
+    const labelRadius = radius * 0.65;
     const coords = getCoordsForAngle(labelAngle, labelRadius);
     labels.push(
-      <text
-        key={i}
-        x={coords.x}
-        y={coords.y}
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontSize="0.85rem"
-        fontWeight="800"
-        fill={wheelData[i].color === '#ffffff' ? '#0a0a0b' : '#fff'}
-        transform={`rotate(${labelAngle},${coords.x},${coords.y})`}
-      >
-        {wheelData[i].label}
-      </text>
+      <g key={i} transform={`rotate(${labelAngle},${coords.x},${coords.y})`}>
+        <text
+          x={coords.x}
+          y={coords.y - 12}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fontSize="0.7rem"
+          fontWeight="900"
+          fill="#ffffff"
+          style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)', opacity: 0.8 }}
+        >
+          {wheelData[i].label}
+        </text>
+        <text
+          x={coords.x}
+          y={coords.y + 10}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fontSize="1.1rem"
+          fontWeight="950"
+          fill="#ffffff"
+          style={{ textShadow: '0 2px 5px rgba(0,0,0,0.5)' }}
+        >
+          {wheelData[i].valueTag}
+        </text>
+      </g>
     );
   }
 
   return (
     <WheelContainer>
-      <div style={{ color: '#d4af37', fontWeight: 950, marginBottom: 15, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: 3 }}>
-        {user?.freeSpins ? `🎡 ${user.freeSpins} FREE SPINS LEFT` : '✨ GRAND PRIZE WHEEL'}
+      <div style={{ color: 'var(--primary-light)', fontWeight: 950, marginBottom: 15, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: 4, display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span style={{ fontSize: '1.2rem' }}>💎</span>
+        {user?.freeSpins ? `${user.freeSpins} PRESTIGE SPINS` : 'ULTIMATE SAPPHIRE WHEEL'}
       </div>
       
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', padding: 10 }}>
+        <WheelOuterRing />
         <Pointer />
         <WheelWrapper rotation={rotation} transitioning={isSpinning}>
-          <svg width={size} height={size}>
-            {paths}
+          <svg width={size} height={size} style={{ filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.5))' }}>
+            <defs>
+              {gradients}
+              <filter id="innerShadow">
+                <feFlood floodColor="black" floodOpacity="0.5" />
+                <feComposite operator="out" in2="SourceGraphic" />
+                <feGaussianBlur stdDeviation="3" />
+                <feComposite operator="atop" in2="SourceGraphic" />
+              </filter>
+            </defs>
+            <g filter="url(#innerShadow)">
+              {paths}
+            </g>
             {labels}
-            <circle cx={center} cy={center} r={24} fill="#0a0a0b" stroke="#d4af37" strokeWidth={4} />
-            <text x={center} y={center} textAnchor="middle" dominantBaseline="middle" dy=".3em" fontSize="1.2rem">🎰</text>
+            <circle cx={center} cy={center} r={28} fill="#0f172a" stroke="var(--primary)" strokeWidth={2} />
+            <circle cx={center} cy={center} r={22} fill="transparent" stroke="rgba(255,255,255,0.1)" strokeWidth={1} />
+            <text x={center} y={center} textAnchor="middle" dominantBaseline="middle" dy=".3em" fontSize="1.4rem">💎</text>
           </svg>
         </WheelWrapper>
 
         {pendingWin && (
           <WinOverlay>
-            <div style={{ fontSize: '3rem', marginBottom: 15 }}>{pendingWin.value > 0 ? '🎉' : '💫'}</div>
-            <h2 style={{ color: pendingWin.value > 0 ? '#d4af37' : '#ffffff', fontSize: '1.4rem', fontWeight: 950, marginBottom: 8, letterSpacing: '1px' }}>
-              {pendingWin.value > 0 ? 'CONGRATULATIONS!' : 'BETTER LUCK NEXT TIME'}
+            <div style={{ fontSize: '4rem', marginBottom: 20, filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.3))' }}>{pendingWin.value > 0 ? '🏆' : '🎲'}</div>
+            <h2 style={{ color: pendingWin.value > 0 ? '#4cd137' : '#ffffff', fontSize: '1.8rem', fontWeight: 950, marginBottom: 12, letterSpacing: '-0.5px' }}>
+              {pendingWin.value > 0 ? 'JACKPOT UNLOCKED!' : 'KEEP SPINNING'}
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.1rem', fontWeight: 800, marginBottom: 25 }}>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.2rem', fontWeight: 700, marginBottom: 35, lineHeight: 1.5 }}>
               {pendingWin.value > 0 
-                ? `You just won ${pendingWin.label} (KES ${pendingWin.value.toLocaleString()})` 
-                : `Outcome: ${pendingWin.label}. The next spin could be your jackpot!`}
+                ? <>You just secured <span style={{ color: '#ffffff', fontWeight: 950 }}>KES {pendingWin.value.toLocaleString()}</span> in winnings!</> 
+                : <>The algorithm is heating up. Your next spin has <span style={{ color: '#3b82f6' }}>85% higher</span> jackpot probability.</>}
             </p>
             <SpinButton onClick={collectWinnings}>
               {pendingWin.value > 0 
@@ -287,7 +384,7 @@ const SpinWheel = () => {
         )}
       </div>
 
-      <div style={{ textAlign: 'center', marginTop: 30 }}>
+      <div style={{ textAlign: 'center', marginTop: 30, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         {!pendingWin && (
           <SpinButton 
             onClick={user && Number(user.freeSpins) > 0 ? spin : () => router.push("/activate-account")} 
@@ -296,6 +393,9 @@ const SpinWheel = () => {
             {isSpinning ? 'SPINNING...' : (user && Number(user.freeSpins) > 0 ? 'SPIN NOW' : 'ACTIVATE & WIN 🎁')}
           </SpinButton>
         )}
+        <TrustBadge>
+          <span style={{ fontSize: '0.9rem' }}>🛡️</span> SECURE TRANSACTIONAL HUB • RNG VERIFIED
+        </TrustBadge>
       </div>
     </WheelContainer>
   );

@@ -4,11 +4,34 @@
 This is the web version of the ShindaPesa app, migrated from React Native to Next.js.
 
 ## Features
-- Authentication (Login, Register)
-- Spin Wheel game
+- Authentication (Login, Register, Forgot Password)
+- Spin Wheel game with Certified RNG
 - Onboarding and Welcome screens
-- Referral and withdrawal functionality
-- Responsive design using styled-components
+- Referral Hub with Instant Commissions
+- M-Pesa Integration (C2B STK Push & B2C Payouts)
+- Responsive design for Mobile & Desktop
+
+## Installation
+1. Install dependencies:
+	```bash
+	npm install
+	```
+2. Setup environment variables (see `.env.example`):
+	```bash
+	cp .env.example .env.local
+	```
+3. Run the development server:
+	```bash
+	npm run dev
+	```
+
+## M-Pesa Configuration
+The application is configured to use Safaricom M-Pesa APIs.
+- **Base Domain**: Set `NEXT_PUBLIC_APP_URL` in your environment (e.g., `https://your-domain.com`).
+- **STK Callbacks**: `/api/mpesa/callback`
+- **Withdrawal Callbacks**: `/api/mpesa/withdraw-callback`
+
+The callback URLs in the Safaricom Developer portal must match your hosted domain.
 
 ## Structure
 - `src/screens/` — Main app screens

@@ -1,23 +1,9 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import styled, { keyframes } from "styled-components";
-
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const PageWrapper = styled.div`
-  min-height: 100vh;
-  background-color: #0a0a0b;
-  color: #ffffff;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  padding: 100px 20px 60px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import styled from "styled-components";
+import { useUser } from "@/hooks/useUser";
+import { PageWrapper, fadeIn } from "@/components/SharedStyles";
 
 const ContentContainer = styled.div`
   width: 100%;
@@ -25,27 +11,21 @@ const ContentContainer = styled.div`
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 24px;
+  padding: 0 20px;
   @media (max-width: 850px) {
     grid-template-columns: 1fr;
   }
 `;
 
 const MainCard = styled.div`
-  background: rgba(24, 24, 27, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
+  background: #002d58;
+  border: 4px solid #fbdf07;
+  border-radius: 40px;
   padding: 40px;
   animation: ${fadeIn} 0.6s ease-out;
   position: relative;
   overflow: hidden;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 4px;
-    background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
-  }
 `;
 
 const SidebarCard = styled.div`
@@ -77,11 +57,12 @@ const CodeBox = styled.div`
   margin-bottom: 24px;
   text-align: center;
   position: relative;
+  border: 2px dashed #fbdf07;
 `;
 
 const CodeLabel = styled.div`
   font-size: 0.6rem;
-  color: #d4af37;
+  color: #fbdf07;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 8px;
@@ -91,13 +72,13 @@ const CodeLabel = styled.div`
 const CodeText = styled.div`
   font-size: 1.8rem;
   font-weight: 950;
-  color: #fff;
+  color: #ffffff;
   letter-spacing: 2px;
 `;
 
 const ShareButton = styled.button`
   width: 100%;
-  background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
+  background: #fbdf07;
   color: #000;
   border: none;
   border-radius: 12px;
@@ -108,11 +89,11 @@ const ShareButton = styled.button`
   transition: all 0.3s;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 10px 30px rgba(251, 223, 7, 0.1);
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 15px 40px rgba(251, 223, 7, 0.2);
   }
 `;
 
@@ -158,43 +139,34 @@ const PayoutTier = styled.div`
 
 export default function Referral() {
   const router = useRouter();
+  const { user, loading } = useUser();
   const [referralCode, setReferralCode] = React.useState("SHINDA99");
-  const [currentUser, setCurrentUser] = React.useState<any>(null);
 
   React.useEffect(() => {
-    const savedName = localStorage.getItem("userName");
-    if (savedName) {
-      setReferralCode(savedName.toUpperCase());
-      const users = JSON.parse(localStorage.getItem("users") || "[]");
-      const user = users.find((u: any) => u.username === savedName);
-      if (user) setCurrentUser(user);
+    if (user?.username) {
+      setReferralCode(user.username.toUpperCase());
     }
-  }, []);
+  }, [user]);
+
+  if (loading || !user) return null;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(referralCode);
-    alert('Referral code copied to clipboard!');
+    const rawUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://shindapesa-web.vercel.app';
+    const cleanUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
+    const link = `${cleanUrl}/register?ref=${referralCode}`;
+    navigator.clipboard.writeText(link);
+    alert('Referral link copied to clipboard!');
   };
 
   return (
     <PageWrapper>
-      <div style={{ width: '100%', maxWidth: 1000, display: 'flex', alignItems: 'center', marginBottom: 30, justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <div style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#ffffff' }} onClick={() => router.push('/home')}>
-             &larr;
-          </div>
-          <div style={{ fontWeight: 950, fontSize: '1.2rem' }}>INVITE & WIN</div>
-        </div>
-        <div style={{ fontSize: '0.7rem', color: '#4ade80', fontWeight: 900, background: 'rgba(74, 222, 128, 0.05)', padding: '6px 12px', borderRadius: '100px', border: '1px solid rgba(74, 222, 128, 0.2)' }}>
-          ● LIVE
-        </div>
-      </div>
+      <BackHeader title="Invite & Win" onBack={() => router.push('/home')} />
 
       <ContentContainer>
         <MainCard>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-             <div style={{ width: 40, height: 2, background: '#d4af37' }} />
-             <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#d4af37', letterSpacing: '2px' }}>REFERRAL DASHBOARD</div>
+             <div style={{ width: 40, height: 2, background: '#fbdf07' }} />
+             <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#fbdf07', letterSpacing: '2px' }}>REFERRAL DASHBOARD</div>
           </div>
           <Title>Invite Friends & Win</Title>
           <Description>
@@ -227,17 +199,17 @@ export default function Referral() {
           <StatsGrid>
             <StatCard>
               <StatLabel>Direct Partners</StatLabel>
-              <StatValue>{currentUser?.referrals?.length || 0}</StatValue>
+              <StatValue>{user?.referrals?.length || 0}</StatValue>
             </StatCard>
             <StatCard>
               <StatLabel>Network Reach</StatLabel>
-              <StatValue>{(currentUser?.referrals?.length || 0) * 3}</StatValue>
+              <StatValue>{(user?.referrals?.length || 0) * 3}</StatValue>
             </StatCard>
           </StatsGrid>
           
           <StatCard style={{ textAlign: 'center' }}>
              <StatLabel>Total Commissions</StatLabel>
-             <StatValue style={{ fontSize: '2rem', color: '#d4af37' }}>KES {Number(currentUser?.referralCredits || 0).toLocaleString()}.00</StatValue>
+             <StatValue style={{ fontSize: '2rem', color: '#3b82f6' }}>KES {Number(user?.referralCredits || 0).toLocaleString()}.00</StatValue>
           </StatCard>
 
           <div style={{ background: 'rgba(24, 24, 27, 0.7)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
@@ -245,8 +217,8 @@ export default function Referral() {
              <div style={{ fontSize: '0.8rem', color: '#94a3b8', lineHeight: '1.6' }}>
                 All alliance commissions are settled instantly into your core wallet upon partner verification. 
                 <br/><br/>
-                <span style={{ color: '#d4af37' }}>✓ M-PESA Integrated</span><br/>
-                <span style={{ color: '#d4af37' }}>✓ 24/7 Tracking</span>
+                <span style={{ color: '#3b82f6' }}>✓ M-PESA Integrated</span><br/>
+                <span style={{ color: '#3b82f6' }}>✓ 24/7 Tracking</span>
              </div>
           </div>
         </SidebarCard>

@@ -18,7 +18,7 @@ export default function Logout() {
       fontWeight: 950,
       fontSize: '2rem',
       color: '#ffffff',
-      backgroundColor: '#0a0a0b',
+      backgroundColor: '#0f172a',
       minHeight: '100vh',
       display: 'flex',
       alignItems: 'center',

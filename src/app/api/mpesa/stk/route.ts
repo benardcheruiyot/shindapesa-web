@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { formatPhoneNumber, generateTimestamp, getAuthToken } from '@/services/mpesaService';
+import { mpesaConfig, getBaseUrl, isConfigValid } from '@/lib/mpesaConfig';
 
 // Global variables to cache the token for better performance in production
 let cachedToken: string | null = null;
@@ -13,20 +14,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Phone and Amount are required" }, { status: 400 });
     }
 
-    // 1. Generate/Retrieve Access Token
-    const consumerKey = process.env.MPESA_CONSUMER_KEY;
-    const consumerSecret = process.env.MPESA_CONSUMER_SECRET;
-    const mpesaEnv = process.env.MPESA_ENV || 'sandbox';
-    const shortcode = process.env.MPESA_SHORTCODE || '174379';
-    const passkey = process.env.MPESA_PASSKEY;
-    const callbackUrl = process.env.MPESA_CALLBACK_URL;
-    
-    const baseUrl = mpesaEnv === 'production' 
-      ? 'https://api.safaricom.co.ke' 
-      : 'https://sandbox.safaricom.co.ke';
+    const baseUrl = getBaseUrl();
     
     // --- SIMULATION MODE ---
-    if (!consumerKey || !consumerSecret || !passkey || !callbackUrl) {
+    if (!isConfigValid('stk')) {
+      if (process.env.NODE_ENV === 'production' || mpesaConfig.env === 'production') {
+        return NextResponse.json({ error: `Production setup error: Missing M-Pesa configuration` }, { status: 500 });
+      }
+
       console.warn("M-Pesa environment variables missing - RUNNING IN SIMULATION MODE");
       return NextResponse.json({
         MerchantRequestID: "SIM-" + Date.now(),
@@ -42,31 +37,47 @@ export async function POST(request: Request) {
 
     // Only fetch a new token if cached one is missing or expired (with 5 min buffer)
     if (!access_token || now >= tokenExpiry) {
-      const data = await getAuthToken(consumerKey, consumerSecret, baseUrl);
-      access_token = data.access_token;
-      cachedToken = access_token;
-      // Mark expiry: Safaricom tokens usually last 3600 seconds. We save for 55 mins (3300s)
-      tokenExpiry = now + (3300 * 1000); 
+      try {
+        const data = await getAuthToken(mpesaConfig.consumerKey!, mpesaConfig.consumerSecret!, baseUrl);
+        if (data.error || !data.access_token) {
+          throw new Error(data.errorMessage || "OAuth Token generation failed");
+        }
+        access_token = data.access_token;
+        cachedToken = access_token;
+        // Mark expiry: Safaricom tokens usually last 3600 seconds. We save for 55 mins (3300s)
+        tokenExpiry = now + (3300 * 1000); 
+      } catch (tokenErr: any) {
+        console.error("Token Error:", tokenErr);
+        return NextResponse.json({ error: "Could not authenticate with Safaricom. Check credentials." }, { status: 401 });
+      }
     }
 
     // 2. Prepare STK Push Request
     const timestamp = generateTimestamp();
-    const password = Buffer.from(`${shortcode}${passkey}${timestamp}`).toString('base64');
+    
+    // For Buy Goods (Till), the shortcode used for password generation is the STORE NUMBER
+    const businessShortCode = mpesaConfig.transactionType === 'CustomerBuyGoodsOnline' 
+      ? mpesaConfig.storeNumber 
+      : mpesaConfig.shortcode;
+      
+    const password = Buffer.from(`${businessShortCode}${mpesaConfig.passkey}${timestamp}`).toString('base64');
     
     // Format phone: 2547XXXXXXXX or 2541XXXXXXXX
     const formattedPhone = formatPhoneNumber(phone);
-    const tillNumber = process.env.MPESA_TILL_NUMBER || shortcode;
+    const partyB = mpesaConfig.transactionType === 'CustomerBuyGoodsOnline'
+      ? mpesaConfig.tillNumber
+      : mpesaConfig.shortcode;
 
     const stkBody = {
-      BusinessShortCode: shortcode,
+      BusinessShortCode: businessShortCode,
       Password: password,
       Timestamp: timestamp,
-      TransactionType: "CustomerBuyGoodsOnline", // CHANGED for TILL (Buy Goods)
+      TransactionType: mpesaConfig.transactionType, 
       Amount: Math.round(amount), // Ensure amount is integer
       PartyA: formattedPhone,
-      PartyB: tillNumber,
+      PartyB: partyB,
       PhoneNumber: formattedPhone,
-      CallBackURL: callbackUrl,
+      CallBackURL: mpesaConfig.callbackUrl,
       AccountReference: accountReference || "SHINDAPESA",
       TransactionDesc: "Account Activation"
     };

@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { ShieldCheck, Info } from 'lucide-react';
 
 const pulse = keyframes`
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.3); }
-  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.3); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
 `;
 
 const shimmer = keyframes`
@@ -14,15 +15,14 @@ const shimmer = keyframes`
 `;
 
 const CardContainer = styled.section`
-  background: rgba(24, 24, 27, 0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  padding: 24px;
+  background: #002d58;
+  border: 4px solid #fbdf07;
+  border-radius: 32px;
+  padding: 32px;
   margin-bottom: 24px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
 
   &::before {
     content: '';
@@ -34,10 +34,10 @@ const CardContainer = styled.section`
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(212, 175, 55, 0.1),
+      rgba(251, 223, 7, 0.05),
       transparent
     );
-    animation: ${shimmer} 5s infinite linear;
+    animation: ${shimmer} 8s infinite linear;
   }
 `;
 
@@ -45,7 +45,7 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 28px;
 `;
 
 const TitleGroup = styled.div`
@@ -55,145 +55,163 @@ const TitleGroup = styled.div`
 
 const CardTitle = styled.h3`
   color: #ffffff;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 950;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 `;
 
 const Subtitle = styled.span`
-  color: #d4af37;
+  color: #fbdf07;
   font-size: 0.7rem;
-  font-weight: 800;
+  font-weight: 950;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-top: 4px;
+  letter-spacing: 3px;
+  margin-top: 8px;
+  opacity: 0.8;
 `;
 
 const NodeBadge = styled.div`
-  background: rgba(212, 175, 55, 0.1);
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  color: #d4af37;
-  padding: 4px 10px;
+  background: rgba(57, 181, 74, 0.1);
+  border: 1px solid rgba(57, 181, 74, 0.2);
+  color: #39b54a;
+  padding: 8px 14px;
   border-radius: 20px;
   font-size: 0.65rem;
-  font-weight: 800;
+  font-weight: 950;
   text-transform: uppercase;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+  letter-spacing: 1px;
 `;
 
 const Pulse = styled.div`
-  width: 6px;
-  height: 6px;
-  background: #d4af37;
+  width: 8px;
+  height: 8px;
+  background: #39b54a;
   border-radius: 50%;
   animation: ${pulse} 2s infinite;
+  box-shadow: 0 0 10px #39b54a;
 `;
 
 const BalanceDisplay = styled.div`
-  margin-bottom: 24px;
+  margin-bottom: 32px;
+  background: rgba(0,0,0,0.2);
+  padding: 24px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.05);
 `;
 
 const Amount = styled.div`
-  font-size: 2.2rem;
+  font-size: 3.2rem;
   font-weight: 950;
   color: #ffffff;
   display: flex;
   align-items: baseline;
-  gap: 6px;
-  letter-spacing: -1px;
+  gap: 10px;
+  letter-spacing: -2px;
+  margin-top: 8px;
 `;
 
 const Currency = styled.span`
-  font-size: 1rem;
-  color: #d4af37;
-  font-weight: 800;
+  font-size: 1.2rem;
+  color: #fbdf07;
+  font-weight: 950;
 `;
 
 const StatsGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 14px;
+  margin-bottom: 32px;
 `;
 
 const StatItem = styled.div`
-  background: rgba(255, 255, 255, 0.02);
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
 `;
 
 const StatLabel = styled.div`
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.65rem;
   text-transform: uppercase;
-  font-weight: 800;
-  margin-bottom: 4px;
+  font-weight: 900;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
 `;
 
 const StatValue = styled.div`
   color: #ffffff;
-  font-size: 0.85rem;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 950;
 `;
 
 const ActionButton = styled.button`
   width: 100%;
-  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #fbdf07 0%, #d4bb00 100%);
+  color: #000;
   border: none;
-  border-radius: 16px;
-  padding: 18px;
-  font-weight: 900;
-  font-size: 1rem;
+  border-radius: 20px;
+  padding: 24px;
+  font-weight: 950;
+  font-size: 1.1rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  box-shadow: 0 10px 20px rgba(201, 160, 80, 0.2);
+  gap: 12px;
+  box-shadow: 0 15px 35px rgba(251, 223, 7, 0.2);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(201, 160, 80, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 45px rgba(251, 223, 7, 0.35);
+    filter: brightness(1.1);
   }
 
   &:active {
-    transform: translateY(1px);
+    transform: translateY(0);
   }
 `;
 
 const MpesaLogo = styled.span`
-  background: #39b54a;
-  color: #fff;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 0.7rem;
+  background: #ffffff;
+  color: #39b54a;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
   font-weight: 950;
   margin-left: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 `;
 
 const UrgencyBanner = styled.div`
-  margin-top: 15px;
-  padding: 12px;
-  background: rgba(239, 68, 68, 0.05);
-  border-radius: 12px;
+  margin-top: 24px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #b91c1c;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.5);
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 `;
 
 interface WithdrawCardProps {
@@ -221,58 +239,55 @@ const WithdrawCard: React.FC<WithdrawCardProps> = ({ available, onWithdraw }) =>
       <Header>
         <TitleGroup>
           <CardTitle>
-            Withdraw Winnings
-            <MpesaLogo>M-PESA</MpesaLogo>
+            <ShieldCheck size={22} color="#fbdf07" style={{ marginRight: '8px' }} />
+            SECURE PAYOUT
           </CardTitle>
-          <Subtitle>Instant M-PESA Payouts</Subtitle>
+          <Subtitle>Safaricom M-PESA Portal</Subtitle>
         </TitleGroup>
         <NodeBadge>
           <Pulse />
-          Direct Channel
+          B3-HUB-AFRICA
         </NodeBadge>
       </Header>
 
       <BalanceDisplay>
-        <StatLabel>Available to Withdraw</StatLabel>
+        <StatLabel style={{ marginBottom: '8px' }}>Withdrawal Ready Balance</StatLabel>
         <Amount>
-          <Currency>KES</Currency> {available.toLocaleString()}
+          <Currency>KES</Currency>
+          {available.toLocaleString()}
         </Amount>
       </BalanceDisplay>
 
       <StatsGrid>
         <StatItem>
-          <StatLabel>Payout Speed</StatLabel>
-          <StatValue>Instant</StatValue>
+          <StatLabel>Transaction Limit</StatLabel>
+          <StatValue>150,000.00 KES</StatValue>
         </StatItem>
         <StatItem>
-          <StatLabel>Status</StatLabel>
-          <StatValue>Verified</StatValue>
+          <StatLabel>Settlement Time</StatLabel>
+          <StatValue>IMMEDIATE</StatValue>
         </StatItem>
         <StatItem>
-          <StatLabel>Weekly limit</StatLabel>
-          <StatValue>Ksh 500,000</StatValue>
+          <StatLabel>Gateway Status</StatLabel>
+          <StatValue style={{ color: '#39b54a', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <div style={{ width: 8, height: 8, background: '#39b54a', borderRadius: '50%' }} />
+            ACTIVE
+          </StatValue>
         </StatItem>
         <StatItem>
-          <StatLabel>Last Payout</StatLabel>
-          <StatValue>12 mins ago</StatValue>
+          <StatLabel>System Charge</StatLabel>
+          <StatValue>0.00 KES</StatValue>
         </StatItem>
       </StatsGrid>
 
       <ActionButton onClick={onWithdraw}>
-        Withdraw to M-PESA
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
+        WITHDRAW TO M-PESA
+        <MpesaLogo>M-PESA</MpesaLogo>
       </ActionButton>
 
       <UrgencyBanner>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="8" x2="12" y2="12"></line>
-          <line x1="12" y1="16" x2="12.01" y2="16"></line>
-        </svg>
-        Minimum withdrawal: KES 50. Maximum: KES 150,000.
+        <Info size={16} />
+        System processing: Batch #44{timeLeft.split(':')[1]} active. Funds will reflect in 3-5 seconds.
       </UrgencyBanner>
     </CardContainer>
   );

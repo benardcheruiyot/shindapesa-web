@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 const ErrorWrapper = styled.div`
   min-height: 100vh;
-  background: #0a0a0b;
+  background: #0f172a;
   color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -17,13 +17,13 @@ const ErrorWrapper = styled.div`
 `;
 
 const ErrorTitle = styled.h2`
-  color: #d4af37;
+  color: #3b82f6;
   font-size: 2rem;
   margin-bottom: 1rem;
 `;
 
 const RetryButton = styled.button`
-  background: #d4af37;
+  background: #3b82f6;
   color: #fff;
   border: none;
   padding: 12px 24px;
@@ -33,7 +33,7 @@ const RetryButton = styled.button`
   margin-top: 20px;
   
   &:hover {
-    background: #fff;
+    background: #60a5fa;
   }
 `;
 

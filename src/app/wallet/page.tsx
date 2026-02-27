@@ -1,25 +1,10 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import styled, { keyframes } from "styled-components";
-import { useUser } from "@/context/UserContext";
+import styled from "styled-components";
+import { useUser } from "@/hooks/useUser";
 import { mpesaApi } from "@/services/mpesaService";
-
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const PageWrapper = styled.div`
-  min-height: 100vh;
-  background-color: #0a0a0b;
-  color: #ffffff;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  padding: 100px 20px 60px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import { PageWrapper, BackHeader } from "@/components/SharedStyles";
 
 const ContentContainer = styled.div`
   width: 100%;
@@ -33,27 +18,20 @@ const ContentContainer = styled.div`
 `;
 
 const BalanceCard = styled.div`
-  background: rgba(24, 24, 27, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
+  background: #002d58;
+  border: 4px solid #fbdf07;
+  border-radius: 40px;
   padding: 40px;
   text-align: left;
   animation: ${fadeIn} 0.6s ease-out;
   position: relative;
   overflow: hidden;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 4px;
-    background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
-  }
 `;
 
 const BalanceTitle = styled.div`
   font-size: 0.75rem;
-  color: #d4af37;
+  color: #fbdf07;
   margin-bottom: 8px;
   font-weight: 800;
   text-transform: uppercase;
@@ -68,8 +46,16 @@ const BalanceAmount = styled.div`
   letter-spacing: -2px;
   span {
     font-size: 1.5rem;
-    color: #d4af37;
+    color: #fbdf07;
     margin-right: 8px;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 2.2rem;
+    
+    span {
+      font-size: 1.1rem;
+    }
   }
 `;
 
@@ -97,18 +83,18 @@ const SubItem = styled.div`
   span:last-child { 
     font-size: 0.9rem; 
     font-weight: 700; 
-    color: #d4af37;
+    color: #3b82f6;
   }
 `;
 
 const ActionButton = styled.button<{ primary?: boolean }>`
   width: 100%;
-  background: ${props => props.primary ? 'linear-gradient(90deg, #d4af37, #fef08a, #d4af37)' : 'transparent'};
+  background: ${props => props.primary ? 'linear-gradient(90deg, #fbdf07, #d4bb00)' : 'transparent'};
   color: ${props => props.primary ? '#000000' : '#ffffff'};
   border: ${props => props.primary ? 'none' : '1px solid rgba(255, 255, 255, 0.2)'};
   border-radius: 12px;
   padding: 18px;
-  font-weight: 900;
+  font-weight: 950;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -118,14 +104,14 @@ const ActionButton = styled.button<{ primary?: boolean }>`
 
   &:hover {
     transform: translateY(-2px);
-    background: ${props => props.primary ? 'linear-gradient(90deg, #fef08a, #d4af37, #fef08a)' : 'rgba(255, 255, 255, 0.05)'};
-    box-shadow: ${props => props.primary ? '0 8px 20px rgba(212, 175, 55, 0.3)' : 'none'};
+    background: ${props => props.primary ? 'linear-gradient(90deg, #fbdf07, #ffd700, #fbdf07)' : 'rgba(255, 255, 255, 0.05)'};
+    box-shadow: ${props => props.primary ? '0 8px 20px rgba(251, 223, 7, 0.3)' : 'none'};
   }
 `;
 
 const LockdownNotice = styled.div`
-  background: rgba(239, 68, 68, 0.05);
-  border: 1px solid rgba(239, 68, 68, 0.1);
+  background: rgba(238, 28, 37, 0.05);
+  border: 1px solid rgba(238, 28, 37, 0.1);
   border-radius: 12px;
   padding: 15px;
   margin-top: 20px;
@@ -133,18 +119,18 @@ const LockdownNotice = styled.div`
   align-items: center;
   gap: 12px;
   font-size: 0.8rem;
-  color: #b91c1c;
+  color: #ee1c25;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
-    background: rgba(239, 68, 68, 0.08);
+    background: rgba(238, 28, 37, 0.08);
   }
 `;
 
 const HistoryCard = styled.div`
-  background: rgba(24, 24, 27, 0.7);
+  background: #002d58;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   overflow: hidden;
@@ -152,8 +138,8 @@ const HistoryCard = styled.div`
 `;
 
 const LegitimacyBanner = styled.div`
-  background: rgba(212, 175, 55, 0.05);
-  border: 1px solid rgba(212, 175, 55, 0.1);
+  background: rgba(0, 91, 170, 0.1);
+  border: 1px solid rgba(0, 91, 170, 0.2);
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 24px;
@@ -165,12 +151,12 @@ const LegitimacyBanner = styled.div`
 const ShieldIcon = styled.div`
   width: 48px;
   height: 48px;
-  background: rgba(212, 175, 55, 0.1);
+  background: rgba(0, 91, 170, 0.2);
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #d4af37;
+  color: #fbdf07;
   font-size: 1.5rem;
 `;
 
@@ -184,55 +170,18 @@ const BannerText = styled.div`
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
-  div:last-child {
-    color: #94a3b8;
     font-size: 0.75rem;
     line-height: 1.4;
     font-weight: 600;
   }
 `;
 
-const HeaderBar = styled.header`
-  width: 100%;
-  max-width: 1000px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 30px;
-  justify-content: space-between;
-`;
-
-const BackArrow = styled.button`
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  &:hover { border-color: #d4af37; background: rgba(255, 255, 255, 0.1); }
-`;
-
-const NoHistory = styled.div`
-  padding: 60px 20px;
-  text-align: center;
-  color: #94a3b8;
-  font-size: 0.9rem;
-  font-weight: 700;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
 export default function Wallet() {
   const router = useRouter();
-  const { user, updateUser } = useUser();
+  const { user, loading } = useUser();
   const [isWithdrawing, setIsWithdrawing] = React.useState(false);
+
+  if (loading || !user) return null;
 
   const handleWithdrawal = async () => {
     if (!user) return;
@@ -271,16 +220,7 @@ export default function Wallet() {
 
   return (
     <PageWrapper>
-      <HeaderBar>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <BackArrow onClick={() => router.push("/home")}>&larr;</BackArrow>
-          <div style={{ fontWeight: 950, letterSpacing: '1px', fontSize: '1.2rem' }}>ACCOUNT WALLET</div>
-        </div>
-        <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <div style={{ width: 8, height: 8, background: '#22c55e', borderRadius: '50%' }} />
-          SECURE CONNECTION
-        </div>
-      </HeaderBar>
+      <BackHeader title="Wallet Ledger" onBack={() => router.push('/home')} />
 
       <ContentContainer>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>

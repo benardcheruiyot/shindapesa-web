@@ -48,6 +48,32 @@ export const userService = {
   },
 
   /**
+   * Clean up user data and apply migrations
+   */
+  cleanUserData: (user: User): User => {
+    const cleaned = { ...user };
+    
+    // 1. Force 5 spins for new/unfinished users
+    const spins = Number(cleaned.freeSpins);
+    if (isNaN(spins) || (spins === 0 && !cleaned.welcomeSpinsFinished)) {
+      cleaned.freeSpins = 5;
+      cleaned.welcomeSpinsFinished = false;
+    }
+
+    // 2. Balance migration: Legacies of 1000 KES are reset to 0 if not activated
+    if (Number(cleaned.balance) === 1000 && !cleaned.isActivated) {
+      cleaned.balance = 0;
+    }
+
+    // 3. Ensure withdrawableBalance exists
+    if (cleaned.withdrawableBalance === undefined) {
+      cleaned.withdrawableBalance = 0;
+    }
+
+    return cleaned;
+  },
+
+  /**
    * Handle the logic for awarding referral bonuses
    */
   processReferral: (referralCode: string): void => {

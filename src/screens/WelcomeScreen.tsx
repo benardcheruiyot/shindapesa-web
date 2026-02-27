@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useRouter } from 'next/navigation';
+import { ShieldCheck } from 'lucide-react';
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -22,7 +23,7 @@ const float = keyframes`
 
 const Container = styled.div`
   min-height: 100vh;
-  background-color: #0a0a0b;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,7 +40,7 @@ const FloatingElement = styled.div<{ $top: string; $left: string; $duration: str
   left: ${props => props.$left};
   width: 15vw;
   height: 15vw;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 91, 170, 0.08) 0%, transparent 70%);
   border-radius: 50%;
   animation: ${float} ${props => props.$duration} ease-in-out infinite;
   pointer-events: none;
@@ -66,7 +67,7 @@ const GlowRing = styled.div`
   width: 160px;
   height: 160px;
   border-radius: 50%;
-  border: 4px solid rgba(212, 175, 55, 0.1);
+  border: 4px solid rgba(245, 158, 11, 0.2);
   animation: ${spin} 8s linear infinite;
   &:before {
     content: '';
@@ -75,7 +76,7 @@ const GlowRing = styled.div`
     left: 50%;
     width: 12px;
     height: 12px;
-    background: #d4af37;
+    background: #f59e0b;
     border-radius: 50%;
   }
 `;
@@ -83,12 +84,12 @@ const GlowRing = styled.div`
 const LogoBody = styled.div`
   width: 100px;
   height: 100px;
-  background: linear-gradient(135deg, #d4af37, #b8860b);
+  background: linear-gradient(135deg, #f59e0b, #b45309);
   border-radius: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
   transform: rotate(-10deg);
 `;
 
@@ -98,13 +99,16 @@ const Title = styled.h1`
   margin-bottom: 8px;
   letter-spacing: -2px;
   color: #ffffff;
+  text-transform: uppercase;
 `;
 
 const Subtitle = styled.div`
-  font-size: 1.25rem;
-  color: rgba(255, 255, 255, 0.7);
-  font-weight: 500;
+  font-size: 1.1rem;
+  color: #f59e0b;
+  font-weight: 950;
   margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 `;
 
 const LoadingText = styled.div`
@@ -116,11 +120,29 @@ const LoadingText = styled.div`
   text-transform: uppercase;
 `;
 
+const SystemLog = styled.div`
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 12px;
+  font-family: monospace;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: left;
+  width: 100%;
+  margin-top: 32px;
+`;
+
+const LogEntry = styled.div`
+  margin-bottom: 4px;
+  span { color: #39b54a; }
+`;
+
 const Spinner = styled.div`
   width: 40px;
   height: 40px;
-  border: 4px solid #f1f2f6;
-  border-top-color: #d4af37;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #f59e0b;
   border-radius: 50%;
   animation: ${spin} 1s linear infinite;
   margin: 0 auto;
@@ -128,20 +150,30 @@ const Spinner = styled.div`
 
 const WelcomeScreen = () => {
   const router = useRouter();
+  const [logIndex, setLogIndex] = useState(0);
+  const logs = [
+    "INITIALIZING SAPPHIRE CORE...",
+    "CONNECTING TO B3-HUB GATEWAY...",
+    "VERIFYING MPESA NODE HANDSHAKE...",
+    "FETCHING USER PRESTIGE DATA...",
+    "SYSTEM SECURE - READY"
+  ];
 
   useEffect(() => {
-    // Persistent Login Check: If user is already in localStorage, skip delay and go home
-    const savedUser = localStorage.getItem('shindapesa_user');
-    if (savedUser) {
-      router.push('/home');
-      return;
-    }
+    const logInterval = setInterval(() => {
+      setLogIndex(prev => (prev < logs.length - 1 ? prev + 1 : prev));
+    }, 600);
 
     const timer = setTimeout(() => {
-      router.push('/');
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, [router]);
+      const savedUser = localStorage.getItem('shindapesa_user');
+      router.push(savedUser ? '/home' : '/');
+    }, 3200);
+
+    return () => {
+      clearInterval(logInterval);
+      clearTimeout(timer);
+    };
+  }, [router, logs.length]);
 
   return (
     <Container>
@@ -152,17 +184,25 @@ const WelcomeScreen = () => {
         <LogoContainer>
           <GlowRing />
           <LogoBody>
-            <span style={{fontSize:'2.5rem', color:'#0a0a0b', fontWeight:900}}>S</span>
+            <ShieldCheck size={50} color="#ffffff" fill="#ffffff" />
           </LogoBody>
         </LogoContainer>
 
         <Title>SHINDAPESA</Title>
-        <Subtitle>East Africa's Premium Rewards</Subtitle>
+        <Subtitle>Sapphire Tier Active</Subtitle>
 
         <div style={{marginTop: 40}}>
           <Spinner />
-          <LoadingText>Securing Portal...</LoadingText>
+          <LoadingText>Syncing Secure Hub</LoadingText>
         </div>
+
+        <SystemLog>
+          {logs.slice(0, logIndex + 1).map((log, i) => (
+            <LogEntry key={i}>
+              [<span>OK</span>] {log}
+            </LogEntry>
+          ))}
+        </SystemLog>
       </Content>
     </Container>
   );

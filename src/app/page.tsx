@@ -18,7 +18,7 @@ const float = keyframes`
 
 const PageWrapper = styled.main`
   min-height: 100vh;
-  background-color: #0a0a0b;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,20 +27,18 @@ const PageWrapper = styled.main`
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
   padding: 20px;
-  background-image: 
-    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
 `;
 
 const ContentCard = styled.div`
-  background: rgba(24, 24, 27, 0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 60px 40px;
-  border-radius: 24px;
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 70px 40px;
+  border-radius: 35px;
   text-align: center;
   max-width: 440px;
   width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
   animation: ${fadeIn} 1s ease-out;
   position: relative;
   overflow: hidden;
@@ -48,8 +46,8 @@ const ContentCard = styled.div`
   &::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 4px;
-    background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
+    top: 0; left: 0; width: 100%; height: 6px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light), var(--primary));
   }
 `;
 
@@ -78,7 +76,7 @@ const LogoContainer = styled.div`
 `;
 
 const CTAButton = styled.button`
-  background: linear-gradient(135deg, #d4af37 0%, #a18412 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: #fff;
   border: none;
   padding: 20px 40px;
@@ -91,11 +89,11 @@ const CTAButton = styled.button`
   margin-top: 20px;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 15px 30px rgba(59, 130, 246, 0.3);
     filter: brightness(1.1);
   }
 `;
@@ -120,8 +118,8 @@ const SecondaryButton = styled.button`
 
 const Badge = styled.div`
   display: inline-block;
-  background: rgba(212, 175, 55, 0.1);
-  color: #d4af37;
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
   padding: 6px 16px;
   border-radius: 100px;
   font-size: 0.7rem;
@@ -129,7 +127,7 @@ const Badge = styled.div`
   letter-spacing: 2px;
   text-transform: uppercase;
   margin-bottom: 24px;
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.2);
 `;
 
 export default function Landing() {

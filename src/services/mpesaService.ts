@@ -22,6 +22,11 @@ export const getAuthToken = async (consumerKey: string, consumerSecret: string, 
   return response.json();
 };
 
+const getApiBaseUrl = () => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_APP_URL || '';
+  return baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+};
+
 /**
  * Frontend Client to interact with our Next.js M-Pesa API routes
  */
@@ -30,7 +35,7 @@ export const mpesaApi = {
    * Initiate an STK Push (C2B Payment)
    */
   initiateStkPush: async (phone: string, amount: number, accountRef: string) => {
-    const response = await fetch('/api/mpesa/stk', {
+    const response = await fetch(`${getApiBaseUrl()}/api/mpesa/stk`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ phone, amount, accountReference: accountRef })
@@ -39,11 +44,19 @@ export const mpesaApi = {
   },
 
   /**
+   * Check STK Push Status (Wait/Poll)
+   */
+  checkStkStatus: async (checkoutID: string) => {
+    const response = await fetch(`${getApiBaseUrl()}/api/mpesa/status?checkoutRequestID=${checkoutID}`);
+    return response.json();
+  },
+
+  /**
    * Initiate a B2C Payout (Withdrawal)
    * PART B
    */
   initiateWithdrawal: async (phone: string, amount: number) => {
-    const response = await fetch('/api/mpesa/withdraw', {
+    const response = await fetch(`${getApiBaseUrl()}/api/mpesa/withdraw`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ phone, amount })

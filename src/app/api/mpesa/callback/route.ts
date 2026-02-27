@@ -1,18 +1,28 @@
 import { NextResponse } from 'next/server';
+import { updateTransactionStatus } from '@/lib/mpesaStore';
 
 export async function POST(request: Request) {
   try {
-    const { Body } = await request.json();
-    const { stkCallback } = Body;
-    const { ResultCode, ResultDesc, MerchantRequestID, CheckoutRequestID } = stkCallback;
+    const body = await request.json();
+    console.log("M-Pesa Callback Received:", JSON.stringify(body, null, 2));
 
-    console.log(`M-Pesa Callback - Code: ${ResultCode}, Desc: ${ResultDesc}`);
-
-    if (ResultCode === 0) {
-      // Payment Successful
-      // In a real app, update DB or cache (e.g., Redis)
-      // and redirect the frontend.
+    const { Body } = body;
+    if (!Body || !Body.stkCallback) {
+      return NextResponse.json({ ResultCode: 1, ResultDesc: "Invalid Body" }, { status: 400 });
     }
+
+    const { stkCallback } = Body;
+    const { ResultCode, ResultDesc, CheckoutRequestID } = stkCallback;
+
+    console.log(`M-Pesa Callback Processed - ID: ${CheckoutRequestID}, Code: ${ResultCode}, Desc: ${ResultDesc}`);
+
+    // Update the store for the frontend to poll
+    updateTransactionStatus(CheckoutRequestID, {
+      status: ResultCode === 0 ? "SUCCESS" : "FAILED",
+      resultCode: ResultCode,
+      resultDesc: ResultDesc,
+      raw: stkCallback
+    });
 
     return NextResponse.json({ ResultCode: 0, ResultDesc: "Success" });
   } catch (error: any) {

@@ -13,28 +13,17 @@ const shimmer = keyframes`
 `;
 
 const CardWrapper = styled.section`
-  background: rgba(24, 24, 27, 0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  padding: 24px;
+  background: #002d58;
+  border: 4px solid #fbdf07;
+  border-radius: 40px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
   margin-bottom: 24px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
-  }
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
 `;
 
 const Header = styled.div`
@@ -46,29 +35,33 @@ const Header = styled.div`
 `;
 
 const VipBadge = styled.div`
-  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
-  color: #fff;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.65rem;
-  font-weight: 900;
+  background: linear-gradient(135deg, #fbdf07 0%, #d4bb00 100%);
+  color: #000;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 0.6rem;
+  font-weight: 950;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 4px 10px rgba(212, 175, 55, 0.15);
+  letter-spacing: 2px;
+  box-shadow: 0 10px 20px rgba(251, 223, 7, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 `;
 
 const Avatar = styled.div`
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.05);
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 950;
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 `;
 
 const UserDetails = styled.div`
@@ -77,30 +70,39 @@ const UserDetails = styled.div`
 
 const LevelTag = styled.div`
   font-size: 0.65rem;
-  font-weight: 900;
-  color: #d4af37;
+  font-weight: 950;
+  color: #fbdf07;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
+  gap: 8px;
+  margin-bottom: 6px;
+  opacity: 0.8;
 `;
 
 const StatusBadge = styled.div<{ $isActivated: boolean }>`
-  background: ${props => props.$isActivated ? 'rgba(74, 222, 128, 0.1)' : 'rgba(239, 68, 68, 0.1)'};
-  color: ${props => props.$isActivated ? '#4ade80' : '#f87171'};
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 0.6rem;
+  background: ${props => props.$isActivated ? 'rgba(57, 181, 74, 0.1)' : 'rgba(238, 28, 37, 0.1)'};
+  color: ${props => props.$isActivated ? '#39b54a' : '#ee1c25'};
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-size: 0.65rem;
   font-weight: 950;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border: 1px solid ${props => props.$isActivated ? 'rgba(74, 222, 128, 0.2)' : 'rgba(239, 68, 68, 0.2)'};
+  letter-spacing: 1.5px;
+  border: 1px solid ${props => props.$isActivated ? 'rgba(76, 209, 55, 0.2)' : 'rgba(255, 71, 87, 0.2)'};
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   animation: ${props => !props.$isActivated ? pulse : 'none'} 2s infinite;
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+    border-radius: 50%;
+  }
 `;
 
 const StatsGrid = styled.div`
@@ -127,9 +129,10 @@ const StatLabel = styled.div`
 `;
 
 const StatValue = styled.div<{ gold?: boolean }>`
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 950;
-  color: ${props => props.gold ? '#d4af37' : '#ffffff'};
+  color: ${props => props.gold ? '#3b82f6' : '#ffffff'};
+  letter-spacing: 0.5px;
 `;
 
 interface UserInfoCardProps {
@@ -146,7 +149,7 @@ const UserInfoCard: React.FC<UserInfoCardProps> = ({ name, phone, isActivated })
       </Avatar>
       <UserDetails>
         <LevelTag>
-          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#d4af37' }} />
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#3b82f6' }} />
           SHINDAPESA PLATINUM MEMBER
         </LevelTag>
         <div style={{ fontSize: '1.1rem', fontWeight: 950, color: '#ffffff', letterSpacing: '-0.2px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -165,9 +168,9 @@ const UserInfoCard: React.FC<UserInfoCardProps> = ({ name, phone, isActivated })
         <StatLabel>Account Security</StatLabel>
         <StatValue style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <div style={{ width: 40, height: 4, background: 'rgba(255,255,255,0.1)', borderRadius: 2, overflow: 'hidden' }}>
-            <div style={{ width: isActivated ? '100%' : '65%', height: '100%', background: isActivated ? '#22c55e' : '#d4af37' }} />
+            <div style={{ width: isActivated ? '100%' : '65%', height: '100%', background: isActivated ? '#22c55e' : '#3b82f6' }} />
           </div>
-          <span style={{ fontSize: '0.7rem', color: isActivated ? '#22c55e' : '#d4af37' }}>{isActivated ? 'High' : 'Secure'}</span>
+          <span style={{ fontSize: '0.7rem', color: isActivated ? '#22c55e' : '#3b82f6' }}>{isActivated ? 'High' : 'Secure'}</span>
         </StatValue>
       </StatItem>
       <StatItem>
