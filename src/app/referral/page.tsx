@@ -3,7 +3,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import { useUser } from "@/hooks/useUser";
-import { PageWrapper, fadeIn } from "@/components/SharedStyles";
+import { PageWrapper, fadeIn, BackHeader } from "@/components/SharedStyles";
 
 const ContentContainer = styled.div`
   width: 100%;

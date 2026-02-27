@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { generateTimestamp, getAuthToken, formatPhoneNumber } from '@/services/mpesaService';
+import { getAuthToken, formatPhoneNumber } from '@/services/mpesaService';
 import { mpesaConfig, getBaseUrl, isConfigValid } from '@/lib/mpesaConfig';
 
 /**
@@ -66,8 +66,9 @@ export async function POST(request: Request) {
     
     return NextResponse.json(b2cData);
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('M-Pesa B2C Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
