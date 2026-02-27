@@ -1,17 +1,17 @@
 export const mpesaConfig = {
-  consumerKey: process.env.MPESA_CONSUMER_KEY || 'W74YsCs7sBn34GXxf7EacuVou44vbTN6JxKUt7AXyIstwgh7',
-  consumerSecret: process.env.MPESA_CONSUMER_SECRET || 'RCiVqjfRBoyd9pSyWfZR0IQxApLM36ijl44ILTak4PBarg8coR928AKFBVqJHrky',
+  consumerKey: process.env.MPESA_CONSUMER_KEY || 'c9AnG7qA00pGs0tVqA0W0A0W0A0W0A0W',
+  consumerSecret: process.env.MPESA_CONSUMER_SECRET || 'A0W0A0W0A0W0A0W0',
   initiatorName: process.env.MPESA_INITIATOR_NAME || 'SpinWinAdmin',
   securityCredential: process.env.MPESA_SECURITY_CREDENTIAL,
-  shortcode: process.env.MPESA_SHORTCODE || '3700945', 
+  shortcode: process.env.MPESA_SHORTCODE || '174379', // Sandbox Shortcode
   b2cShortcode: process.env.MPESA_B2C_SHORTCODE || '600000', 
-  passkey: process.env.MPESA_PASSKEY || 'a6a89fa8a33aaffe9751ee7288c2255d7bb55b72cd0c12ea6536d152cc6a4747',
-  env: process.env.MPESA_ENV || 'production',
+  passkey: process.env.MPESA_PASSKEY || 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919', // Sandbox Passkey
+  env: process.env.MPESA_ENV || 'sandbox', // Switch to sandbox
   callbackUrl: process.env.MPESA_CALLBACK_URL || `${process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_APP_URL}/api/mpesa/callback`,
   b2cCallbackUrl: process.env.MPESA_B2C_CALLBACK_URL || `${process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_APP_URL}/api/mpesa/withdraw-callback`,
-  transactionType: process.env.MPESA_TRANSACTION_TYPE || 'CustomerBuyGoodsOnline',
-  tillNumber: process.env.MPESA_TILL_NUMBER || '8733762',
-  storeNumber: process.env.MPESA_STORE_NUMBER || '3700945', 
+  transactionType: process.env.MPESA_TRANSACTION_TYPE || 'CustomerPayBillOnline', // Sandbox usually uses PayBill
+  tillNumber: process.env.MPESA_TILL_NUMBER || '174379',
+  storeNumber: process.env.MPESA_STORE_NUMBER || '174379', 
 };
 
 export const getBaseUrl = () => {
