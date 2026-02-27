@@ -1,0 +1,49 @@
+[00:53:01.894] Server  ERROR   ⨯ Error: Cannot find module 'next/dist/client/components/builtin/global-not-found'
+Require stack:
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\on-demand-entry-handler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\hot-reloader-turbopack.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\start-server.js
+[00:53:01.987] Server  ERROR   ⨯ Error: Cannot find module 'next/dist/client/components/builtin/global-not-found'
+Require stack:
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\on-demand-entry-handler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\hot-reloader-turbopack.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\start-server.js
+[00:53:02.045] Server  ERROR   ⨯ Error: Cannot find module 'next/dist/client/components/builtin/global-not-found'
+Require stack:
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\on-demand-entry-handler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\hot-reloader-turbopack.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\start-server.js
+[00:53:21.062] Server  ERROR   ⨯ Error: Cannot find module 'next/dist/client/components/builtin/global-not-found'
+Require stack:
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\on-demand-entry-handler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\hot-reloader-turbopack.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\start-server.js
+[00:53:21.117] Server  ERROR   ⨯ Error: Cannot find module 'next/dist/client/components/builtin/global-not-found'
+Require stack:
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\on-demand-entry-handler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\hot-reloader-turbopack.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\start-server.js
+[00:53:21.163] Server  ERROR   ⨯ Error: Cannot find module 'next/dist/client/components/builtin/global-not-found'
+Require stack:
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\on-demand-entry-handler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\hot-reloader-turbopack.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\start-server.js
+[00:53:21.337] Server  ERROR   ⨯ Error: Cannot find module 'next/dist/client/components/builtin/global-not-found'
+Require stack:
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\on-demand-entry-handler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\dev\hot-reloader-turbopack.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\router-server.js
+- C:\Users\bcher\shindapesa-web\node_modules\next\dist\server\lib\start-server.js
