@@ -13,13 +13,18 @@ const TickerWrapper = styled.div`
   padding: 8px 0;
   overflow: hidden;
   white-space: nowrap;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: #ffffff;
   font-weight: 700;
   position: relative;
   z-index: 5;
   display: flex;
   align-items: center;
+
+  @media (max-width: 600px) {
+    font-size: 0.75rem;
+    padding: 6px 0;
+  }
 
   &::before {
     content: 'LIVE PAYOUTS';

@@ -71,8 +71,9 @@ const CertifiedBadge = styled.div`
   @media (max-width: 600px) {
     top: 16px;
     right: 16px;
-    padding: 6px 10px;
-    font-size: 0.6rem;
+    padding: 6px 12px;
+    font-size: 0.7rem;
+    font-weight: 800;
   }
 `;
 
@@ -95,7 +96,8 @@ const HeroTitle = styled.h1`
   }
 
   @media (max-width: 600px) {
-    font-size: 1.75rem;
+    font-size: 2rem;
+    letter-spacing: -0.02em;
   }
 `;
 
@@ -178,8 +180,8 @@ const HomeHero = ({ livePlayers, onAction }: HomeHeroProps) => {
                 <HeroDescription>
                     Join <strong>{livePlayers.toLocaleString()}</strong> verified players in the current session. Your potential reward pool is ready for disbursement.
                 </HeroDescription>
-                <div style={{ marginBottom: 24, background: 'rgba(255, 255, 255, 0.02)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.04)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', fontWeight: 600, marginBottom: 8, color: '#64748b', letterSpacing: '0.05em' }}>
+                <div style={{ marginBottom: 24, background: 'rgba(255, 255, 255, 0.03)', padding: '20px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 800, marginBottom: 10, color: '#94a3b8', letterSpacing: '0.1em' }}>
                         <span>SYSTEM TRUST SCORE</span>
                         <span style={{ color: '#22c55e' }}>{winProbability}% VERIFIED</span>
                     </div>

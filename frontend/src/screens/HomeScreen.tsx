@@ -249,7 +249,7 @@ const WalletHeader = styled.div`
     display: flex;
     align-items: center;
     gap: 8px;
-    &::before { content: 'ðŸ›¡ï¸'; font-size: 0.8rem; }
+    &::before { content: '🛡️'; font-size: 0.8rem; }
   }
   
   .line {
@@ -378,6 +378,20 @@ const ProgressStep = styled.div<{ $active?: boolean, $pending?: boolean }>`
     color: ${props => props.$active ? 'var(--success)' : props.$pending ? 'var(--primary-light)' : 'rgba(255, 255, 255, 0.3)'};
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    gap: 12px;
+    .dot {
+      width: 44px;
+      height: 44px;
+      font-size: 1.1rem;
+    }
+    .label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2px;
+    }
   }
 
   @keyframes pulse-gold {
@@ -399,7 +413,7 @@ const BankGradeText = styled.div`
   font-weight: 700;
   letter-spacing: 0.5px;
 
-  &::before { content: 'ðŸ”’'; font-size: 0.7rem; }
+  &::before { content: '🔒'; font-size: 0.7rem; }
 `;
 
 const WinningToast = styled.div<{ $visible: boolean }>`
@@ -486,7 +500,7 @@ export default function HomeScreen() {
       const pref = prefixes[Math.floor(Math.random() * prefixes.length)];
       const amt = amounts[Math.floor(Math.random() * amounts.length)];
       const suffix = Math.floor(100 + Math.random() * 900);
-      return `ðŸŽ‰ ${pref}***${suffix} just won KES ${amt.toLocaleString()}!  â€¢  `;
+      return `🎉 ${pref}***${suffix} just won KES ${amt.toLocaleString()}!  •  `;
     });
     setTickerWinners(fakeWinners);
 
@@ -528,7 +542,7 @@ export default function HomeScreen() {
     return (
       <div style={{ height: '100vh', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-light)' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '3rem', marginBottom: 25, animation: 'rotate 2s linear infinite' }}>ðŸŽ¡</div>
+          <div style={{ fontSize: '3rem', marginBottom: 25, animation: 'rotate 2s linear infinite' }}>🎡</div>
           <h3 style={{ textTransform: 'uppercase', letterSpacing: 3, fontWeight: 900 }}>Authenticating...</h3>
         </div>
       </div>
@@ -575,22 +589,22 @@ export default function HomeScreen() {
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, opacity: 0.5 }}>
           <span style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '2px', color: '#3b82f6' }}>SYSTEM: ONLINE v2.0.4</span>
-          <span style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '2px', color: '#4cd137' }}>STATUS: SECURE ðŸŸ¢</span>
+          <span style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '2px', color: '#4cd137' }}>STATUS: SECURE 🟢</span>
         </div>
 
         <VIPBanner />
 
         <VerificationProgressWrapper onClick={() => router.push("/activate-account")}>
-          <div style={{ marginBottom: 16, textAlign: 'center' }}>
-            <span style={{ fontSize: '0.7rem', fontWeight: 900, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '2px' }}>Finalize Account Setup</span>
+          <div style={{ marginBottom: 20, textAlign: 'center' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: 950, color: '#3b82f6', textTransform: 'uppercase', letterSpacing: '3px', opacity: 0.9 }}>Finalize Account Setup</span>
           </div>
           <ProgressSteps>
             <ProgressStep $active>
-              <div className="dot">âœ“</div>
+              <div className="dot">✓</div>
               <div className="label">Registration</div>
             </ProgressStep>
             <ProgressStep $active>
-              <div className="dot">âœ“</div>
+              <div className="dot">✓</div>
               <div className="label">Gameplay</div>
             </ProgressStep>
             <ProgressStep $pending>
@@ -603,7 +617,7 @@ export default function HomeScreen() {
         <HomeHero livePlayers={livePlayers} onAction={() => router.push("/activate-account")} />
 
         <WinningToast $visible={toast.visible}>
-          <div className="icon">ðŸ’°</div>
+          <div className="icon">💰</div>
           <div className="text">
             <span className="name">{toast.name}</span>
             <span className="win">Won KES {toast.amount.toLocaleString()}!</span>
@@ -641,7 +655,7 @@ export default function HomeScreen() {
         
         <div style={{ padding: '60px 20px 120px', textAlign: 'center' }}>
           <div style={{ opacity: 0.15, fontSize: '0.8rem', fontWeight: 700, letterSpacing: '2px' }}>
-            Â© {new Date().getFullYear()} SHINDAPESA ENTERTAINMENT LTD. ALL RIGHTS RESERVED.
+            © {new Date().getFullYear()} SHINDAPESA ENTERTAINMENT LTD. ALL RIGHTS RESERVED.
           </div>
         </div>
       </ContentWrapper>
