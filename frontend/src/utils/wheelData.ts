@@ -7,7 +7,7 @@ export interface WheelSegment {
 }
 
 export const wheelData: WheelSegment[] = [
-  { label: 'JACKPOT', color: 'linear-gradient(135deg, #1d4ed8 0%, #172554 100%)', min: 10001, max: 20000, valueTag: 'x20' },
+  { label: 'MAX WIN', color: 'linear-gradient(135deg, #1d4ed8 0%, #172554 100%)', min: 10001, max: 20000, valueTag: 'x20' },
   { label: 'TRY AGAIN', color: '#0f172a', min: 0, max: 0, valueTag: 'x0' },
   { label: 'BIG WIN', color: 'linear-gradient(135deg, #059669 0%, #064e3b 100%)', min: 5001, max: 10000, valueTag: 'x10' },
   { label: 'TRY AGAIN', color: '#0f172a', min: 0, max: 0, valueTag: 'x0' },

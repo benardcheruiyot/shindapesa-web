@@ -355,12 +355,12 @@ const SpinWheel = () => {
           <WinOverlay>
             <div style={{ fontSize: '4rem', marginBottom: 20, filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.3))' }}>{pendingWin.value > 0 ? '🏆' : '🎲'}</div>
             <h2 style={{ color: pendingWin.value > 0 ? '#4cd137' : '#ffffff', fontSize: '1.8rem', fontWeight: 950, marginBottom: 12, letterSpacing: '-0.5px' }}>
-              {pendingWin.value > 0 ? 'JACKPOT UNLOCKED!' : 'KEEP SPINNING'}
+              {pendingWin.value > 0 ? 'REAL CASH SECURED!' : 'KEEP SPINNING'}
             </h2>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.2rem', fontWeight: 700, marginBottom: 35, lineHeight: 1.5 }}>
               {pendingWin.value > 0 
                 ? <>You just secured <span style={{ color: '#ffffff', fontWeight: 950 }}>KES {pendingWin.value.toLocaleString()}</span> in winnings!</> 
-                : <>The algorithm is heating up. Your next spin has <span style={{ color: '#3b82f6' }}>85% higher</span> jackpot probability.</>}
+                : <>The algorithm is heating up. Your next spin has <span style={{ color: '#3b82f6' }}>85% higher</span> success probability.</>}
             </p>
             <SpinButton onClick={collectWinnings}>
               {pendingWin.value > 0 
