@@ -18,8 +18,18 @@ export async function POST(request: Request) {
     
     // --- SIMULATION MODE ---
     if (!isConfigValid('stk')) {
+      const missingFields = [];
+      if (!mpesaConfig.consumerKey) missingFields.push("Consumer Key");
+      if (!mpesaConfig.consumerSecret) missingFields.push("Consumer Secret");
+      if (!mpesaConfig.passkey) missingFields.push("Passkey");
+      if (!mpesaConfig.callbackUrl) missingFields.push("Callback URL");
+      if (mpesaConfig.transactionType === 'CustomerBuyGoodsOnline' && !mpesaConfig.storeNumber) missingFields.push("Store Number");
+
       if (process.env.NODE_ENV === 'production' || mpesaConfig.env === 'production') {
-        return NextResponse.json({ error: `Production setup error: Missing M-Pesa configuration` }, { status: 500 });
+        return NextResponse.json({ 
+          error: `Production setup error: Missing variables [${missingFields.join(", ")}]`,
+          help: "Ensure all M-Pesa variables are set in your .env file or hosting provider dashboard."
+        }, { status: 500 });
       }
 
       console.warn("M-Pesa environment variables missing - RUNNING IN SIMULATION MODE");
