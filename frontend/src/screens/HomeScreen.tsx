@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
@@ -114,7 +114,7 @@ const LogoText = styled.div`
   }
 
   &::before {
-    content: '⚡';
+    content: 'âš¡';
     font-size: 1.25rem;
   }
 
@@ -206,7 +206,7 @@ const WalletHeader = styled.div`
     display: flex;
     align-items: center;
     gap: 8px;
-    &::before { content: '🛡️'; font-size: 0.8rem; }
+    &::before { content: 'ðŸ›¡ï¸'; font-size: 0.8rem; }
   }
   
   .line {
@@ -343,7 +343,7 @@ const BankGradeText = styled.div`
   font-weight: 700;
   letter-spacing: 0.5px;
 
-  &::before { content: '🔒'; font-size: 0.7rem; }
+  &::before { content: 'ðŸ”’'; font-size: 0.7rem; }
 `;
 
 const WinningToast = styled.div<{ $visible: boolean }>`
@@ -430,7 +430,7 @@ export default function HomeScreen() {
       const pref = prefixes[Math.floor(Math.random() * prefixes.length)];
       const amt = amounts[Math.floor(Math.random() * amounts.length)];
       const suffix = Math.floor(100 + Math.random() * 900);
-      return `🎉 ${pref}***${suffix} just won KES ${amt.toLocaleString()}!  •  `;
+      return `ðŸŽ‰ ${pref}***${suffix} just won KES ${amt.toLocaleString()}!  â€¢  `;
     });
     setTickerWinners(fakeWinners);
 
@@ -472,7 +472,7 @@ export default function HomeScreen() {
     return (
       <div style={{ height: '100vh', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-light)' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '3rem', marginBottom: 25, animation: 'rotate 2s linear infinite' }}>🎡</div>
+          <div style={{ fontSize: '3rem', marginBottom: 25, animation: 'rotate 2s linear infinite' }}>ðŸŽ¡</div>
           <h3 style={{ textTransform: 'uppercase', letterSpacing: 3, fontWeight: 900 }}>Authenticating...</h3>
         </div>
       </div>
@@ -517,7 +517,7 @@ export default function HomeScreen() {
             }}
             title="Get Support"
           >
-             💬
+             ðŸ’¬
           </button>
           
           <BalanceBadge onClick={() => router.push("/activate-account")} style={{ background: 'rgba(76, 209, 55, 0.05)', borderColor: 'rgba(76, 209, 55, 0.2)' }}>
@@ -540,7 +540,7 @@ export default function HomeScreen() {
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, opacity: 0.5 }}>
           <span style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '2px', color: '#3b82f6' }}>SYSTEM: ONLINE v2.0.4</span>
-          <span style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '2px', color: '#4cd137' }}>STATUS: SECURE 🟢</span>
+          <span style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '2px', color: '#4cd137' }}>STATUS: SECURE ðŸŸ¢</span>
         </div>
 
         <VIPBanner />
@@ -551,11 +551,11 @@ export default function HomeScreen() {
           </div>
           <ProgressSteps>
             <ProgressStep $active>
-              <div className="dot">✓</div>
+              <div className="dot">âœ“</div>
               <div className="label">Registration</div>
             </ProgressStep>
             <ProgressStep $active>
-              <div className="dot">✓</div>
+              <div className="dot">âœ“</div>
               <div className="label">Gameplay</div>
             </ProgressStep>
             <ProgressStep $pending>
@@ -568,7 +568,7 @@ export default function HomeScreen() {
         <HomeHero livePlayers={livePlayers} onAction={() => router.push("/activate-account")} />
 
         <WinningToast $visible={toast.visible}>
-          <div className="icon">💰</div>
+          <div className="icon">ðŸ’°</div>
           <div className="text">
             <span className="name">{toast.name}</span>
             <span className="win">Won KES {toast.amount.toLocaleString()}!</span>
@@ -602,35 +602,11 @@ export default function HomeScreen() {
         </div>
         <PayoutFeed payouts={recentPayouts} />
 
-        <TrustSection>
-          <div className="title">Official Partners & Security</div>
-          <div className="logos">
-            <div>
-              <span style={{ fontSize: '1.8rem' }}>🛡️</span>
-              <span className="badge">BCLB LICENSED</span>
-            </div>
-            <div>
-              <span style={{ fontSize: '1.8rem' }}>💳</span>
-              <span className="badge">MPESA SECURE</span>
-            </div>
-            <div>
-              <span style={{ fontSize: '1.8rem' }}>�</span>
-              <span className="badge">18+ ONLY</span>
-            </div>
-            <div>
-              <span style={{ fontSize: '1.8rem' }}>🎮</span>
-              <span className="badge">GAMING LICENSE</span>
-            </div>
-          </div>
-          <div style={{ marginTop: 25, color: 'rgba(255,255,255,0.4)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '1px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <span>REGULATED BY THE BETTING CONTROL AND LICENSING BOARD • LICENSE NO. 0000452</span>
-            <span style={{ color: '#ff4d4d', opacity: 0.8 }}>⚠ RESPONSIBLE GAMING: PLAY WISELY.</span>
-          </div>
-        </TrustSection>
+        <TrustSection />
         
         <div style={{ padding: '60px 20px 120px', textAlign: 'center' }}>
           <div style={{ opacity: 0.15, fontSize: '0.8rem', fontWeight: 700, letterSpacing: '2px' }}>
-            © {new Date().getFullYear()} SHINDAPESA ENTERTAINMENT LTD. ALL RIGHTS RESERVED.
+            Â© {new Date().getFullYear()} SHINDAPESA ENTERTAINMENT LTD. ALL RIGHTS RESERVED.
           </div>
         </div>
       </ContentWrapper>
@@ -639,3 +615,4 @@ export default function HomeScreen() {
     </Container>
   );
 }
+

@@ -1,290 +1,258 @@
 ﻿"use client";
-import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { ShieldCheck, Info } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import styled, { keyframes } from "styled-components";
+import { ShieldCheck, Info } from "lucide-react";
 
-const pulse = keyframes
+const pulse = keyframes`
   0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.3); }
   70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
   100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-;
+`;
 
-const shimmer = keyframes
+const shimmer = keyframes`
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
-;
+`;
 
-const CardContainer = styled.section
+const CardContainer = styled.section`
   background: rgba(17, 24, 39, 0.7);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 32px;
-  padding: 32px;
-  margin-bottom: 24px;
+  border-radius: 24px;
+  padding: 24px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   position: relative;
   overflow: hidden;
-  box-shadow: 
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05),
-    inset 0 1px 1px rgba(255, 255, 255, 0.05);
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 200%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(59, 130, 246, 0.05),
-      transparent
-    );
-    animation: \ 8s infinite linear;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
   }
-;
+`;
 
-const Header = styled.div
+const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 28px;
-;
+  margin-bottom: 24px;
+`;
 
-const TitleGroup = styled.div
+const Title = styled.h2`
+  color: #f3f4f6;
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const BalanceLabel = styled.p`
+  color: #9ca3af;
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+`;
+
+const BalanceAmount = styled.p`
+  color: #3b82f6;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+`;
+
+const Form = styled.form`
   display: flex;
   flex-direction: column;
-;
+  gap: 20px;
+`;
 
-const CardTitle = styled.h3
-  color: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin: 0;
+const InputGroup = styled.div`
   display: flex;
-  align-items: center;
-  gap: 12px;
-  background: linear-gradient(to right, #fff, #94a3b8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-;
+  flex-direction: column;
+  gap: 8px;
+`;
 
-const Subtitle = styled.span
-  color: #3b82f6;
-  font-size: 0.65rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-top: 6px;
-  opacity: 0.9;
-;
+const Label = styled.label`
+  color: #d1d5db;
+  font-size: 0.875rem;
+  font-weight: 500;
+`;
 
-const NodeBadge = styled.div
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.2);
-  color: #22c55e;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.65rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  letter-spacing: 1px;
-;
-
-const Pulse = styled.div
-  width: 6px;
-  height: 6px;
-  background: #22c55e;
-  border-radius: 50%;
-  animation: \ 2s infinite;
-;
-
-const BalanceDisplay = styled.div
-  margin-bottom: 32px;
-  padding: 24px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.03);
-;
-
-const Amount = styled.div
-  font-size: 2.2rem;
-  font-weight: 950;
-  color: #ffffff;
-  letter-spacing: -1.5px;
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-;
-
-const Currency = styled.span
-  font-size: 1rem;
-  color: #3b82f6;
-  font-weight: 900;
-;
-
-const StatsGrid = styled.div
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 32px;
-;
-
-const StatItem = styled.div
-  background: rgba(255, 255, 255, 0.02);
-  padding: 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-;
-
-const StatLabel = styled.div
-  font-size: 0.6rem;
-  color: #64748b;
-  text-transform: uppercase;
-  font-weight: 800;
-  margin-bottom: 4px;
-  letter-spacing: 1px;
-;
-
-const StatValue = styled.div
-  font-size: 0.85rem;
-  font-weight: 800;
-  color: #ffffff;
-;
-
-const ActionButton = styled.button
-  width: 100%;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: #ffffff;
-  border: none;
-  padding: 24px;
-  border-radius: 20px;
-  font-size: 1.1rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  box-shadow: 0 15px 35px rgba(59, 130, 246, 0.25);
+const InputWrapper = styled.div`
   position: relative;
-  overflow: hidden;
+`;
+
+const StyledInput = styled.input`
+  width: 100%;
+  background: rgba(31, 41, 55, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background: rgba(31, 41, 55, 0.8);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
+
+  &::placeholder {
+    color: #6b7280;
+  }
+`;
+
+const Hint = styled.p`
+  color: #6b7280;
+  font-size: 0.75rem;
+  margin-top: 4px;
+`;
+
+const SubmitButton = styled.button<{ isLoading?: boolean }>`
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  opacity: ${props => props.isLoading ? 0.7 : 1};
+  pointer-events: ${props => props.isLoading ? "none" : "auto"};
 
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 20px 45px rgba(59, 130, 246, 0.35);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
   }
 
   &:active {
-    transform: translateY(-1px);
+    transform: translateY(0);
   }
-;
+`;
 
-const MpesaLogo = styled.span
-  background: #ffffff;
-  color: #000000;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.65rem;
-  font-weight: 900;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-;
-
-const UrgencyBanner = styled.div
-  margin-top: 24px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 16px;
+const StatusBox = styled.div<{ type: "success" | "error" | "info" }>`
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  background: ${props => 
+    props.type === "success" ? "rgba(16, 185, 129, 0.1)" : 
+    props.type === "error" ? "rgba(239, 68, 68, 0.1)" : 
+    "rgba(59, 130, 246, 0.1)"};
+  border: 1px solid ${props => 
+    props.type === "success" ? "rgba(16, 185, 129, 0.2)" : 
+    props.type === "error" ? "rgba(239, 68, 68, 0.2)" : 
+    "rgba(59, 130, 246, 0.2)"};
+  color: ${props => 
+    props.type === "success" ? "#10b981" : 
+    props.type === "error" ? "#ef4444" : 
+    "#3b82f6"};
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: rgba(255, 255, 255, 0.5);
+  gap: 8px;
+`;
+
+const LimitsInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  background: rgba(31, 41, 55, 0.3);
+  border-radius: 12px;
   font-size: 0.75rem;
-  font-weight: 800;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-;
+  color: #9ca3af;
+`;
 
-interface WithdrawCardProps {
-  available: number;
-  onWithdraw: () => void;
-}
+const WithdrawCard: React.FC = () => {
+  const [amount, setAmount] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [status, setStatus] = useState<{ type: "success" | "error" | "info"; message: string } | null>(null);
 
-const WithdrawCard: React.FC<WithdrawCardProps> = ({ available, onWithdraw }) => {
-  const [timeLeft, setTimeLeft] = useState('04:12');
+  const handleWithdraw = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!amount || isNaN(Number(amount)) || Number(amount) < 10) {
+      setStatus({ type: "error", message: "Minimum withdrawal is KES 10" });
+      return;
+    }
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const mins = Math.floor(Math.random() * 5);
-      const secs = Math.floor(Math.random() * 60);
-      setTimeLeft(mins.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0'));
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
+    setIsLoading(true);
+    setStatus({ type: "info", message: "Processing withdrawal..." });
+
+    try {
+      // API call logic would go here
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setStatus({ type: "success", message: "Withdrawal request sent successfully!" });
+      setAmount("");
+    } catch (error) {
+      setStatus({ type: "error", message: "Failed to process withdrawal. Please try again." });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <CardContainer>
       <Header>
-        <TitleGroup>
-          <CardTitle>
-            <ShieldCheck size={22} color="#3b82f6" style={{ marginRight: '8px' }} />
-            SECURE PAYOUT
-          </CardTitle>
-          <Subtitle>Safaricom M-PESA Portal</Subtitle>
-        </TitleGroup>
-        <NodeBadge>
-          <Pulse />
-          B3-HUB-AFRICA
-        </NodeBadge>
+        <Title>
+          <ShieldCheck size={20} color="#3b82f6" />
+          Secure Withdraw
+        </Title>
       </Header>
 
-      <BalanceDisplay>
-        <StatLabel style={{ marginBottom: '8px' }}>Withdrawal Ready Balance</StatLabel>
-        <Amount>
-          <Currency>KES</Currency>
-          {available.toLocaleString()}
-        </Amount>
-      </BalanceDisplay>
+      <div style={{ marginBottom: "24px" }}>
+        <BalanceLabel>Available Balance</BalanceLabel>
+        <BalanceAmount>KES 2,450.00</BalanceAmount>
+      </div>
 
-      <StatsGrid>
-        <StatItem>
-          <StatLabel>Transaction Limit</StatLabel>
-          <StatValue>150,000.00 KES</StatValue>
-        </StatItem>
-        <StatItem>
-          <StatLabel>Settlement Time</StatLabel>
-          <StatValue>IMMEDIATE</StatValue>
-        </StatItem>
-        <StatItem>
-          <StatLabel>Gateway Status</StatLabel>
-          <StatValue style={{ color: '#39b54a', display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <div style={{ width: 8, height: 8, background: '#39b54a', borderRadius: '50%' }} />
-            ACTIVE
-          </StatValue>
-        </StatItem>
-        <StatItem>
-          <StatLabel>System Charge</StatLabel>
-          <StatValue>0.00 KES</StatValue>
-        </StatItem>
-      </StatsGrid>
+      <Form onSubmit={handleWithdraw}>
+        <InputGroup>
+          <Label>Amount to Withdraw</Label>
+          <InputWrapper>
+            <StyledInput 
+              type="text" 
+              placeholder="Min KES 10"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+          </InputWrapper>
+          <Hint>Transaction fee: KES 0.00</Hint>
+        </InputGroup>
 
-      <ActionButton onClick={onWithdraw}>
-        WITHDRAW TO M-PESA
-        <MpesaLogo>M-PESA</MpesaLogo>
-      </ActionButton>
+        <LimitsInfo>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span>Min Withdrawal:</span>
+            <span style={{ color: "#f3f4f6" }}>KES 10</span>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span>Max Daily Limit:</span>
+            <span style={{ color: "#f3f4f6" }}>KES 50,000</span>
+          </div>
+        </LimitsInfo>
 
-      <UrgencyBanner>
-        <Info size={16} />
-        System processing: Batch active. Funds will reflect in 3-5 seconds.
-      </UrgencyBanner>
+        {status && (
+          <StatusBox type={status.type}>
+            <Info size={16} />
+            {status.message}
+          </StatusBox>
+        )}
+
+        <SubmitButton type="submit" isLoading={isLoading}>
+          {isLoading ? "Processing..." : "Withdraw Funds"}
+        </SubmitButton>
+      </Form>
     </CardContainer>
   );
 };
