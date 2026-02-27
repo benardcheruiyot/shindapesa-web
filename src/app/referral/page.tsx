@@ -199,11 +199,11 @@ export default function Referral() {
           <StatsGrid>
             <StatCard>
               <StatLabel>Direct Partners</StatLabel>
-              <StatValue>{user?.referrals?.length || 0}</StatValue>
+              <StatValue>0</StatValue>
             </StatCard>
             <StatCard>
               <StatLabel>Network Reach</StatLabel>
-              <StatValue>{(user?.referrals?.length || 0) * 3}</StatValue>
+              <StatValue>0</StatValue>
             </StatCard>
           </StatsGrid>
           
