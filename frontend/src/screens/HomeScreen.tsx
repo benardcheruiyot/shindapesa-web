@@ -207,7 +207,12 @@ const HeaderActions = styled.div`
     gap: 6px;
     
     .live-stats {
-      display: none !important;
+      padding: 4px 8px !important;
+      margin-right: 0 !important;
+      
+      span {
+        font-size: 0.65rem !important;
+      }
     }
     
     button {
