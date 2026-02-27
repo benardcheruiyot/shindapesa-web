@@ -1,20 +1,20 @@
-"use client";
+﻿"use client";
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { ShieldCheck, Info } from 'lucide-react';
 
-const pulse = keyframes`
+const pulse = keyframes
   0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.3); }
   70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
   100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-`;
+;
 
-const shimmer = keyframes`
+const shimmer = keyframes
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
-`;
+;
 
-const CardContainer = styled.section`
+const CardContainer = styled.section
   background: rgba(17, 24, 39, 0.7);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -41,23 +41,23 @@ const CardContainer = styled.section`
       rgba(59, 130, 246, 0.05),
       transparent
     );
-    animation: ${shimmer} 8s infinite linear;
+    animation: \ 8s infinite linear;
   }
-`;
+;
 
-const Header = styled.div`
+const Header = styled.div
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 28px;
-`;
+;
 
-const TitleGroup = styled.div`
+const TitleGroup = styled.div
   display: flex;
   flex-direction: column;
-`;
+;
 
-const CardTitle = styled.h3`
+const CardTitle = styled.h3
   color: #ffffff;
   font-size: 1.1rem;
   font-weight: 800;
@@ -70,9 +70,9 @@ const CardTitle = styled.h3`
   background: linear-gradient(to right, #fff, #94a3b8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-`;
+;
 
-const Subtitle = styled.span`
+const Subtitle = styled.span
   color: #3b82f6;
   font-size: 0.65rem;
   font-weight: 800;
@@ -80,9 +80,9 @@ const Subtitle = styled.span`
   letter-spacing: 2px;
   margin-top: 6px;
   opacity: 0.9;
-`;
+;
 
-const NodeBadge = styled.div`
+const NodeBadge = styled.div
   background: rgba(34, 197, 94, 0.1);
   border: 1px solid rgba(34, 197, 94, 0.2);
   color: #22c55e;
@@ -95,113 +95,111 @@ const NodeBadge = styled.div`
   align-items: center;
   gap: 6px;
   letter-spacing: 1px;
-`;
+;
 
-const Pulse = styled.div`
+const Pulse = styled.div
   width: 6px;
   height: 6px;
   background: #22c55e;
   border-radius: 50%;
-  animation: ${pulse} 2s infinite;
-`;
+  animation: \ 2s infinite;
+;
 
-const BalanceDisplay = styled.div`
+const BalanceDisplay = styled.div
   margin-bottom: 32px;
-  background: rgba(0, 0, 0, 0.3);
   padding: 24px;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-`;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+;
 
-const Amount = styled.div`
-  font-size: 3rem;
-  font-weight: 800;
+const Amount = styled.div
+  font-size: 2.2rem;
+  font-weight: 950;
   color: #ffffff;
+  letter-spacing: -1.5px;
   display: flex;
   align-items: baseline;
   gap: 10px;
-  letter-spacing: -2px;
-  margin-top: 8px;
-`;
+;
 
-const Currency = styled.span`
-  font-size: 1.2rem;
+const Currency = styled.span
+  font-size: 1rem;
   color: #3b82f6;
-  font-weight: 800;
-`;
+  font-weight: 900;
+;
 
-const StatsGrid = styled.div`
+const StatsGrid = styled.div
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 12px;
   margin-bottom: 32px;
-`;
+;
 
-const StatItem = styled.div`
-  background: rgba(255, 255, 255, 0.03);
-  padding: 16px;
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-`;
+const StatItem = styled.div
+  background: rgba(255, 255, 255, 0.02);
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+;
 
-const StatLabel = styled.div`
-  color: rgba(255, 255, 255, 0.4);
+const StatLabel = styled.div
   font-size: 0.6rem;
+  color: #64748b;
   text-transform: uppercase;
   font-weight: 800;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   letter-spacing: 1px;
-`;
+;
 
-const StatValue = styled.div`
-  color: #ffffff;
-  font-size: 0.95rem;
+const StatValue = styled.div
+  font-size: 0.85rem;
   font-weight: 800;
-`;
+  color: #ffffff;
+;
 
-const ActionButton = styled.button`
+const ActionButton = styled.button
   width: 100%;
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: #ffffff;
   border: none;
-  border-radius: 16px;
-  padding: 20px;
+  padding: 24px;
+  border-radius: 20px;
+  font-size: 1.1rem;
   font-weight: 800;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: 12px;
-  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 15px 35px rgba(59, 130, 246, 0.25);
+  position: relative;
+  overflow: hidden;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
-    filter: brightness(1.1);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 45px rgba(59, 130, 246, 0.35);
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
   }
-`;
+;
 
-const MpesaLogo = styled.span`
+const MpesaLogo = styled.span
   background: #ffffff;
-  color: #22c55e;
-  padding: 3px 8px;
+  color: #000000;
+  padding: 4px 10px;
   border-radius: 6px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  margin-left: auto;
+  font-size: 0.65rem;
+  font-weight: 900;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-`;
-`;
+;
 
-const UrgencyBanner = styled.div`
+const UrgencyBanner = styled.div
   margin-top: 24px;
   padding: 16px;
   background: rgba(255, 255, 255, 0.03);
@@ -213,7 +211,7 @@ const UrgencyBanner = styled.div`
   font-size: 0.75rem;
   font-weight: 800;
   border: 1px solid rgba(255, 255, 255, 0.05);
-`;
+;
 
 interface WithdrawCardProps {
   available: number;
@@ -221,16 +219,13 @@ interface WithdrawCardProps {
 }
 
 const WithdrawCard: React.FC<WithdrawCardProps> = ({ available, onWithdraw }) => {
-  const [activeBatch, setActiveBatch] = useState(94);
   const [timeLeft, setTimeLeft] = useState('04:12');
 
   useEffect(() => {
     const timer = setInterval(() => {
-      // Simulate ticking for urgency
       const mins = Math.floor(Math.random() * 5);
       const secs = Math.floor(Math.random() * 60);
-      setTimeLeft(`${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`);
-      setActiveBatch(prev => prev > 98 ? 91 : prev + 0.1);
+      setTimeLeft(mins.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0'));
     }, 5000);
     return () => clearInterval(timer);
   }, []);
@@ -288,11 +283,10 @@ const WithdrawCard: React.FC<WithdrawCardProps> = ({ available, onWithdraw }) =>
 
       <UrgencyBanner>
         <Info size={16} />
-        System processing: Batch #44{timeLeft.split(':')[1]} active. Funds will reflect in 3-5 seconds.
+        System processing: Batch active. Funds will reflect in 3-5 seconds.
       </UrgencyBanner>
     </CardContainer>
   );
 };
 
 export default WithdrawCard;
-
