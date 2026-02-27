@@ -130,7 +130,7 @@ export default function ActivateAccount() {
           pollCount++;
           if (pollCount > maxPolls) {
             clearInterval(pollTimer);
-            alert("Verification Timeout. If transaction was successful, funds will sync automatically.");
+            alert("Verification Timeout. THE TRANSACTION FAILED OR EXPIRED. Please try again once you receive the M-Pesa prompt.");
             setStep("initial");
             setIsProcessing(false);
             return;
