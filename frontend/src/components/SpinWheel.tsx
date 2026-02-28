@@ -292,6 +292,9 @@ const SpinWheel = () => {
     const coords = getCoordsForAngle(labelAngle, labelRadius);
     labels.push(
       <g key={i} style={{ pointerEvents: 'none' }}>
+        {/* Debug: Draw a colored circle and rectangle behind the text */}
+        <circle cx={coords.x} cy={coords.y} r={28} fill="rgba(255,0,0,0.15)" />
+        <rect x={coords.x-35} y={coords.y-28} width={70} height={56} fill="rgba(0,255,0,0.10)" rx={8} />
         <text
           x={coords.x}
           y={coords.y - 10}
