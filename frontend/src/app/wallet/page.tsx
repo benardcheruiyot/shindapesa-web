@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useUser } from "@/context/UserContext";
 import { mpesaApi } from "@/services/mpesaService";
 import { userService } from "@/services/userService";
+import PaymentOverlay from "@/components/PaymentOverlay";
 import { 
   PageWrapper, 
   BackHeader, 
@@ -219,6 +220,8 @@ export default function Wallet() {
   const router = useRouter();
   const { user, refreshUser, loading } = useUser();
   const [isWithdrawing, setIsWithdrawing] = React.useState(false);
+  const [status, setStatus] = React.useState<'idle' | 'pending' | 'success' | 'error'>('idle');
+  const [statusMessage, setStatusMessage] = React.useState("");
 
   if (loading || !user) return null;
 
@@ -233,24 +236,31 @@ export default function Wallet() {
     }
 
     if (withdrawable < 100) {
-      alert("Minimum withdrawable amount is KES 100. Please activate more funds.");
+      setStatus('error');
+      setStatusMessage("Minimum withdrawable amount is KES 100. Please activate more funds.");
       return;
     }
 
     setIsWithdrawing(true);
+    setStatus('pending');
+    setStatusMessage("Authorizing secure payout to your M-PESA...");
+    
     try {
       const result = await mpesaApi.initiateWithdrawal(user.phone || user.phoneNumber || "", withdrawable);
       
       if (result && result.ResponseCode === "0") {
-        alert("Withdrawal initiated! You will receive your cash shortly.");
+        setStatus('success');
+        setStatusMessage("Withdrawal initiated! You will receive your cash shortly.");
         const updatedUser = { ...user, withdrawableBalance: 0 };
         userService.saveUser(updatedUser, true);
         refreshUser();
       } else {
-        alert("System Error: " + (result?.ResponseDescription || "Gateway Timeout"));
+        setStatus('error');
+        setStatusMessage("System Error: " + (result?.ResponseDescription || "Gateway Timeout"));
       }
     } catch (e) {
-      alert("Network Error. Please try again later.");
+      setStatus('error');
+      setStatusMessage("Network Error. Please check your connection and try again.");
     } finally {
       setIsWithdrawing(false);
     }
@@ -259,6 +269,22 @@ export default function Wallet() {
   return (
     <PageWrapper>
       <BackHeader title="Financial Ledger" onBack={() => router.push('/home')} />
+
+      {status === 'pending' && <PaymentOverlay status="pending" message={statusMessage} />}
+      {status === 'success' && (
+        <PaymentOverlay 
+          status="success" 
+          message={statusMessage} 
+          onClose={() => setStatus('idle')} 
+        />
+      )}
+      {status === 'error' && (
+        <PaymentOverlay 
+          status="error" 
+          message={statusMessage} 
+          onClose={() => setStatus('idle')} 
+        />
+      )}
 
       <ContentContainer>
         <div style={{ display: "flex", flexDirection: "column" }}>
