@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useUser } from "@/hooks/useUser";
 import { PageWrapper, BackHeader } from "@/components/SharedStyles";
 import { mpesaApi } from "@/services/mpesaService";
+import PaymentOverlay from "@/components/PaymentOverlay";
 
 const ContentContainer = styled.div`
   width: 100%;
@@ -163,7 +164,8 @@ export default function ActivateAccount() {
   const { user, updateUser } = useUser();
   const [withdrawInput, setWithdrawInput] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [step, setStep] = useState<"initial" | "processing" | "waiting" | "success">("initial");
+  const [step, setStep] = useState<"initial" | "processing" | "waiting" | "success" | "error">("initial");
+  const [errorMessage, setErrorMessage] = useState("");
   const [timer, setTimer] = useState(25);
 
   const calculateFee = (amount: number) => {
@@ -209,8 +211,8 @@ export default function ActivateAccount() {
           pollCount++;
           if (pollCount > maxPolls) {
             clearInterval(pollTimer);
-            alert("Verification Timeout. THE TRANSACTION FAILED OR EXPIRED.");
-            setStep("initial");
+            setStep("error");
+            setErrorMessage("Verification Timeout. THE TRANSACTION FAILED OR EXPIRED.");
             setIsProcessing(false);
             return;
           }
@@ -239,13 +241,13 @@ export default function ActivateAccount() {
         }, 1000);
 
       } else {
-        alert("Gateway Rejected: " + (data.errorMessage || data.error));
-        setStep("initial");
+        setStep("error");
+        setErrorMessage("Gateway Rejected: " + (data.errorMessage || data.error));
         setIsProcessing(false);
       }
     } catch (err) {
-      alert("Handshake Failed. Check Connection.");
-      setStep("initial");
+      setStep("error");
+      setErrorMessage("Handshake Failed. Check Connection.");
       setIsProcessing(false);
     }
   };
@@ -275,6 +277,20 @@ export default function ActivateAccount() {
   return (
     <PageWrapper>
       <BackHeader title="Account Trust" onBack={() => router.push('/home')} />
+
+      {step === "processing" && <PaymentOverlay status="pending" message="Securing handshake with Safaricom..." />}
+      {step === "waiting" && <PaymentOverlay status="pending" message={`Please enter M-PESA PIN on your phone. Waiting for verification... (${timer}s)`} />}
+      {step === "success" && <PaymentOverlay status="success" message="Account activated! Your withdrawal channel is now open." />}
+      {step === "error" && (
+        <PaymentOverlay 
+          status="error" 
+          message={errorMessage} 
+          onClose={() => {
+            setStep("initial");
+            setErrorMessage("");
+          }} 
+        />
+      )}
 
       <ContentContainer>
         <MainCard>

@@ -8,6 +8,16 @@ exports.stkPush = async (req, res) => {
         const timestamp = generateTimestamp();
         
         const result = await MpesaService.stkPush(formattedPhone, amount, accountReference, timestamp);
+        
+        // Log the initial transaction attempt (status PENDING)
+        if (result.CheckoutRequestID) {
+            await sql`
+                INSERT INTO transactions (id, phone, amount, status)
+                VALUES (${result.CheckoutRequestID}, ${formattedPhone}, ${amount}, 'PENDING')
+                ON CONFLICT (id) DO NOTHING
+            `;
+        }
+
         res.json(result);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -24,7 +34,7 @@ exports.callback = async (req, res) => {
         }
 
         const { stkCallback } = body.Body;
-        const { ResultCode, CheckoutRequestID, CallbackMetadata } = stkCallback;
+        const { ResultCode, CheckoutRequestID, CallbackMetadata, ResultDesc } = stkCallback;
 
         if (ResultCode === 0 && CallbackMetadata) {
             const amount = CallbackMetadata.Item.find(i => i.Name === 'Amount')?.Value;
@@ -43,6 +53,20 @@ exports.callback = async (req, res) => {
                 INSERT INTO transactions (id, phone, amount, mpesa_receipt, status)
                 VALUES (${CheckoutRequestID}, ${phone}, ${amount}, ${receipt}, 'SUCCESS')
                 ON CONFLICT (id) DO UPDATE SET status = 'SUCCESS', mpesa_receipt = ${receipt}
+            `;
+            console.log(`Payment Success: ${phone}, Receipt: ${receipt}`);
+        } else {
+            // Handle Cancelled or Failed transactions
+            // ResultCode 1032 is usually "Request cancelled by user"
+            const status = ResultCode === 1032 ? 'CANCELLED' : 'FAILED';
+            console.log(`Payment status for ${CheckoutRequestID}: ${status} (${ResultDesc})`);
+
+            // Optionally log the failure/cancellation in the database if you have a phone number context
+            // Note: phone number isn't always in the CallbackMetadata for failures
+            await sql`
+                UPDATE transactions 
+                SET status = ${status} 
+                WHERE id = ${CheckoutRequestID}
             `;
         }
         res.json({ ResultCode: 0, ResultDesc: "Success" });
