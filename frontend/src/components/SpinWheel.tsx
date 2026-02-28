@@ -294,19 +294,21 @@ const SpinWheel = () => {
 
     labels.push(
       <g key={i} transform={`rotate(${rotationDeg},${coords.x},${coords.y})`}>
+        {/* Force labels to always render on top with high z-index via layering */}
         <text
           x={coords.x}
           y={coords.y - 12}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize="0.6rem"
+          fontSize="0.7rem"
           fontWeight="900"
-          fill="#ffffff"
+          fill="#FFFFFF"
           style={{ 
-            textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
-            opacity: 0.8, 
+            textShadow: '0 2px 4px rgba(0,0,0,1)', 
+            opacity: 1, 
             letterSpacing: '0.5px',
-            textTransform: 'uppercase'
+            textTransform: 'uppercase',
+            pointerEvents: 'none'
           }}
         >
           {wheelData[i].label}
@@ -316,11 +318,12 @@ const SpinWheel = () => {
           y={coords.y + 12}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize="1.3rem"
+          fontSize="1.5rem"
           fontWeight="1000"
-          fill="#ffffff"
+          fill="#FFFFFF"
           style={{ 
-            textShadow: '0 2px 10px rgba(0,0,0,0.8), 0 0 15px rgba(59, 130, 246, 0.4)',
+            textShadow: '0 2px 10px rgba(0,0,0,1), 0 0 20px rgba(59, 130, 246, 0.6)',
+            pointerEvents: 'none'
           }}
         >
           {wheelData[i].valueTag}
@@ -331,7 +334,7 @@ const SpinWheel = () => {
 
   return (
     <WheelContainer>
-      <div style={{ color: 'var(--primary-light)', fontWeight: 950, marginBottom: 15, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: 4, display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div style={{ color: '#3b82f6', fontWeight: 950, marginBottom: 15, fontSize: '1rem', textTransform: 'uppercase', letterSpacing: 4, display: 'flex', alignItems: 'center', gap: 10, textShadow: '0 0 10px rgba(59, 130, 246, 0.5)' }}>
         <span style={{ fontSize: '1.2rem' }}>💎</span>
         {user?.freeSpins ? `${user.freeSpins} PRESTIGE SPINS` : 'ULTIMATE SAPPHIRE WHEEL'}
       </div>
@@ -340,23 +343,26 @@ const SpinWheel = () => {
         <WheelOuterRing />
         <Pointer />
         <WheelWrapper rotation={rotation} transitioning={isSpinning}>
-          <svg width={size} height={size} style={{ filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.5))' }}>
+          <svg 
+            width={size} 
+            height={size} 
+            viewBox={`0 0 ${size} ${size}`}
+            style={{ 
+              filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.5))',
+              overflow: 'visible' 
+            }}
+          >
             <defs>
               {gradients}
-              <filter id="innerShadow">
-                <feFlood floodColor="black" floodOpacity="0.5" />
-                <feComposite operator="out" in2="SourceGraphic" />
-                <feGaussianBlur stdDeviation="3" />
-                <feComposite operator="atop" in2="SourceGraphic" />
-              </filter>
             </defs>
-            <g filter="url(#innerShadow)">
+            <g>
               {paths}
             </g>
-            {labels}
-            <circle cx={center} cy={center} r={28} fill="#0f172a" stroke="var(--primary)" strokeWidth={2} />
-            <circle cx={center} cy={center} r={22} fill="transparent" stroke="rgba(255,255,255,0.1)" strokeWidth={1} />
-            <text x={center} y={center} textAnchor="middle" dominantBaseline="middle" dy=".3em" fontSize="1.4rem">💎</text>
+            <g style={{ pointerEvents: 'none' }}>
+              {labels}
+            </g>
+            <circle cx={center} cy={center} r={30} fill="#0d1526" stroke="#3b82f6" strokeWidth={3} />
+            <text x={center} y={center} textAnchor="middle" dominantBaseline="middle" dy=".3em" fontSize="1.6rem">💎</text>
           </svg>
         </WheelWrapper>
 
