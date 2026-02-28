@@ -207,17 +207,17 @@ const SpinWheel = () => {
     let wonSliceIndex: number;
 
     if (isFreeSpin) {
-      // Sequence for exactly 3 wins:
-      // Spin 1: Loss (Index 1)
-      // Spin 2: Win x5 (Index 4) -> (KES 1,000 - 5,000)
-      // Spin 3: Win x10 (Index 2) -> (KES 5,001 - 10,000)
-      // Spin 4: Loss (Index 5)
-      // Spin 5: Win x20 (Index 0) -> (KES 10,001 - 20,000)
-      // Total potential: KES 16,000 - KES 35,000
+      // Sequence for exactly 2 wins (one high x100 or x200, one small x10) and 3 losses:
+      // Spin 1: Loss (Index 1) -> "x"
+      // Spin 2: Random High Win (Index 0 for x200 OR Index 2 for x100)
+      // Spin 3: Loss (Index 3) -> "x"
+      // Spin 4: Small Win (Index 8) -> x10 (KES 1,000)
+      // Spin 5: Loss (Index 5) -> "x"
       const sequenceIndex = 5 - currentSpins; 
-      const indices = [1, 4, 2, 5, 0]; 
+      const highWinIndex = Math.random() > 0.5 ? 0 : 2; // Randomly choose between x200 or x100
+      const indices = [1, highWinIndex, 3, 8, 5]; 
       wonSliceIndex = indices[sequenceIndex] ?? 5; 
-      console.log(`Executing Promo Spin #${sequenceIndex + 1}, target index: ${wonSliceIndex}`);
+      console.log(`Executing Randomized Mixed-Promo Spin #${sequenceIndex + 1}, target index: ${wonSliceIndex}`);
     } else {
       wonSliceIndex = Math.floor(Math.random() * wheelData.length);
     }
@@ -292,15 +292,13 @@ const SpinWheel = () => {
     const coords = getCoordsForAngle(labelAngle, labelRadius);
     labels.push(
       <g key={i} transform={`rotate(${labelAngle},${coords.x},${coords.y})`}>
-        {wheelData[i].valueTag !== '0' && (
-          <circle
-            cx={coords.x}
-            cy={coords.y + 10}
-            r={18}
-            fill="rgba(255, 255, 255, 0.15)"
-            style={{ filter: 'blur(4px)' }}
-          />
-        )}
+        <circle
+          cx={coords.x}
+          cy={coords.y + 10}
+          r={18}
+          fill="rgba(59, 130, 246, 0.3)"
+          style={{ filter: 'blur(8px)' }}
+        />
         <text
           x={coords.x}
           y={coords.y - 14}
@@ -318,11 +316,11 @@ const SpinWheel = () => {
           y={coords.y + 10}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize={wheelData[i].valueTag === '0' ? "1rem" : "1.0rem"}
+          fontSize="1.4rem"
           fontWeight="1000"
-          fill={wheelData[i].valueTag === '0' ? "rgba(255,255,255,0.4)" : "#ffffff"}
+          fill="#ffffff"
           style={{ 
-            textShadow: wheelData[i].valueTag === '0' ? 'none' : '0 0 15px rgba(59, 130, 246, 0.8), 0 2px 5px rgba(0,0,0,0.8)',
+            textShadow: '0 0 15px rgba(59, 130, 246, 0.8), 0 2px 5px rgba(0,0,0,0.8)',
           }}
         >
           {wheelData[i].valueTag}
