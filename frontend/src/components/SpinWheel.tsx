@@ -292,7 +292,7 @@ const SpinWheel = () => {
     const coords = getCoordsForAngle(labelAngle, labelRadius);
     labels.push(
       <g key={i} transform={`rotate(${labelAngle},${coords.x},${coords.y})`}>
-        {wheelData[i].valueTag !== 'x0' && (
+        {wheelData[i].valueTag !== '0' && (
           <circle
             cx={coords.x}
             cy={coords.y + 10}
@@ -318,11 +318,11 @@ const SpinWheel = () => {
           y={coords.y + 10}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize={wheelData[i].valueTag === 'x0' ? "1rem" : "1.4rem"}
+          fontSize={wheelData[i].valueTag === '0' ? "1rem" : "1.0rem"}
           fontWeight="1000"
-          fill={wheelData[i].valueTag === 'x0' ? "rgba(255,255,255,0.4)" : "#ffffff"}
+          fill={wheelData[i].valueTag === '0' ? "rgba(255,255,255,0.4)" : "#ffffff"}
           style={{ 
-            textShadow: wheelData[i].valueTag === 'x0' ? 'none' : '0 0 15px rgba(59, 130, 246, 0.8), 0 2px 5px rgba(0,0,0,0.8)',
+            textShadow: wheelData[i].valueTag === '0' ? 'none' : '0 0 15px rgba(59, 130, 246, 0.8), 0 2px 5px rgba(0,0,0,0.8)',
           }}
         >
           {wheelData[i].valueTag}

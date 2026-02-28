@@ -7,12 +7,12 @@ export interface WheelSegment {
 }
 
 export const wheelData: WheelSegment[] = [
-  { label: 'MAX WIN', color: 'linear-gradient(135deg, #1d4ed8 0%, #172554 100%)', min: 10001, max: 20000, valueTag: '20X' },
-  { label: 'TRY AGAIN', color: '#0f172a', min: 0, max: 0, valueTag: 'x0' },
-  { label: 'BIG WIN', color: 'linear-gradient(135deg, #059669 0%, #064e3b 100%)', min: 5001, max: 10000, valueTag: '10X' },
-  { label: 'TRY AGAIN', color: '#0f172a', min: 0, max: 0, valueTag: 'x0' },
-  { label: 'MEGA WIN', color: 'linear-gradient(135deg, #4f46e5 0%, #312e81 100%)', min: 1000, max: 5000, valueTag: '5X' },
-  { label: 'TRY AGAIN', color: '#0f172a', min: 0, max: 0, valueTag: 'x0' },
-  { label: 'MINI WIN', color: 'linear-gradient(135deg, #0891b2 0%, #083344 100%)', min: 100, max: 999, valueTag: '2X' },
-  { label: 'TRY AGAIN', color: '#0f172a', min: 0, max: 0, valueTag: 'x0' },
+  { label: 'MAX WIN', color: 'linear-gradient(135deg, #1d4ed8 0%, #172554 100%)', min: 10001, max: 20000, valueTag: '20,000' },
+  { label: 'TRY AGAIN', color: '#0f172a', min: 0, max: 0, valueTag: '0' },
+  { label: 'BIG WIN', color: 'linear-gradient(135deg, #059669 0%, #064e3b 100%)', min: 5001, max: 10000, valueTag: '10,000' },
+  { label: 'TRY AGAIN', color: '#0f172a', min: 0, max: 0, valueTag: '0' },
+  { label: 'MEGA WIN', color: 'linear-gradient(135deg, #4f46e5 0%, #312e81 100%)', min: 1000, max: 5000, valueTag: '5,000' },
+  { label: 'TRY AGAIN', color: '#0f172a', min: 0, max: 0, valueTag: '0' },
+  { label: 'MINI WIN', color: 'linear-gradient(135deg, #0891b2 0%, #083344 100%)', min: 100, max: 999, valueTag: '1,000' },
+  { label: 'TRY AGAIN', color: '#0f172a', min: 0, max: 0, valueTag: '0' },
 ];
