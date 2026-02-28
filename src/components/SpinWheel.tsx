@@ -288,31 +288,43 @@ const SpinWheel = () => {
   let labels = [];
   for (let i = 0; i < numSlices; i++) {
     const labelAngle = (i + 0.5) * angle;
-    const labelRadius = radius * 0.65;
+    const labelRadius = radius * 0.7;
     const coords = getCoordsForAngle(labelAngle, labelRadius);
     labels.push(
-      <g key={i} transform={`rotate(${labelAngle},${coords.x},${coords.y})`}>
+      <g key={i} style={{ pointerEvents: 'none' }}>
         <text
           x={coords.x}
-          y={coords.y - 12}
+          y={coords.y - 10}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize="0.7rem"
+          fontSize="13px"
           fontWeight="900"
-          fill="#ffffff"
-          style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)', opacity: 0.8 }}
+          fill="#FFFFFF"
+          style={{
+            textShadow: '0 0 6px #000, 0 0 12px #000',
+            textTransform: 'uppercase',
+            letterSpacing: '1px',
+            paintOrder: 'stroke',
+            stroke: '#000',
+            strokeWidth: 2
+          }}
         >
           {wheelData[i].label}
         </text>
         <text
           x={coords.x}
-          y={coords.y + 10}
+          y={coords.y + 14}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize="1.1rem"
-          fontWeight="950"
-          fill="#ffffff"
-          style={{ textShadow: '0 2px 5px rgba(0,0,0,0.5)' }}
+          fontSize="26px"
+          fontWeight="1000"
+          fill="#FFFFFF"
+          style={{
+            textShadow: '0 0 10px #000, 0 0 20px #3b82f6',
+            paintOrder: 'stroke',
+            stroke: '#000',
+            strokeWidth: 3
+          }}
         >
           {wheelData[i].valueTag}
         </text>
