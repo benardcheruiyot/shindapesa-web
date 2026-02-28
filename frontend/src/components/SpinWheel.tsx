@@ -288,47 +288,34 @@ const SpinWheel = () => {
   let labels = [];
   for (let i = 0; i < numSlices; i++) {
     const labelAngle = (i + 0.5) * angle;
-    // Move labels closer to the middle of the slice
-    const labelRadius = radius * 0.7; 
+    const labelRadius = radius * 0.7;
     const coords = getCoordsForAngle(labelAngle, labelRadius);
-    
-    // Calculate rotation to make text follow the slice direction
-    // 90 is adjusted to make the text perpendicular to the radius
-    const textRotation = labelAngle;
-
+    const width = 70, height = 44;
     labels.push(
-      <g key={i} transform={`translate(${coords.x}, ${coords.y}) rotate(${textRotation})`}>
-        <text
-          x={0}
-          y={-10}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fontSize="11px"
-          fontWeight="900"
-          fill="#FFFFFF"
-          style={{ 
-            textShadow: '0 0 4px #000000, 0 0 8px #000000',
-            textTransform: 'uppercase',
-            letterSpacing: '1px'
-          }}
-        >
-          {wheelData[i].label}
-        </text>
-        <text
-          x={0}
-          y={12}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fontSize="22px"
-          fontWeight="1000"
-          fill="#FFFFFF"
-          style={{ 
-            textShadow: '0 0 6px #000000, 0 0 12px #000000, 0 0 20px rgba(59, 130, 246, 0.8)',
-          }}
-        >
-          {wheelData[i].valueTag}
-        </text>
-      </g>
+      <foreignObject
+        key={i}
+        x={coords.x - width / 2}
+        y={coords.y - height / 2}
+        width={width}
+        height={height}
+        style={{ pointerEvents: 'none', overflow: 'visible' }}
+      >
+        <div style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          width: '100%', height: '100%',
+          transform: `rotate(${labelAngle}deg)`,
+        }}>
+          <span style={{
+            fontSize: '11px', fontWeight: 900, color: '#fff', textShadow: '0 0 4px #000,0 0 8px #000',
+            textTransform: 'uppercase', letterSpacing: '1px', lineHeight: 1, marginBottom: 2,
+            background: 'rgba(0,0,0,0.15)', borderRadius: 4, padding: '0 2px',
+          }}>{wheelData[i].label}</span>
+          <span style={{
+            fontSize: '22px', fontWeight: 1000, color: '#fff', textShadow: '0 0 6px #000,0 0 12px #000,0 0 20px #3b82f6',
+            lineHeight: 1, background: 'rgba(0,0,0,0.18)', borderRadius: 6, padding: '0 4px',
+          }}>{wheelData[i].valueTag}</span>
+        </div>
+      </foreignObject>
     );
   }
 
