@@ -288,42 +288,42 @@ const SpinWheel = () => {
   let labels = [];
   for (let i = 0; i < numSlices; i++) {
     const labelAngle = (i + 0.5) * angle;
-    const labelRadius = radius * 0.65;
+    // Move labels closer to the middle of the slice
+    const labelRadius = radius * 0.7; 
     const coords = getCoordsForAngle(labelAngle, labelRadius);
-    const rotationDeg = labelAngle;
+    
+    // Calculate rotation to make text follow the slice direction
+    // 90 is adjusted to make the text perpendicular to the radius
+    const textRotation = labelAngle;
 
     labels.push(
-      <g key={i} transform={`rotate(${rotationDeg},${coords.x},${coords.y})`}>
-        {/* Force labels to always render on top with high z-index via layering */}
+      <g key={i} transform={`translate(${coords.x}, ${coords.y}) rotate(${textRotation})`}>
         <text
-          x={coords.x}
-          y={coords.y - 12}
+          x={0}
+          y={-10}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize="0.7rem"
+          fontSize="11px"
           fontWeight="900"
           fill="#FFFFFF"
           style={{ 
-            textShadow: '0 2px 4px rgba(0,0,0,1)', 
-            opacity: 1, 
-            letterSpacing: '0.5px',
+            textShadow: '0 0 4px #000000, 0 0 8px #000000',
             textTransform: 'uppercase',
-            pointerEvents: 'none'
+            letterSpacing: '1px'
           }}
         >
           {wheelData[i].label}
         </text>
         <text
-          x={coords.x}
-          y={coords.y + 12}
+          x={0}
+          y={12}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize="1.5rem"
+          fontSize="22px"
           fontWeight="1000"
           fill="#FFFFFF"
           style={{ 
-            textShadow: '0 2px 10px rgba(0,0,0,1), 0 0 20px rgba(59, 130, 246, 0.6)',
-            pointerEvents: 'none'
+            textShadow: '0 0 6px #000000, 0 0 12px #000000, 0 0 20px rgba(59, 130, 246, 0.8)',
           }}
         >
           {wheelData[i].valueTag}
@@ -348,21 +348,22 @@ const SpinWheel = () => {
             height={size} 
             viewBox={`0 0 ${size} ${size}`}
             style={{ 
-              filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.5))',
-              overflow: 'visible' 
+              filter: 'drop-shadow(0 10px 40px rgba(0,0,0,0.7))',
+              overflow: 'visible',
+              display: 'block'
             }}
           >
             <defs>
               {gradients}
             </defs>
-            <g>
+            <g id="wheel-paths">
               {paths}
             </g>
-            <g style={{ pointerEvents: 'none' }}>
+            <g id="wheel-labels" style={{ pointerEvents: 'none' }}>
               {labels}
             </g>
-            <circle cx={center} cy={center} r={30} fill="#0d1526" stroke="#3b82f6" strokeWidth={3} />
-            <text x={center} y={center} textAnchor="middle" dominantBaseline="middle" dy=".3em" fontSize="1.6rem">💎</text>
+            <circle cx={center} cy={center} r={32} fill="#0d1526" stroke="#3b82f6" strokeWidth={3} />
+            <text x={center} y={center} textAnchor="middle" dominantBaseline="middle" dy=".3em" fontSize="1.8rem">💎</text>
           </svg>
         </WheelWrapper>
 
