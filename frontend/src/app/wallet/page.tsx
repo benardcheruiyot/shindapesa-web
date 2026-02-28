@@ -282,7 +282,12 @@ export default function Wallet() {
         <PaymentOverlay 
           status="error" 
           message={statusMessage} 
-          onClose={() => setStatus('idle')} 
+          onClose={() => {
+            setStatus('idle');
+            if (statusMessage.includes("Minimum withdrawable amount")) {
+              router.push("/activate-account");
+            }
+          }} 
         />
       )}
 
