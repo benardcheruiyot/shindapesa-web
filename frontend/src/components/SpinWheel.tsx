@@ -290,37 +290,37 @@ const SpinWheel = () => {
     const labelAngle = (i + 0.5) * angle;
     const labelRadius = radius * 0.65;
     const coords = getCoordsForAngle(labelAngle, labelRadius);
+    const rotationDeg = labelAngle;
+
     labels.push(
-      <g key={i} transform={`rotate(${labelAngle},${coords.x},${coords.y})`}>
-        <circle
-          cx={coords.x}
-          cy={coords.y + 10}
-          r={18}
-          fill="rgba(59, 130, 246, 0.3)"
-          style={{ filter: 'blur(8px)' }}
-        />
+      <g key={i} transform={`rotate(${rotationDeg},${coords.x},${coords.y})`}>
         <text
           x={coords.x}
-          y={coords.y - 14}
+          y={coords.y - 12}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize="0.65rem"
+          fontSize="0.6rem"
           fontWeight="900"
           fill="#ffffff"
-          style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)', opacity: 0.7, letterSpacing: '1px' }}
+          style={{ 
+            textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+            opacity: 0.8, 
+            letterSpacing: '0.5px',
+            textTransform: 'uppercase'
+          }}
         >
           {wheelData[i].label}
         </text>
         <text
           x={coords.x}
-          y={coords.y + 10}
+          y={coords.y + 12}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize="1.4rem"
+          fontSize="1.3rem"
           fontWeight="1000"
           fill="#ffffff"
           style={{ 
-            textShadow: '0 0 15px rgba(59, 130, 246, 0.8), 0 2px 5px rgba(0,0,0,0.8)',
+            textShadow: '0 2px 10px rgba(0,0,0,0.8), 0 0 15px rgba(59, 130, 246, 0.4)',
           }}
         >
           {wheelData[i].valueTag}
