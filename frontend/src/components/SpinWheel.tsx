@@ -341,7 +341,6 @@ const SpinWheel = () => {
         <span style={{ fontSize: '1.2rem' }}>💎</span>
         {user?.freeSpins ? `${user.freeSpins} PRESTIGE SPINS` : 'ULTIMATE SAPPHIRE WHEEL'}
       </div>
-      
       <div style={{ position: 'relative', padding: 10 }}>
         <WheelOuterRing />
         <Pointer />
@@ -368,6 +367,47 @@ const SpinWheel = () => {
             <circle cx={center} cy={center} r={32} fill="#0d1526" stroke="#3b82f6" strokeWidth={3} />
             <text x={center} y={center} textAnchor="middle" dominantBaseline="middle" dy=".3em" fontSize="1.8rem">💎</text>
           </svg>
+          {/* DEBUG: HTML overlay for odds/labels */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: size,
+            height: size,
+            pointerEvents: 'none',
+            zIndex: 9999,
+          }}>
+            {Array.from({length: numSlices}).map((_, i) => {
+              const labelAngle = (i + 0.5) * angle;
+              const labelRadius = radius * 0.7;
+              const rad = (labelAngle - 90) * (Math.PI / 180);
+              const x = center + labelRadius * Math.cos(rad);
+              const y = center + labelRadius * Math.sin(rad);
+              return (
+                <div key={i} style={{
+                  position: 'absolute',
+                  left: x - 40,
+                  top: y - 30,
+                  width: 80,
+                  height: 60,
+                  background: 'rgba(255,255,0,0.25)',
+                  border: '2px dashed #f00',
+                  color: '#000',
+                  fontWeight: 900,
+                  fontSize: 18,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  pointerEvents: 'none',
+                  zIndex: 9999,
+                }}>
+                  <span>{wheelData[i].label}</span>
+                  <span style={{fontSize: 26}}>{wheelData[i].valueTag}</span>
+                </div>
+              );
+            })}
+          </div>
         </WheelWrapper>
 
         {pendingWin && (
