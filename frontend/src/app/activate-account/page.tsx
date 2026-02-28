@@ -216,20 +216,15 @@ export default function ActivateAccount() {
           }
 
           try {
-            const statusData = await mpesaApi.checkStkStatus(checkoutID);
+            // Check user balance instead of STK status ID
+            const statusData = await mpesaApi.checkUserBalance(user?.phoneNumber || user?.phone || "");
 
-            if (statusData.status === "SUCCESS") {
+            if (statusData && statusData.is_activated) {
               clearInterval(pollTimer);
               handleSuccess();
-            } else if (statusData.status === "FAILED") {
-              clearInterval(pollTimer);
-              const failureReason = statusData.resultDesc || "Transaction was not completed.";
-              alert(`AUTHENTICATION FAILED: ${failureReason}`);
-              setStep("initial");
-              setIsProcessing(false);
             }
           } catch (pollErr) {
-            console.error("Status check failed", pollErr);
+            console.error("Balance check failed", pollErr);
           }
         }, 1500);
 
