@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 const rotate = keyframes`
   from { transform: rotate(0deg); }
@@ -23,7 +23,7 @@ const Spinner = styled.div`
   border: 5px solid rgba(59, 130, 246, 0.1);
   border-top: 5px solid #3b82f6;
   border-radius: 50%;
-  animation: ${rotate} 1s linear infinite;
+  ${css`animation: ${rotate} 1s linear infinite;`}
 `;
 
 const Text = styled.p`

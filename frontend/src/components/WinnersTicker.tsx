@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 
 const scroll = keyframes`
   0% { transform: translateX(0); }
@@ -43,7 +43,7 @@ const TickerWrapper = styled.div`
 
 const TickerContent = styled.div`
   display: inline-block;
-  animation: ${scroll} 80s linear infinite;
+  ${css`animation: ${scroll} 80s linear infinite;`}
   padding-left: 100%;
 `;
 

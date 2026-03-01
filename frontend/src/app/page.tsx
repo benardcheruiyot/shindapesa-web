@@ -1,6 +1,6 @@
 ﻿"use client";
 import React, { useEffect } from "react";
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useUser";
 import { ShieldCheck, Lock, Globe } from 'lucide-react';
@@ -49,7 +49,7 @@ const ContentCard = styled.div`
   max-width: 440px;
   width: 100%;
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
-  animation: ${fadeIn} 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  ${css`animation: ${fadeIn} 1.2s cubic-bezier(0.16, 1, 0.3, 1);`}
   position: relative;
   z-index: 2;
 

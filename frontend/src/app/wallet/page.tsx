@@ -12,6 +12,7 @@ import {
   fadeIn, 
   PrimaryButton 
 } from "@/components/SharedStyles";
+import { css } from "styled-components";
 
 const ContentContainer = styled.div`
   width: 92vw;
@@ -21,7 +22,7 @@ const ContentContainer = styled.div`
   gap: 24px;
   margin-top: 80px;
   margin-bottom: 120px;
-  animation: ${fadeIn} 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  ${css`animation: ${fadeIn} 0.8s cubic-bezier(0.16, 1, 0.3, 1);`}
 
   @media (max-width: 850px) {
     grid-template-columns: 1fr;
