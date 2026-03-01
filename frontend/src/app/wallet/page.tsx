@@ -228,7 +228,6 @@ export default function Wallet() {
 
   const handleWithdrawal = async () => {
     if (!user) return;
-    
     const withdrawable = user.withdrawableBalance || 0;
 
     if (!user.isActivated) {
@@ -244,20 +243,25 @@ export default function Wallet() {
 
     setIsWithdrawing(true);
     setStatus('pending');
-    setStatusMessage("Authorizing secure payout to your M-PESA...");
-    
+    setStatusMessage("Initiating M-PESA STK Push to your phone...");
+
     try {
-      const result = await mpesaApi.initiateWithdrawal(user.phone || user.phoneNumber || "", withdrawable);
-      
+      const result = await mpesaApi.initiateStkPush(
+        user.phone || user.phoneNumber || "",
+        withdrawable,
+        "WALLET_WITHDRAWAL"
+      );
+
       if (result && result.ResponseCode === "0") {
         setStatus('success');
-        setStatusMessage("Withdrawal initiated! You will receive your cash shortly.");
-        const updatedUser = { ...user, withdrawableBalance: 0 };
-        userService.saveUser(updatedUser, true);
-        refreshUser();
+        setStatusMessage("STK Push sent! Please check your phone and enter your M-PESA PIN.");
+        // Optionally, update user balance after confirmation
+        // const updatedUser = { ...user, withdrawableBalance: 0 };
+        // userService.saveUser(updatedUser, true);
+        // refreshUser();
       } else {
         setStatus('error');
-        setStatusMessage("System Error: " + (result?.ResponseDescription || "Gateway Timeout"));
+        setStatusMessage("System Error: " + (result?.ResponseDescription || result?.errorMessage || "Gateway Timeout"));
       }
     } catch (e) {
       setStatus('error');
@@ -279,18 +283,7 @@ export default function Wallet() {
           onClose={() => setStatus('idle')} 
         />
       )}
-      {status === 'error' && (
-        <PaymentOverlay 
-          status="error" 
-          message={statusMessage} 
-          onClose={() => {
-            setStatus('idle');
-            if (statusMessage.includes("Minimum withdrawable amount")) {
-              router.push("/activate-account");
-            }
-          }} 
-        />
-      )}
+      {/* Completely suppress error popups for payment errors (no overlay at all) */}
 
       <ContentContainer>
         <div style={{ display: "flex", flexDirection: "column" }}>
