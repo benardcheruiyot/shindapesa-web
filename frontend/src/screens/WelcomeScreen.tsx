@@ -2,6 +2,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { css } from 'styled-components';
 import { useRouter } from 'next/navigation';
 import { ShieldCheck } from 'lucide-react';
 
@@ -42,7 +43,7 @@ const FloatingElement = styled.div<{ $top: string; $left: string; $duration: str
   height: 15vw;
   background: radial-gradient(circle, rgba(0, 91, 170, 0.08) 0%, transparent 70%);
   border-radius: 50%;
-  animation: ${float} ${props => props.$duration} ease-in-out infinite;
+  ${({ $duration }) => css`animation: ${float} ${$duration} ease-in-out infinite;`}
   pointer-events: none;
 `;
 
@@ -51,7 +52,7 @@ const Content = styled.div`
   max-width: 440px;
   text-align: center;
   z-index: 2;
-  animation: ${fadeIn} 0.8s ease-out;
+  ${css`animation: ${fadeIn} 0.8s ease-out;`}
 `;
 
 const LogoContainer = styled.div`
@@ -68,7 +69,7 @@ const GlowRing = styled.div`
   height: 160px;
   border-radius: 50%;
   border: 1px solid rgba(59, 130, 246, 0.2);
-  animation: ${spin} 12s linear infinite;
+  ${css`animation: ${spin} 12s linear infinite;`}
   &:before {
     content: '';
     position: absolute;
@@ -148,7 +149,7 @@ const Spinner = styled.div`
   border: 3px solid rgba(59, 130, 246, 0.1);
   border-top-color: #3b82f6;
   border-radius: 50%;
-  animation: ${spin} 0.8s linear infinite;
+  ${css`animation: ${spin} 0.8s linear infinite;`}
   margin: 0 auto;
 `;
 
