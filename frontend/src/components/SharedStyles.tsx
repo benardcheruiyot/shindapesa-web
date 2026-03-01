@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 export const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -44,7 +44,7 @@ export const AuthCard = styled.div`
     0 20px 25px -5px rgba(0, 0, 0, 0.2),
     0 10px 10px -5px rgba(0, 0, 0, 0.04),
     inset 0 1px 1px rgba(255, 255, 255, 0.05);
-  animation: ${fadeIn} 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  ${css`animation: ${fadeIn} 0.8s cubic-bezier(0.16, 1, 0.3, 1);`}
   z-index: 2;
 
   @media (max-width: 480px) {

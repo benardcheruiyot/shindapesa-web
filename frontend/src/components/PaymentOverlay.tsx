@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 const fadeIn = keyframes`
   from { opacity: 0; }
@@ -28,7 +28,7 @@ const Overlay = styled.div`
   justify-content: center;
   z-index: 9999;
   padding: 24px;
-  animation: ${fadeIn} 0.3s ease-out;
+  ${css`animation: ${fadeIn} 0.3s ease-out;`}
 `;
 
 const Modal = styled.div`
@@ -40,7 +40,7 @@ const Modal = styled.div`
   max-width: 400px;
   text-align: center;
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
-  animation: ${scaleIn} 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  ${css`animation: ${scaleIn} 0.4s cubic-bezier(0.16, 1, 0.3, 1);`}
   position: relative;
   overflow: hidden;
 `;
@@ -55,19 +55,19 @@ const StatusIcon = styled.div<{ type: 'pending' | 'success' | 'error' }>`
   justify-content: center;
   font-size: 2.5rem;
   
-  ${props => props.type === 'pending' && `
+  ${({ type }) => type === 'pending' && css`
     border: 3px solid rgba(59, 130, 246, 0.2);
     border-top-color: #3b82f6;
     animation: ${spin} 1s linear infinite;
   `}
   
-  ${props => props.type === 'success' && `
+  ${({ type }) => type === 'success' && css`
     background: rgba(34, 197, 94, 0.1);
     color: #4ade80;
     border: 2px solid rgba(34, 197, 94, 0.2);
   `}
   
-  ${props => props.type === 'error' && `
+  ${({ type }) => type === 'error' && css`
     background: rgba(239, 68, 68, 0.1);
     color: #f87171;
     border: 2px solid rgba(239, 68, 68, 0.2);

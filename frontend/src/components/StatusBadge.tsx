@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 
 const slideIn = keyframes`
   from { transform: translateX(-20px); opacity: 0; }
@@ -20,7 +20,7 @@ const Badge = styled.div<{ $isActivated: boolean }>`
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  animation: ${slideIn} 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  ${css`animation: ${slideIn} 0.5s cubic-bezier(0.16, 1, 0.3, 1);`}
   letter-spacing: 0.02em;
 
   span:first-child {

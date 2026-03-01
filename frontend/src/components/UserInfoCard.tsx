@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 const pulse = keyframes`
   0% { transform: scale(1); opacity: 1; }

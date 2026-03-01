@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 const float = keyframes`
   0% { transform: translateY(0px) rotate(0deg); }
@@ -61,7 +61,7 @@ const PromoIcon = styled.div`
   margin-bottom: 24px;
   display: inline-block;
   filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5));
-  animation: ${float} 4s ease-in-out infinite;
+  ${css`animation: ${float} 4s ease-in-out infinite;`}
 `;
 
 const Title = styled.h2`
