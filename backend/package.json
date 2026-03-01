@@ -4,7 +4,7 @@
   "description": "Standalone M-Pesa Backend for Shindapesa",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "npm run init-db && node index.js",
     "dev": "nodemon index.js",
     "init-db": "node src/config/initDb.js"
   },
