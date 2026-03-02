@@ -274,30 +274,31 @@ export default function Wallet() {
   };
 
   return (
-        {/* DEBUG OVERLAY: Shows the API URL at the top left of the page for troubleshooting */}
-        <div style={{ position: 'fixed', top: 0, left: 0, background: '#222', color: '#fff', padding: '6px 12px', zIndex: 9999, fontSize: 12, opacity: 0.85 }}>
-          <strong>API URL:</strong> {apiUrl || 'NOT SET'}
-        </div>
-    <PageWrapper>
-      <BackHeader title="Financial Ledger" onBack={() => router.push('/home')} />
+    <>
+      {/* DEBUG OVERLAY: Shows the API URL at the top left of the page for troubleshooting */}
+      <div style={{ position: 'fixed', top: 0, left: 0, background: '#222', color: '#fff', padding: '6px 12px', zIndex: 9999, fontSize: 12, opacity: 0.85 }}>
+        <strong>API URL:</strong> {apiUrl || 'NOT SET'}
+      </div>
+      <PageWrapper>
+        <BackHeader title="Financial Ledger" onBack={() => router.push('/home')} />
 
-      {status === 'pending' && <PaymentOverlay status="pending" message={statusMessage} />}
-      {status === 'success' && (
-        <PaymentOverlay 
-          status="success" 
-          message={statusMessage} 
-          onClose={() => setStatus('idle')} 
-        />
-      )}
-      {/* Completely suppress error popups for payment errors (no overlay at all) */}
+        {status === 'pending' && <PaymentOverlay status="pending" message={statusMessage} />}
+        {status === 'success' && (
+          <PaymentOverlay 
+            status="success" 
+            message={statusMessage} 
+            onClose={() => setStatus('idle')} 
+          />
+        )}
+        {/* Completely suppress error popups for payment errors (no overlay at all) */}
 
-      <ContentContainer>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <BalanceCard>
-            <BalanceTitle>Liquid Settlements</BalanceTitle>
-            <BalanceAmount><span>KES</span>{Number(user?.withdrawableBalance || 0).toLocaleString()}</BalanceAmount>
-            
-            <SubBalanceGrid>
+        <ContentContainer>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <BalanceCard>
+              <BalanceTitle>Liquid Settlements</BalanceTitle>
+              <BalanceAmount><span>KES</span>{Number(user?.withdrawableBalance || 0).toLocaleString()}</BalanceAmount>
+              
+              <SubBalanceGrid>
               <SubItem>
                 <span>Account Equity</span>
                 <span>KES {Number(user?.balance || 0).toLocaleString()}</span>
