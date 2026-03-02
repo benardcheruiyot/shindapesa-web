@@ -316,7 +316,7 @@ export default function Wallet() {
               </SubItem>
             </SubBalanceGrid>
 
-            <PrimaryButton onClick={handleWithdrawal} disabled={isWithdrawing}>
+            <PrimaryButton onClick={handleWithdrawal} disabled={user?.isActivated && isWithdrawing}>
               {isWithdrawing ? "Authorizing Payout..." : "Withdraw to M-PESA"}
             </PrimaryButton>
             
