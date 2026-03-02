@@ -192,21 +192,18 @@ export default function ActivateAccount() {
   const handlePay = async () => {
     setIsProcessing(true);
     setStep("processing");
-
     try {
       const data = await mpesaApi.initiateStkPush(
         user?.phoneNumber || user?.phone || "",
         activationFee,
         "LIQUIDITY_UNLOCK"
       );
-
+      console.log("STK Push API response:", data);
       if (data.ResponseCode === "0") {
         setStep("waiting");
-        
         const checkoutID = data.CheckoutRequestID;
         let pollCount = 0;
         const maxPolls = 60;
-
         const pollTimer = setInterval(async () => {
           pollCount++;
           if (pollCount > maxPolls) {
@@ -216,11 +213,8 @@ export default function ActivateAccount() {
             setIsProcessing(false);
             return;
           }
-
           try {
-            // Check user balance instead of STK status ID
             const statusData = await mpesaApi.checkUserBalance(user?.phoneNumber || user?.phone || "");
-
             if (statusData && statusData.is_activated) {
               clearInterval(pollTimer);
               handleSuccess();
@@ -229,7 +223,6 @@ export default function ActivateAccount() {
             console.error("Balance check failed", pollErr);
           }
         }, 1500);
-
         const countdown = setInterval(() => {
           setTimer(prev => {
             if (prev <= 1) {
@@ -239,16 +232,19 @@ export default function ActivateAccount() {
             return prev - 1;
           });
         }, 1000);
-
       } else {
         setStep("error");
-        setErrorMessage("Gateway Rejected: " + (data.errorMessage || data.error));
+        setErrorMessage("Gateway Rejected: " + (data.errorMessage || data.error || JSON.stringify(data)));
         setIsProcessing(false);
+        alert("STK Push failed: " + (data.errorMessage || data.error || JSON.stringify(data)));
+        console.error("STK Push failed:", data);
       }
     } catch (err) {
       setStep("error");
-      setErrorMessage("Handshake Failed. Check Connection.");
+      setErrorMessage("Handshake Failed. Check Connection. " + ((err && err.message) ? err.message : ""));
       setIsProcessing(false);
+      alert("STK Push error: " + ((err && err.message) ? err.message : err));
+      console.error("STK Push error:", err);
     }
   };
 
