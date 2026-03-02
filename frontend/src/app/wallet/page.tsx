@@ -382,6 +382,6 @@ export default function Wallet() {
         </div>
       </ContentContainer>
     </PageWrapper>
-
+  </> 
   );
 }
