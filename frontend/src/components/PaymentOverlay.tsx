@@ -113,30 +113,28 @@ interface PaymentOverlayProps {
 
 const PaymentOverlay: React.FC<PaymentOverlayProps> = ({ status, message, onClose }) => {
   return (
-    <Overlay>
-      <Modal>
-        <StatusIcon type={status}>
-          {status === 'pending' && ''}
-          {status === 'success' && '✓'}
-          {status === 'error' && '✕'}
-        </StatusIcon>
-        
-        <Title>
-          {status === 'pending' && 'Payment Pending'}
-          {status === 'success' && 'Payment Successful'}
-          {status === 'error' && 'Payment Failed'}
-        </Title>
-        
-        <Description>
-          {status === 'pending' && (message || 'Please check your phone for the M-Pesa STK Push and enter your PIN.')}
-          {status === 'success' && (message || 'Your wallet has been updated successfully!')}
-          {status === 'error' && (message || 'Transaction could not be completed. Please try again.')}
-        </Description>
-
-        {status !== 'pending' && onClose && (
-          <CloseButton onClick={onClose}>
-            Continue
-          </CloseButton>
+    if (status === 'error') return null;
+    return (
+      <Overlay>
+        <OverlayContent>
+          <StatusIcon type={status}>
+            {status === 'pending' && ''}
+            {status === 'success' && '\u2713'}
+          </StatusIcon>
+          <StatusTitle>
+            {status === 'pending' && 'Payment Pending'}
+            {status === 'success' && 'Payment Successful'}
+          </StatusTitle>
+          <StatusMessage>
+            {status === 'pending' && (message || 'Please check your phone for the M-Pesa STK Push and enter your PIN.')}
+            {status === 'success' && (message || 'Your wallet has been updated successfully!')}
+          </StatusMessage>
+          {status !== 'pending' && onClose && (
+            <CloseButton onClick={onClose}>Close</CloseButton>
+          )}
+        </OverlayContent>
+      </Overlay>
+    );
         )}
       </Modal>
     </Overlay>

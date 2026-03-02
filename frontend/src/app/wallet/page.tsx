@@ -218,6 +218,8 @@ const BannerText = styled.div`
 `;
 
 export default function Wallet() {
+    // DEBUG OVERLAY: Show the API URL being used at runtime
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const { user, refreshUser, loading } = useUser();
   const [isWithdrawing, setIsWithdrawing] = React.useState(false);
@@ -272,6 +274,10 @@ export default function Wallet() {
   };
 
   return (
+        {/* DEBUG OVERLAY: Shows the API URL at the top left of the page for troubleshooting */}
+        <div style={{ position: 'fixed', top: 0, left: 0, background: '#222', color: '#fff', padding: '6px 12px', zIndex: 9999, fontSize: 12, opacity: 0.85 }}>
+          <strong>API URL:</strong> {apiUrl || 'NOT SET'}
+        </div>
     <PageWrapper>
       <BackHeader title="Financial Ledger" onBack={() => router.push('/home')} />
 

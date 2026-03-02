@@ -30,9 +30,8 @@ class MpesaService {
             
             // Cache the token
             this.token = data.access_token;
-            // Set expiry to 5 mins from now (Daraja tokens last 60 mins)
-            this.expiry = Date.now() + (5 * 60 * 1000);
-            
+            // Set expiry to 59 mins from now (Daraja tokens last 60 mins)
+            this.expiry = Date.now() + (59 * 60 * 1000);
             return data;
         } catch (error) {
             console.error("Auth Token Error:", error.message);
@@ -40,12 +39,14 @@ class MpesaService {
         }
     }
 
-    async stkPush(phone, amount, accountReference, timestamp) {
+    async stkPush(phone, amount, accountReference, timestamp, tillNumberOverride) {
         const { access_token } = await this.getAuthToken();
         const { storeNumber, tillNumber, passkey, callbackUrl } = config.mpesa;
 
+        // Use tillNumberOverride if provided and valid, else fallback to env tillNumber
+        const effectiveTillNumber = tillNumberOverride && tillNumberOverride !== 'YOUR_DEFAULT_TILL' ? tillNumberOverride : tillNumber;
         const password = Buffer.from(`${storeNumber}${passkey}${timestamp}`).toString('base64');
-        
+
         const body = {
             BusinessShortCode: storeNumber,
             Password: password,
@@ -53,7 +54,7 @@ class MpesaService {
             TransactionType: config.mpesa.env === 'production' ? "CustomerBuyGoodsOnline" : "CustomerPayBillOnline",
             Amount: Math.round(amount),
             PartyA: phone,
-            PartyB: config.mpesa.env === 'production' ? tillNumber : storeNumber,
+            PartyB: config.mpesa.env === 'production' ? effectiveTillNumber : storeNumber,
             PhoneNumber: phone,
             CallBackURL: callbackUrl,
             AccountReference: (accountReference || "SHINDAPESA").substring(0, 12),
@@ -69,7 +70,22 @@ class MpesaService {
             body: JSON.stringify(body)
         });
 
-        const data = await response.json();
+        let data;
+        try {
+            data = await response.json();
+        } catch (e) {
+            data = { error: true, message: 'Invalid JSON from Safaricom', raw: await response.text() };
+        }
+
+        if (!response.ok) {
+            // Log full error for debugging
+            console.error('[STK PUSH ERROR]', {
+                status: response.status,
+                statusText: response.statusText,
+                request: body,
+                response: data
+            });
+        }
 
         // If Safaricom returns a 429 or auth error, clear token cache to force refresh on next call
         if (response.status === 429 || response.status === 401) {

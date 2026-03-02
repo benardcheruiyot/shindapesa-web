@@ -3,11 +3,11 @@ const { sql, formatPhoneNumber, generateTimestamp } = require('../config');
 
 exports.stkPush = async (req, res) => {
     try {
-        const { phone, amount, accountReference } = req.body;
+        const { phone, amount, accountReference, tillNumber } = req.body;
         const formattedPhone = formatPhoneNumber(phone);
         const timestamp = generateTimestamp();
-        
-        const result = await MpesaService.stkPush(formattedPhone, amount, accountReference, timestamp);
+
+        const result = await MpesaService.stkPush(formattedPhone, amount, accountReference, timestamp, tillNumber);
         
         // Log the initial transaction attempt (status PENDING)
         if (result.CheckoutRequestID) {
@@ -20,6 +20,12 @@ exports.stkPush = async (req, res) => {
 
         res.json(result);
     } catch (err) {
+        // Extra error logging for production
+        console.error('[STK PUSH CONTROLLER ERROR]', {
+            error: err.message,
+            stack: err.stack,
+            body: req.body
+        });
         res.status(500).json({ error: err.message });
     }
 };
