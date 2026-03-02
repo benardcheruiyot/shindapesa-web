@@ -232,6 +232,7 @@ export default function Wallet() {
     if (!user) return;
     const withdrawable = user.withdrawableBalance || 0;
 
+    // Redirect to activate account if not activated
     if (!user.isActivated) {
       router.push("/activate-account");
       return;
