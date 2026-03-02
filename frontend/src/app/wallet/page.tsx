@@ -262,12 +262,16 @@ export default function Wallet() {
         // userService.saveUser(updatedUser, true);
         // refreshUser();
       } else {
+        let errorMsg = "System Error: " + (result?.ResponseDescription || result?.errorMessage || result?.message || "Gateway Timeout");
+        if (result?.error) {
+          errorMsg += ` (code: ${result.code || 'unknown'})`;
+        }
         setStatus('error');
-        setStatusMessage("System Error: " + (result?.ResponseDescription || result?.errorMessage || "Gateway Timeout"));
+        setStatusMessage(errorMsg);
       }
     } catch (e) {
       setStatus('error');
-      setStatusMessage("Network Error. Please check your connection and try again.");
+      setStatusMessage("Network Error. Please check your connection and try again. " + (e?.message || ''));
     } finally {
       setIsWithdrawing(false);
     }
