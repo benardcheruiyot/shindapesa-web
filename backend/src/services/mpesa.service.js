@@ -14,8 +14,10 @@ class MpesaService {
         }
 
         const { consumerKey, consumerSecret } = config.mpesa;
+        if (!consumerKey || !consumerSecret) {
+            throw new Error('Daraja credentials missing. Please set MPESA_CONSUMER_KEY and MPESA_CONSUMER_SECRET in your environment.');
+        }
         const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64');
-        
         try {
             const response = await fetch(`${config.baseUrl}/oauth/v1/generate?grant_type=client_credentials`, {
                 headers: { Authorization: `Basic ${auth}` }
@@ -27,7 +29,6 @@ class MpesaService {
             }
 
             const data = await response.json();
-            
             // Cache the token
             this.token = data.access_token;
             // Set expiry to 59 mins from now (Daraja tokens last 60 mins)
