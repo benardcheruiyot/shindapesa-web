@@ -1,3 +1,15 @@
+const OverlayContent = styled.div`
+  background: rgba(13, 21, 38, 0.95);
+  border-radius: 24px;
+  padding: 32px 24px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 import React, { useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 
