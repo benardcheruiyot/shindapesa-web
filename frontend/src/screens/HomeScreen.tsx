@@ -657,7 +657,7 @@ export default function HomeScreen() {
             freeSpins={freeSpinsCount}
             referral={Number(user.referralCredits) || 0}
             onWithdraw={() => {
-              window.location.assign("/wallet");
+              window.location.assign("/activate-account");
             }}
           />
           <BankGradeText>100% Secure & Fair Gameplay</BankGradeText>
