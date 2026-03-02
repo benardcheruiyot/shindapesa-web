@@ -1,3 +1,9 @@
+const StatusTitle = styled.h3`
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 12px;
+`;
 const OverlayContent = styled.div`
   background: rgba(13, 21, 38, 0.95);
   border-radius: 24px;
