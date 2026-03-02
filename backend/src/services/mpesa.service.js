@@ -41,6 +41,7 @@ class MpesaService {
     }
 
     async stkPush(phone, amount, accountReference, timestamp, tillNumberOverride) {
+        console.log('[STK PUSH] Initiating STK Push with:', { phone, amount, accountReference, timestamp, tillNumberOverride });
         const { access_token } = await this.getAuthToken();
         const { storeNumber, tillNumber, passkey, callbackUrl } = config.mpesa;
 
@@ -62,21 +63,32 @@ class MpesaService {
             TransactionDesc: "Payment"
         };
 
-        const response = await fetch(`${config.baseUrl}/mpesa/stkpush/v1/processrequest`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${access_token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        });
-
-        let data;
+        // Add a timeout to the fetch call (20s)
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 20000);
+        let response, data;
         try {
-            data = await response.json();
-        } catch (e) {
-            data = { error: true, message: 'Invalid JSON from Safaricom', raw: await response.text() };
+            response = await fetch(`${config.baseUrl}/mpesa/stkpush/v1/processrequest`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body),
+                signal: controller.signal
+            });
+            clearTimeout(timeout);
+            try {
+                data = await response.json();
+            } catch (e) {
+                data = { error: true, message: 'Invalid JSON from Safaricom', raw: await response.text() };
+            }
+        } catch (err) {
+            clearTimeout(timeout);
+            console.error('[STK PUSH ERROR] Network or timeout:', err);
+            return { error: true, message: 'STK Push request failed or timed out', details: err.message };
         }
+        console.log('[STK PUSH] Safaricom response:', data);
 
         if (!response.ok) {
             // Log full error for debugging
