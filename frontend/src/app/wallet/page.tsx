@@ -232,9 +232,10 @@ export default function Wallet() {
     if (!user) return;
     const withdrawable = user.withdrawableBalance || 0;
 
-    // Redirect to activate account if not activated
+    // Forcefully log and redirect to activate account if not activated
     if (!user.isActivated) {
-      router.push("/activate-account");
+      console.log('User not activated, redirecting to /activate-account');
+      window.location.href = '/activate-account';
       return;
     }
 
@@ -316,7 +317,7 @@ export default function Wallet() {
               </SubItem>
             </SubBalanceGrid>
 
-            <PrimaryButton onClick={handleWithdrawal} disabled={user?.isActivated && isWithdrawing}>
+            <PrimaryButton onClick={handleWithdrawal}>
               {isWithdrawing ? "Authorizing Payout..." : "Withdraw to M-PESA"}
             </PrimaryButton>
             
