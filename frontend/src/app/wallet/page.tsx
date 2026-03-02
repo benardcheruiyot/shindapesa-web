@@ -229,51 +229,59 @@ export default function Wallet() {
   if (loading || !user) return null;
 
   const handleWithdrawal = async () => {
-    if (!user) return;
-    const withdrawable = user.withdrawableBalance || 0;
-
-    // Forcefully log and redirect to activate account if not activated
-    if (!user.isActivated) {
-      console.log('User not activated, redirecting to /activate-account');
-      window.location.href = '/activate-account';
+    if (!user) {
+      setStatus('error');
+      setStatusMessage('User not loaded. Please log in again.');
+      console.error('User object missing:', user);
       return;
     }
-
+    const withdrawable = user.withdrawableBalance || 0;
+    console.log('Withdraw button clicked. User:', user);
+    if (!user.isActivated) {
+      setStatus('error');
+      setStatusMessage('Your account is not activated. Please activate your account to withdraw.');
+      console.warn('User not activated, redirecting to /activate-account');
+      setTimeout(() => {
+        window.location.href = '/activate-account';
+      }, 1200);
+      return;
+    }
     if (withdrawable < 100) {
       setStatus('error');
-      setStatusMessage("Minimum withdrawable amount is KES 100. Please activate more funds.");
+      setStatusMessage(`Minimum withdrawable amount is KES 100. Your withdrawable balance is KES ${withdrawable}.`);
+      console.warn('Withdraw blocked: insufficient withdrawable balance', withdrawable);
       return;
     }
-
     setIsWithdrawing(true);
     setStatus('pending');
-    setStatusMessage("Initiating M-PESA STK Push to your phone...");
-
+    setStatusMessage('Initiating M-PESA STK Push to your phone...');
     try {
       const result = await mpesaApi.initiateStkPush(
-        user.phone || user.phoneNumber || "",
+        user.phone || user.phoneNumber || '',
         withdrawable,
-        "WALLET_WITHDRAWAL"
+        'WALLET_WITHDRAWAL'
       );
-
-      if (result && result.ResponseCode === "0") {
+      console.log('STK Push result:', result);
+      if (result && result.ResponseCode === '0') {
         setStatus('success');
-        setStatusMessage("STK Push sent! Please check your phone and enter your M-PESA PIN.");
+        setStatusMessage('STK Push sent! Please check your phone and enter your M-PESA PIN.');
         // Optionally, update user balance after confirmation
         // const updatedUser = { ...user, withdrawableBalance: 0 };
         // userService.saveUser(updatedUser, true);
         // refreshUser();
       } else {
-        let errorMsg = "System Error: " + (result?.ResponseDescription || result?.errorMessage || result?.message || "Gateway Timeout");
+        let errorMsg = 'System Error: ' + (result?.ResponseDescription || result?.errorMessage || result?.message || 'Gateway Timeout');
         if (result?.error) {
           errorMsg += ` (code: ${result.code || 'unknown'})`;
         }
         setStatus('error');
         setStatusMessage(errorMsg);
+        console.error('Withdrawal error:', errorMsg, result);
       }
     } catch (e) {
       setStatus('error');
-      setStatusMessage("Network Error. Please check your connection and try again. " + ((e as any)?.message || ''));
+      setStatusMessage('Network Error. Please check your connection and try again. ' + ((e as any)?.message || ''));
+      console.error('Withdrawal network error:', e);
     } finally {
       setIsWithdrawing(false);
     }
@@ -296,7 +304,13 @@ export default function Wallet() {
             onClose={() => setStatus('idle')} 
           />
         )}
-        {/* Completely suppress error popups for payment errors (no overlay at all) */}
+        {status === 'error' && (
+          <PaymentOverlay 
+            status="error" 
+            message={statusMessage} 
+            onClose={() => setStatus('idle')} 
+          />
+        )}
 
         <ContentContainer>
           <div style={{ display: "flex", flexDirection: "column" }}>
