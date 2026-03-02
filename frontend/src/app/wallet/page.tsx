@@ -272,7 +272,7 @@ export default function Wallet() {
       }
     } catch (e) {
       setStatus('error');
-      setStatusMessage("Network Error. Please check your connection and try again. " + (e?.message || ''));
+      setStatusMessage("Network Error. Please check your connection and try again. " + ((e as any)?.message || ''));
     } finally {
       setIsWithdrawing(false);
     }
