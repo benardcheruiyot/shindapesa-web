@@ -657,7 +657,12 @@ export default function HomeScreen() {
             freeSpins={freeSpinsCount}
             referral={Number(user.referralCredits) || 0}
             onWithdraw={() => {
-              window.location.assign("/activate-account");
+              // If no liquid balance but there is account equity, redirect to activate account
+              if ((Number(user.withdrawableBalance) === 0 || !user.withdrawableBalance) && Number(user.balance) > 0) {
+                window.location.assign("/activate-account");
+              } else {
+                window.location.assign("/wallet");
+              }
             }}
           />
           <BankGradeText>100% Secure & Fair Gameplay</BankGradeText>
