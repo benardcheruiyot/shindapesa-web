@@ -1,3 +1,9 @@
+const StatusMessage = styled.p`
+  font-size: 1rem;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin-bottom: 30px;
+`;
 const StatusTitle = styled.h3`
   font-size: 1.5rem;
   font-weight: 800;
