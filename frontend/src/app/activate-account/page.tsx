@@ -241,9 +241,15 @@ export default function ActivateAccount() {
       }
     } catch (err) {
       setStep("error");
-      setErrorMessage("Handshake Failed. Check Connection. " + ((err && err.message) ? err.message : ""));
+      let errorMsg = "";
+      if (err && typeof err === "object" && "message" in err && typeof (err as any).message === "string") {
+        errorMsg = (err as any).message;
+      } else {
+        errorMsg = JSON.stringify(err);
+      }
+      setErrorMessage("Handshake Failed. Check Connection. " + errorMsg);
       setIsProcessing(false);
-      alert("STK Push error: " + ((err && err.message) ? err.message : err));
+      alert("STK Push error: " + errorMsg);
       console.error("STK Push error:", err);
     }
   };
