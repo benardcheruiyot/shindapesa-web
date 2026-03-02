@@ -383,4 +383,5 @@ export default function Wallet() {
       </ContentContainer>
     </PageWrapper>
   );
+
 }
