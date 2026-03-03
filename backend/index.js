@@ -17,7 +17,6 @@ app.use(cors({
 // Automatically handles OPTIONS preflight
 
 
-const PORT = config.port;
 
 // Health check
 app.get('/', (req, res) => res.send('Shindapesa API is running'));
@@ -31,15 +30,27 @@ app.use((err, req, res, next) => {
         res.status(500).json({ error: 'Something went wrong!' });
 });
 
-// Robust startup error logging
+// Explicit CORS fallback for OPTIONS requests
+app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Origin', 'https://shindapesa-lttc96cmk-bens-projects-60fa57a1.vercel.app');
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        res.header('Access-Control-Allow-Credentials', 'true');
+        return res.sendStatus(200);
+    }
+    next();
+});
+
+// Always use process.env.PORT directly for Render compatibility
 async function startServer() {
     try {
-        // Test DB connection (if needed)
         if (typeof sql === 'function') {
             await sql`SELECT 1`;
             console.log('✅ Database connection successful');
         }
-        app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+        const port = process.env.PORT;
+        app.listen(port, () => console.log(`Backend running on port ${port}`));
     } catch (err) {
         console.error('❌ Startup error:', err);
         process.exit(1);
