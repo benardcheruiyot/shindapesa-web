@@ -4,17 +4,25 @@ const { config } = require('./src/config');
 const mpesaRoutes = require('./src/routes/mpesa.routes');
 
 const app = express();
+app.use(express.json()); // Move above CORS
 app.use(cors({
-    origin: true, // Allow all origins for debugging
+    origin: true,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     preflightContinue: false
 }));
 app.options('*', cors());
-// Best practice: Enable CORS preflight for all routes
-app.options('*', cors());
-app.use(express.json());
+// Manual fallback for OPTIONS requests
+app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        return res.sendStatus(200);
+    }
+    next();
+});
 
 const PORT = config.port;
 
