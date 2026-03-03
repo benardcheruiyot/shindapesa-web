@@ -118,11 +118,7 @@ exports.getLatestTransaction = async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-};
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
+}
 
 exports.authTest = async (req, res) => {
     try {
