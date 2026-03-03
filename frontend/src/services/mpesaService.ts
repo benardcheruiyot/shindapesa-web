@@ -88,7 +88,7 @@ export const mpesaApi = {
     });
     return response.json();
   }
-
+    ,
   /**
    * Get latest transaction status for a user
    */
