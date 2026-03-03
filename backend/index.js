@@ -6,25 +6,15 @@ const mpesaRoutes = require('./src/routes/mpesa.routes');
 const app = express();
 app.use(express.json()); // Always first
 
+
+const FRONTEND_ORIGIN = 'https://shindapesa-lttc96cmk-bens-projects-60fa57a1.vercel.app';
 app.use(cors({
-    origin: true, // For debugging; use your domain for production
+    origin: FRONTEND_ORIGIN,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    preflightContinue: false
 }));
-app.options('*', cors());
-
-// Manual fallback for OPTIONS requests
-app.use((req, res, next) => {
-    if (req.method === 'OPTIONS') {
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-        return res.sendStatus(200);
-    }
-    next();
-});
+// Automatically handles OPTIONS preflight
 
 const PORT = config.port;
 
