@@ -16,6 +16,7 @@ app.use(cors({
 }));
 // Automatically handles OPTIONS preflight
 
+
 const PORT = config.port;
 
 // Health check
@@ -26,9 +27,23 @@ app.use('/', mpesaRoutes);
 
 // Centralized error handling
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Something went wrong!' });
+        console.error(err.stack);
+        res.status(500).json({ error: 'Something went wrong!' });
 });
 
-app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+// Robust startup error logging
+async function startServer() {
+    try {
+        // Test DB connection (if needed)
+        if (typeof sql === 'function') {
+            await sql`SELECT 1`;
+            console.log('✅ Database connection successful');
+        }
+        app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+    } catch (err) {
+        console.error('❌ Startup error:', err);
+        process.exit(1);
+    }
+}
+startServer();
 
