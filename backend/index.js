@@ -8,6 +8,8 @@ app.use(cors({
     origin: 'https://shindapesa-web.vercel.app',
     credentials: true
 }));
+// Best practice: Enable CORS preflight for all routes
+app.options('*', cors());
 app.use(express.json());
 
 const PORT = config.port;
