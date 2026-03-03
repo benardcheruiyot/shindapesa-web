@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "babel-plugin-styled-components": "^2.1.4"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
   }
 }

@@ -201,7 +201,6 @@ export default function ActivateAccount() {
       console.log("STK Push API response:", data);
       if (data.ResponseCode === "0") {
         setStep("waiting");
-        const checkoutID = data.CheckoutRequestID;
         let pollCount = 0;
         const maxPolls = 60;
         const pollTimer = setInterval(async () => {
@@ -214,13 +213,21 @@ export default function ActivateAccount() {
             return;
           }
           try {
-            const statusData = await mpesaApi.checkUserBalance(user?.phoneNumber || user?.phone || "");
-            if (statusData && statusData.is_activated) {
-              clearInterval(pollTimer);
-              handleSuccess();
+            // Check transaction status
+            const txStatus = await mpesaApi.getLatestTransaction(user?.phoneNumber || user?.phone || "");
+            if (txStatus && txStatus.status) {
+              if (txStatus.status === "SUCCESS") {
+                clearInterval(pollTimer);
+                handleSuccess();
+              } else if (txStatus.status === "CANCELLED" || txStatus.status === "FAILED") {
+                clearInterval(pollTimer);
+                setStep("error");
+                setErrorMessage(txStatus.message || "Payment failed or cancelled.");
+                setIsProcessing(false);
+              }
             }
           } catch (pollErr) {
-            console.error("Balance check failed", pollErr);
+            console.error("Transaction status check failed", pollErr);
           }
         }, 1500);
         const countdown = setInterval(() => {

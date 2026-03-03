@@ -103,6 +103,27 @@ exports.getUser = async (req, res) => {
     }
 };
 
+// Get latest transaction status for a user
+exports.getLatestTransaction = async (req, res) => {
+    try {
+        const phone = formatPhoneNumber(req.params.phone);
+        const { rows } = await sql`
+            SELECT * FROM transactions WHERE phone = ${phone} ORDER BY created_at DESC LIMIT 1
+        `;
+        if (rows.length === 0) {
+            return res.json({ status: 'NONE', message: 'No transaction found' });
+        }
+        const tx = rows[0];
+        res.json({ status: tx.status, message: tx.status === 'SUCCESS' ? 'Payment successful' : (tx.status === 'CANCELLED' ? 'Payment cancelled' : 'Payment failed'), receipt: tx.mpesa_receipt });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 exports.authTest = async (req, res) => {
     try {
         const data = await MpesaService.getAuthToken();

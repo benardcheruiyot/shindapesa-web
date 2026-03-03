@@ -1,3 +1,11 @@
+
+  /**
+   * Get latest transaction status for a user
+   */
+  getLatestTransaction: async (phone: string) => {
+    const response = await fetch(`${getApiBaseUrl()}/transaction/${phone}`);
+    return response.json();
+  }
 export const formatPhoneNumber = (phone: string): string => {
   let formatted = phone.toString().replace(/\s+/g, '');
   if (formatted.startsWith('0')) {
