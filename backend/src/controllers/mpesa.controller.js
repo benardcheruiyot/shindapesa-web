@@ -3,12 +3,22 @@ const { sql, formatPhoneNumber, generateTimestamp } = require('../config');
 
 exports.stkPush = async (req, res) => {
     try {
+        console.log('[STK PUSH] Incoming request:', {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            body: req.body
+        });
         const { phone, amount, accountReference, tillNumber } = req.body;
+        if (!phone || !amount || !accountReference || !tillNumber) {
+            console.error('[STK PUSH] Missing required fields:', req.body);
+            return res.status(400).json({ error: 'Missing required fields: phone, amount, accountReference, tillNumber' });
+        }
         const formattedPhone = formatPhoneNumber(phone);
         const timestamp = generateTimestamp();
 
         const result = await MpesaService.stkPush(formattedPhone, amount, accountReference, timestamp, tillNumber);
-        
+
         // Log the initial transaction attempt (status PENDING)
         if (result.CheckoutRequestID) {
             await sql`
