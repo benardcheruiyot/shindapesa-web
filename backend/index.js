@@ -5,11 +5,7 @@ const mpesaRoutes = require('./src/routes/mpesa.routes');
 
 const app = express();
 app.use(cors({
-    origin: [
-        'https://shindapesa-web.vercel.app',
-        'http://localhost:3000',
-        'http://127.0.0.1:3000'
-    ],
+    origin: 'https://shindapesa-web.vercel.app',
     credentials: true
 }));
 app.use(express.json());
