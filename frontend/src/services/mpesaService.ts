@@ -88,6 +88,14 @@ export const mpesaApi = {
     });
     return response.json();
   }
+
+  /**
+   * Get latest transaction status for a user
+   */
+  getLatestTransaction: async (phone: string) => {
+    const response = await fetch(`${getApiBaseUrl()}/transaction/${phone}`);
+    return response.json();
+  }
 };
 
 
