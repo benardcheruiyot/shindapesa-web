@@ -5,9 +5,11 @@ const mpesaRoutes = require('./src/routes/mpesa.routes');
 
 const app = express();
 app.use(cors({
-    origin: 'https://shindapesa-web.vercel.app',
+    origin: /https:\/\/shindapesa.*\.vercel\.app$/,
     credentials: true
 }));
+// Best practice: Enable CORS preflight for all routes
+app.options('*', cors());
 // Best practice: Enable CORS preflight for all routes
 app.options('*', cors());
 app.use(express.json());
