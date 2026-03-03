@@ -7,14 +7,35 @@ const app = express();
 app.use(express.json()); // Always first
 
 
-const FRONTEND_ORIGIN = 'https://shindapesa-lttc96cmk-bens-projects-60fa57a1.vercel.app';
+
+const allowedOrigins = [
+    'https://shindapesa-lttc96cmk-bens-projects-60fa57a1.vercel.app',
+    'http://localhost:3000',
+];
 app.use(cors({
-    origin: FRONTEND_ORIGIN,
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(null, false);
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-// Automatically handles OPTIONS preflight
+
+// Wildcard fallback for debugging (remove in production)
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
 
 
 
