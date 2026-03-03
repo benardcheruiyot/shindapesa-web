@@ -4,15 +4,17 @@ const { config } = require('./src/config');
 const mpesaRoutes = require('./src/routes/mpesa.routes');
 
 const app = express();
-app.use(express.json()); // Move above CORS
+app.use(express.json()); // Always first
+
 app.use(cors({
-    origin: true,
+    origin: true, // For debugging; use your domain for production
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     preflightContinue: false
 }));
 app.options('*', cors());
+
 // Manual fallback for OPTIONS requests
 app.use((req, res, next) => {
     if (req.method === 'OPTIONS') {
